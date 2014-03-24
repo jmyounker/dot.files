@@ -4,6 +4,10 @@ import argparse
 import os
 import shutil
 
+dirs = [
+  'bin',
+]
+
 files = [
   ('dot.gitconfig', '.gitconfig'),
   ('dot.gitignore_global', '.gitignore_global'),
@@ -12,6 +16,11 @@ files = [
 home = '/Users/jeff'
 
 def install():
+  for dir in dirs:
+    dir_full_path = os.path.join(home, dir)
+    if not os.path.exists(dir_full_path):
+      os.mkdir(dir_full_path)
+
   for (source, deployed) in files:
     deployed_full_path = os.path.join(home, deployed)
     if os.path.exists(source):
@@ -22,6 +31,7 @@ def recover():
     deployed_full_path = os.path.join(home, deployed)
     if os.path.exists(deployed_full_path):
       shutil.copy2(deployed_full_path, source)
+
 
 parser = argparse.ArgumentParser(description='install dot files')
 parser.add_argument('--install', dest='action', action='store_const',
