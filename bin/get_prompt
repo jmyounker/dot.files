@@ -176,6 +176,8 @@ def get_cdpath(path, home, user, proj):
     return ':'.join([".", git_home, home] + dev_paths(path, user, proj))
 
 
+# Currently this is still the skeleton from when I worked at Google.  It will need to be updated when
+# I begin doing big projects again.
 def dev_paths(path, user, proj):
     # A set of relative paths
     devpaths = []
