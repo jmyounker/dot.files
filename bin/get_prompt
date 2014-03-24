@@ -196,5 +196,6 @@ def dev_paths(path, user, proj):
 
     return []
 
+
 if __name__ == '__main__':
     sys.stdout.write(set_state_expr())
