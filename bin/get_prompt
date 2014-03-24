@@ -58,6 +58,7 @@ def dir_is_available(dir_path):
 def set_prompt_expr(path, home, user):
     return prompt_assignment(get_prompt(path, home, user))
 
+
 def prompt_assignment(prompt):
     return 'PS1=\'%s\'' % prompt
 
