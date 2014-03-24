@@ -5,6 +5,7 @@ import re
 import subprocess
 import sys
 
+
 default_prompt = '${debian_chroot:+($debian_chroot)}\u@\h:\[$(tput -T${TERM:-dumb} setaf 4)\]%(path)s\[$(tput -T${TERM:-dumb} sgr0)\]\$ '
 proj_prompt = '${debian_chroot:+($debian_chroot)}\u@\h[\[$(tput -T${TERM:-dumb} setaf 1)\]%(proj)s:%(branch)s\[$(tput -T${TERM:-dumb} sgr0)\]]:\[$(tput -T${TERM:-dumb} setaf 4)\]%(path)s\[$(tput -T${TERM:-dumb} sgr0)\]\$ '
 msg_prompt = '${debian_chroot:+($debian_chroot)}\u@\h[\[$(tput -T${TERM:-dumb} setaf 1)\]%(msg)s\[$(tput -T${TERM:-dumb} sgr0)\]]:\[$(tput -T${TERM:-dumb} setaf 4)\]%(path)s\[$(tput -T${TERM:-dumb} sgr0)\]\$ '
