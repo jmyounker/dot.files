@@ -88,7 +88,7 @@ def get_prompt(path, home, user, proj):
 
        untracked_branch = re.search("^##\s+(\S+)\n", output)
        tracked_branch = re.search("^##\s+(\S+)\.\.\.", output)
-       branch_match = untracked_branch if untracked_branch else tracked_branch
+       branch_match = tracked_branch if tracked_branch else untracked_branch
        if not branch_match:
          return proj_prompt % {'proj': proj, 'branch': '', 'path': prompt_path}
        branch = branch_match.group(1)
@@ -170,7 +170,9 @@ def set_cdpath_expr(path, home, user, proj):
 
 
 def get_cdpath(path, home, user, proj):
-    git_home = '/usr/local/home/%s' % user
+    git_home = file_in_path(path, '.git')
+    if not git_home:
+       return ':'.join([".", home])
     return ':'.join([".", git_home, home] + dev_paths(path, user, proj))
 
 
