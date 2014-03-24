@@ -11,6 +11,8 @@ dirs = [
 files = [
   ('dot.gitconfig', '.gitconfig'),
   ('dot.gitignore_global', '.gitignore_global'),
+  ('dot.profile', '.profile'),
+  ('bin/get_prompt', 'bin/get_prompt'),
 ]
 
 home = '/Users/jeff'
