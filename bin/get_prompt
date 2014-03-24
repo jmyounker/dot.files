@@ -62,6 +62,7 @@ def set_prompt_expr(path, home, user):
 def prompt_assignment(prompt):
     return 'PS1=\'%s\'' % prompt
 
+
 def get_prompt(path, home, user):
     projroot = file_in_path(path, '.git')
     proj = ""
