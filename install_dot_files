@@ -1,0 +1,34 @@
+#!/usr/bin/python
+
+import argparse
+import os
+import shutil
+
+files = [
+  ('dot.gitconfig', '.gitconfig'),
+  ('dot.gitignore_global', '.gitignore_global'),
+]
+
+home = '/Users/jeff'
+
+def install():
+  for (source, deployed) in files:
+    deployed_full_path = os.path.join(home, deployed)
+    if os.path.exists(source):
+      shutil.copy2(source, deployed_full_path)
+  
+def recover():
+  for (source, deployed) in files:
+    deployed_full_path = os.path.join(home, deployed)
+    if os.path.exists(deployed_full_path):
+      shutil.copy2(deployed_full_path, source)
+
+parser = argparse.ArgumentParser(description='install dot files')
+parser.add_argument('--install', dest='action', action='store_const',
+    const=install, help='install dot files')
+parser.add_argument('--recover', dest='action', action='store_const',
+    const=recover, help='recover dot files from environment')
+
+args = parser.parse_args()
+args.action()
+
