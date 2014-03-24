@@ -27,37 +27,41 @@ def log(message):
     """Appends a log message to a file. Used for debugging."""
     with open('/tmp/get_prompt.log', 'a') as logfile:
         print >> logfile, message
-     
+
+
 def set_state_expr():
-    path = os.getcwd()
+    try:
+        path = os.getcwd()
+    except OSError, e:
+        if e.errno == 2:
+            prompt = msg_prompt % {'path': '?',
+                                   'msg': 'DUDE! THE DIRECTORY IS GONE. WTF?'}
+            return prompt_assignment(prompt)
+        raise
+
     home = os.environ.get('HOME')
     user = os.environ.get('USER')
-    proj = os.environ.get('PROJ')
-
-    # Set the current project file based on $PROJ.  If anything
-    # happens then silently consume the error. This feature is just
-    # a nice-to-have.
-    if proj:
-        write_file(proj_file % {'home': home}, proj)
 
     cmds = []
-    cmds.append(set_prompt_expr(path, home, user, proj))
-    cmds.append(set_cdpath_expr(path, home, user, proj))
+    cmds.append(set_prompt_expr(path, home, user))
+    cmds.append(set_cdpath_expr(path, home, user))
     return '; '.join(cmds)
 
 
 def dir_is_available(dir_path):
     try:
-       return os.path.exists(path)
+        return os.path.exists(dir_path)
     except OSError:
-       return False
+        return False
 
 
-def set_prompt_expr(path, home, user, proj):
-    return 'PS1=\'%s\'' % get_prompt(path, home, user, proj)
+def set_prompt_expr(path, home, user):
+    return prompt_assignment(get_prompt(path, home, user))
 
+def prompt_assignment(prompt):
+    return 'PS1=\'%s\'' % prompt
 
-def get_prompt(path, home, user, proj):
+def get_prompt(path, home, user):
     projroot = file_in_path(path, '.git')
     proj = ""
     if projroot:
@@ -65,20 +69,20 @@ def get_prompt(path, home, user, proj):
     prompt_path = condense_path(path, home, user, proj)
 
     if home:
-	try:
+        try:
             os.path.exists(home)
-	except OSError, e:
+        except OSError, e:
             if e.errno == 2:
                 return msg_prompt % {'path':prompt_path,
                                      'msg': "DUDE! CAN'T FIND HOME DIRECTORY. WTF?"}
-	    raise
+            raise
     try:
         os.path.exists(path)
     except OSError, e:
-	if e.errno == 2:
+        if e.errno == 2:
             return msg_prompt % {'path': '?',
-                                 'msg': 'THIS DIRECTORY IS GONE!'}
-	raise
+                                 'msg': 'THE DIRECTORY %s IS GONE!' % path}
+        raise
 
     if proj:
        try:
@@ -148,7 +152,7 @@ def file_in_path(path, filename):
         return path
     (parent, base) = os.path.split(path)
     if parent == path:
-        return False
+        return ""
     else:
         return file_in_path(parent, filename)    
 
@@ -163,17 +167,17 @@ def parent_of(path, component):
         return parent_of(parent, component)
 
 
-def set_cdpath_expr(path, home, user, proj):
+def set_cdpath_expr(path, home, user):
     if not path.endswith('/'):
         path += '/'
-    return 'export CDPATH=\'%s\'' % get_cdpath(path, home, user, proj)
+    return 'export CDPATH=\'%s\'' % get_cdpath(path, home, user)
 
 
-def get_cdpath(path, home, user, proj):
+def get_cdpath(path, home, user):
     git_home = file_in_path(path, '.git')
     if not git_home:
        return ':'.join([".", home])
-    return ':'.join([".", git_home, home] + dev_paths(path, user, proj))
+    return ':'.join([".", git_home, home] + dev_paths(path, user, os.path.basename(git_home)))
 
 
 # Currently this is still the skeleton from when I worked at Google.  It will need to be updated when
