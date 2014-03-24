@@ -5,7 +5,6 @@
         co = checkout
         s = status
         submit = commit
-        va = checkout video-analytics
 
 [user]
 	name = Jeff Younker
