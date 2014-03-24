@@ -1,0 +1,37 @@
+[alias]
+        b = branch
+        br = branch
+        ci = commit -m
+        co = checkout
+        s = status
+        submit = commit
+        va = checkout video-analytics
+
+[user]
+	name = Jeff Younker
+	email = jeff@drinktomi.com
+[push]
+	default = simple
+[color]
+	ui = true
+	status = auto
+	branch = auto
+
+[merge]
+        keepBackup = false
+        tool = p4merge
+
+[mergetool "p4merge"]
+        cmd = /Applications/p4merge.app/Contents/MacOS/p4merge "$BASE" "$LOCAL" "$REMOTE" "$MERGED"
+        keepTemporaries = false
+        trustExitCode = false
+        keepBackup = false
+[diff]
+        tool = p4diff
+
+[difftool "p4diff"]
+        cmd = /Applications/p4merge.app/Contents/MacOS/p4merge "$LOCAL" "$REMOTE"
+        keepBackup = false
+
+[core]
+        excludesfile = /Users/jeff/.gitignore_global
