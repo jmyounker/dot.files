@@ -1,14 +1,20 @@
 #!/usr/bin/python
 
 import argparse
+import hashlib
 import os
 import shutil
+import subprocess
+import sys
+
 
 dirs = [
   'bin',
 ]
 
 files = [
+  ('dot.bash_aliases', '.bash_aliases'),
+  ('dot.bashrc', '.bashrc'),
   ('dot.gitconfig', '.gitconfig'),
   ('dot.gitignore_global', '.gitignore_global'),
   ('dot.profile', '.profile'),
@@ -17,30 +23,65 @@ files = [
 
 home = '/Users/jeff'
 
-def install():
+def md5_digest(filename):
+    with open(filename) as f:
+        return hashlib.md5(f.read()).hexdigest()
+
+
+def targets(args):
+    for (source, deployed) in files:
+        deployed_full_path = os.path.join(home, deployed)
+        if (source in args.files or
+            deployed in args.files or
+            deployed_full_path in args.files or
+            not args.files):
+            yield (source, deployed_full_path)
+
+
+def install(args):
+  if os.path.exists(os.path.join(home, '.bash_profile')):
+    print >> sys.stderr, ".bash_profile exists. This can cause problems. Maybe you should remove it."
+
   for dir in dirs:
     dir_full_path = os.path.join(home, dir)
     if not os.path.exists(dir_full_path):
       os.mkdir(dir_full_path)
 
-  for (source, deployed) in files:
-    deployed_full_path = os.path.join(home, deployed)
+  for (source, deployed) in targets(args):
     if os.path.exists(source):
-      shutil.copy2(source, deployed_full_path)
-  
-def recover():
-  for (source, deployed) in files:
-    deployed_full_path = os.path.join(home, deployed)
-    if os.path.exists(deployed_full_path):
-      shutil.copy2(deployed_full_path, source)
+      shutil.copy2(source, deployed)
+
+
+def recover(args):
+  for (source, deployed) in targets(args):
+    if os.path.exists(deployed):
+      shutil.copy2(deployed, source)
+
+
+def diff(args):
+  for (source, deployed) in targets(args):
+    if os.path.exists(source) and not os.path.exists(deployed):
+        print "File %s not deployed from %s" % (deployed, source)
+    elif not os.path.exists(source) and os.path.exists(deployed):
+        print "File %s not recovered from %s" % (source, deployed)
+    elif os.path.exists(source) and os.path.exists(deployed):
+      if md5_digest(source) != md5_digest(deployed):
+        subprocess.call(['p4merge', source, deployed])
 
 
 parser = argparse.ArgumentParser(description='install dot files')
+parser.add_argument('--diff', dest='action', action='store_const',
+    const=diff, help='diff deployed and source dot files')
 parser.add_argument('--install', dest='action', action='store_const',
     const=install, help='install dot files')
 parser.add_argument('--recover', dest='action', action='store_const',
     const=recover, help='recover dot files from environment')
+parser.add_argument('files', metavar='FILE', type=str, nargs='*',
+                   help='a list of files to act on')
 
-args = parser.parse_args()
-args.action()
+if __name__ == '__main__':
+    args = parser.parse_args()
+    if args.action is None:
+        args.action = diff
+    args.action(args)
 
