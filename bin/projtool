@@ -1,16 +1,17 @@
 #!/usr/bin/python
 
 import argparse
-import hashlib
 import os
-import shutil
+import re
+import string
 import subprocess
 import sys
-import re
+import tempfile
 
 
 proj_file_basename = '.projrc'
 hist_to_keep = 50000  # number of project changes to keep
+proj_base = os.path.join(os.environ['HOME'], 'repos')
 
 
 def file_in_path(path, filename):
@@ -22,6 +23,12 @@ def file_in_path(path, filename):
     else:
         return file_in_path(parent, filename)
 
+
+def shesc(s):
+    s = re.sub(r'\\', '\\\\', s)
+    s = re.sub(r' ', '\\ ', s)
+    s = re.sub(r'\t', '\\t', s)
+    return re.sub(r'\n', '\\n', s)
 
 def components(path):
     (dirname, basename) = os.path.split(path)
@@ -41,37 +48,93 @@ def is_child_of(parent, child):
 
 
 def create(args):
-    pass
+    proj_name = args.rest[0] if args.rest else None
+    if proj_name is None:
+        return 1
+    proj_db = ProjDb()
+    if proj_name in proj_db:
+        return 1
+    proj = ProjConfig(os.path.join(proj_base, proj_name, proj_file_basename))
+    if os.path.exists(proj.config):
+        proj_db.add_entry(proj)
+        return 0
+    if not os.path.exists(proj.root):
+        os.mkdir(proj.root)
+    init_proj(proj.root)
+    return 0
 
 
 def init(args):
-    pass
+    proj = init_proj(os.getcwd())
+    ProjDb().add_entry(proj)
+    ProjHist().add_entry(proj)
 
 
-def set(args):
-    # Read projects
+def init_proj(proj_root):
+    cwd = os.getcwd()
+    os.chdir(proj_root)
+    try:
+        if not os.path.exists('.git'):
+            subprocess.call(['git', 'init'])
+    finally:
+        os.chdir(cwd)
+    proj = ProjConfig(os.path.join(proj_root, proj_file_basename))
+    proj.write()
+    return proj
+
+
+def ls(args):
+    for proj in ProjDb().ls():
+        print proj
+
+
+def forget(args):
     proj_name = args.rest[0] if args.rest else None
+    proj_db = ProjDb()
+    if proj_name in proj_db:
+        proj_db.forget(proj_name)
+
+
+def setvar(args):
+    """Only works from within an active project."""
+    if not args.rest:
+        return 1
     # Read projects
-    proj = get_proj(proj_name)
+    proj = get_proj(None)
     if proj is None:
         return 1
     proj.read()
-    # This is a new project, so it goes in the DB
-    if proj_name is None:
-        proj_db = ProjDb()
-        proj_db.add_entry(proj)
-    # Set or remove variables.
-    for var_expr in args.vars:
+    # Set variables.
+    for var_expr in args.rest:
         match = re.search(r'(\S+)=(.*)', var_expr)
         if not match:
             continue
         var = match.group(1)
         val = match.group(2)
-        if not val and var in proj.entry:
-            del proj.entry[var]
-        else:
-            proj[var] = val
+        proj.entry[var] = val
+        if var == 'name':
+            proj_db = ProjDb()
+            proj_db.forget(proj.root_name)
+            proj_db.add_entry(proj)
     proj.write()
+    ProjHist().add_entry(proj)
+    return 0
+
+
+def unsetvar(args):
+    """Only works from within an active project."""
+    if not args.rest:
+        return 1
+    # Read projects
+    proj = get_proj(None)
+    if proj is None:
+        return 1
+    proj.read()
+    # Remove variables.
+    for var in args.rest:
+        del proj.entry[var]
+    proj.write()
+    ProjHist().add_entry(proj)
     return 0
 
 
@@ -87,31 +150,67 @@ def activate(args):
         proj_db = ProjDb()
         proj_db.add_entry(proj)
     # Record the project change
-    hist = ProjHist()
-    hist.read()
-    hist.append(proj.name)
-    hist.write()
+    ProjHist().add_entry(proj)
     # Build commands to be executed
     cmds = []
+    # Get list of variables set by the last call to activate
+    managed_vars = os.environ.get('PROJ_MANAGED_ENVARS', '').split(':')
+    # Make sure to get rid of any empty variable names.
+    managed_vars = [x for x in managed_vars if x]
+    # Delete environment variables set by the previous code
+    for var in managed_vars:
+        cmds.append('export %s=' % var)
     # Change into the new project if not in the project already
     if not is_child_of(proj.root, os.getcwd()):
-        cmds.append('cd %s' % proj.root)
-    # Print line to be sourced by shell
-    cmds += proj.export_stmts()
-    print ' ; '.join(cmds)
+        cmds.append('cd %s' % shesc(proj.root))
+    # Add exports
+    exports = proj.exports()
+    cmds += ['export %s=%s' % (var, shesc(val)) for var, val in exports.items()]
+    # Set list of managed vars
+    cmds.append('PROJ_MANAGED_ENVARS=%s' % ':'.join(exports.keys()))
+    # Switch to the specified virtual env
+    virtualenv = proj.virtualenv()
+    if virtualenv:
+        cmds.append('workon %s && export PROJ_MANGED_VIRTUALENV=$VIRTUAL_ENV' % virtualenv)
+    else:
+        proj_managed_virtualenv = os.environ.get('PROJ_MANGED_VIRTUALENV', '')
+        if proj_managed_virtualenv:
+            cmds.append('unset PROJ_MANGED_VIRTUALENV')
+            current_virtualenv=os.environ.get('VIRTUAL_ENV', None)
+            if current_virtualenv and (current_virtualenv == proj_managed_virtualenv):
+                cmds.append('deactivate')
+    # Write to temp file that will be executed by the calling process
+    if args.dump:
+        for cmd in cmds:
+            print cmd
+        return 0
+    with tempfile.NamedTemporaryFile('w', delete=False) as f:
+        print f.name
+        for cmd in cmds:
+            print >> f, cmd
+        # Delete script as the last thing it does.
+        print >> f, "rm %s" % f.name
     return 0
 
 
 def get_proj(proj_name=None):
-    proj_db = ProjDb()
-    if proj_name is None:
+    def containing_proj():
         proj_root = file_in_path(os.getcwd(), proj_file_basename)
         proj_config = os.path.join(proj_root, proj_file_basename)
         if proj_config is None:
             return None
         return ProjConfig(proj_config)
+    if proj_name is None:
+        return containing_proj()
+    elif proj_name is '.':
+        proj_hist = ProjHist()
+        proj_hist.read()
+        if proj_hist.last():
+            return ProjDb().get_config(proj_hist.last())
+        else:
+            return containing_proj()
     else:
-        return proj_db.get_config(proj_name)
+        return ProjDb().get_config(proj_name)
 
 
 class ProjConfig(object):
@@ -134,11 +233,15 @@ class ProjConfig(object):
         if 'name' in self.entry:
             return self.entry['name']
         else:
-            return os.path.basename(os.path.dirname(self.config))
+            return self.root_name
 
     @property
     def root(self):
         return os.path.dirname(self.config)
+
+    @property
+    def root_name(self):
+        return os.path.basename(os.path.dirname(self.config))
 
     def exports(self):
         exports = {}
@@ -153,8 +256,8 @@ class ProjConfig(object):
                 exports[expandable] = val
         return exports
 
-    def export_stmts(self):
-        return ["export %s=%s" % (var, val) for var, val in self.exports().items()]
+    def virtualenv(self):
+        return self.entry.get('virtualenv')
 
 
 class ProjDb(object):
@@ -176,9 +279,9 @@ class ProjDb(object):
             return None
         with open(proj_db_entry) as f:
             for line in f:
-                match = re.search(r'^\s*(\S+)', line)
+                match = re.search(r'^\s*(\S.*)', line)
                 if match:
-                    return match.group(1)
+                    return match.group(1).rstrip()
         return None
 
     def get_config(self, proj_name):
@@ -188,6 +291,19 @@ class ProjDb(object):
         if not os.path.exists(proj_config):
             return None
         return ProjConfig(proj_config)
+
+    def ls(self):
+        if os.path.exists(self.db):
+            return os.listdir(self.db)
+        else:
+            return []
+
+    def forget(self, proj_name):
+        if proj_name in self:
+            os.unlink(os.path.join(self.db, proj_name))
+
+    def __contains__(self, proj_name):
+        return proj_name in set(self.ls())
 
 
 class ProjHist(object):
@@ -202,11 +318,10 @@ class ProjHist(object):
             return
         with open(self.db) as f:
             for line in f:
-                match = re.search(r'^\s*(\S+)', line)
+                match = re.search(r'^\s*(\S.*)', line)
                 if match:
-                    self.hist.append(match.group(1))
+                    self.hist.append(match.group(1).rstrip())
         self.dirty = False
-
 
     def last(self):
         return self.hist[-1] if self.hist else None
@@ -227,24 +342,35 @@ class ProjHist(object):
                 f.write('%s\n' % proj)
         self.dirty = False
 
+    def add_entry(self, proj):
+        self.read()
+        self.append(proj.name)
+        self.write()
+
 
 def main(args):
-    if args.cmd is None:
-        print >> sys.stderr, "No command found"
-        return 127
     cmds = { 'create': create,
              'init': init,
-             'activate': activate }
+             'set': setvar,
+             'unset': unsetvar,
+             'ls': ls,
+             'forget': forget,
+             'activate': activate,
+             }
+    cmd = cmds.get(args.cmd, activate)
+    # We have an unknown command, and therefore we're being called as activate, so we need
+    # to make it look like we were called as activate.
     if args.cmd not in cmds:
-        print >> sys.stderr, "Recognized commands are:", ','.join(cmds.keys())
-        return 127
-    cmd = cmds[args.cmd]
+        args.rest = [args.cmd] + args.rest
+        args.cmd = 'activate'  # For cleanliness
     return cmd(args)
 
 
 parser = argparse.ArgumentParser(description='install dot files')
-parser.add_argument('-v', '--var', metavar='VAR=VAL', dest='action', type=str,
+parser.add_argument('-v', '--var', metavar='VAR=VAL', dest='vars', type=str,
     help='set a project variables')
+parser.add_argument('--dump', dest='dump', type=bool, default=False,
+    help='dump information to command line instead of files')
 parser.add_argument('cmd', metavar='CMD', type=str, help='command to execute')
 parser.add_argument('rest', metavar='REST', type=str, nargs='*', help='per command args')
 

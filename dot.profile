@@ -24,7 +24,7 @@ function export() {
 export -f export
 
 # Set up virtualenvwrapper for Python development.
-export WORKON_HOME=$HOME/.virtualenvs
+export WORKON_HOME=$HOME/.virtualenv
 export PROJECT_HOME=$HOME/Projects
 source /usr/local/bin/virtualenvwrapper.sh
 
@@ -43,3 +43,41 @@ if [[ -r ~/google-cloud-sdk ]]; then
   source ~/google-cloud-sdk/completion.bash.inc
 fi
 
+
+_proj_completion() {
+    local cur prev opts projects
+    COMPREPLY=()
+    cur="${COMP_WORDS[COMP_CWORD]}"
+    prev="${COMP_WORDS[COMP_CWORD-1]}"
+    case "${prev}" in
+         proj)
+                projects=$( projtool ls )
+                COMPREPLY=( $(compgen -W "${projects}" -- ${cur}) )
+                return 0
+                ;;
+        projtool)
+                projects=$( projtool ls )
+                COMPREPLY=( $(compgen -W "${projects}" -- ${cur}) )
+                return 0
+                ;;
+        *)
+        ;;
+    esac
+
+    return 0
+}
+
+complete -F _proj_completion proj
+complete -F _proj_completion projtool
+
+
+_virtualenv_completion() {
+    local cur virtualenvs
+    COMPREPLY=()
+    cur="${COMP_WORDS[COMP_CWORD]}"
+    virtualenvs=$( workon )
+    COMPREPLY=( $(compgen -W "${virtualenvs}" -- ${cur}) )
+    return 0
+}
+
+complete -F _virtualenv_completion workon

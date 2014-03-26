@@ -96,10 +96,14 @@ def get_prompt(path, home, user):
        untracked_branch = re.search("^##\s+(\S+)\n", output)
        tracked_branch = re.search("^##\s+(\S+)\.\.\.", output)
        branch_match = tracked_branch if tracked_branch else untracked_branch
-       if not branch_match:
-         return proj_prompt % {'proj': proj, 'path': prompt_path}
-       branch = branch_match.group(1)
-       return proj_prompt % {'proj': '%s:%s' % (proj, branch), 'path': prompt_path}
+       proj_tag = proj
+       if branch_match:
+           branch = branch_match.group(1)
+           proj_tag += ':%s' % branch
+       virtual_env = os.environ.get('VIRTUAL_ENV')
+       if virtual_env:
+           proj_tag  += ' %s' % os.path.basename(virtual_env)
+       return proj_prompt % {'proj': proj_tag, 'path': prompt_path}
     else:
         return default_prompt % {'path': prompt_path}
 
@@ -196,7 +200,6 @@ def dev_paths(path, user, proj):
         return [os.path.join(git5_path, p) for p in devpaths]
 
     return []
-
 
 if __name__ == '__main__':
     sys.stdout.write(set_state_expr())
