@@ -7,7 +7,7 @@ import sys
 
 
 default_prompt = '${debian_chroot:+($debian_chroot)}\u@\h:\[$(tput -T${TERM:-dumb} setaf 4)\]%(path)s\[$(tput -T${TERM:-dumb} sgr0)\]\$ '
-proj_prompt = '${debian_chroot:+($debian_chroot)}\u@\h[\[$(tput -T${TERM:-dumb} setaf 1)\]%(proj)s:%(branch)s\[$(tput -T${TERM:-dumb} sgr0)\]]:\[$(tput -T${TERM:-dumb} setaf 4)\]%(path)s\[$(tput -T${TERM:-dumb} sgr0)\]\$ '
+proj_prompt = '${debian_chroot:+($debian_chroot)}\u@\h[\[$(tput -T${TERM:-dumb} setaf 1)\]%(proj)s\[$(tput -T${TERM:-dumb} sgr0)\]]:\[$(tput -T${TERM:-dumb} setaf 4)\]%(path)s\[$(tput -T${TERM:-dumb} sgr0)\]\$ '
 msg_prompt = '${debian_chroot:+($debian_chroot)}\u@\h[\[$(tput -T${TERM:-dumb} setaf 1)\]%(msg)s\[$(tput -T${TERM:-dumb} sgr0)\]]:\[$(tput -T${TERM:-dumb} setaf 4)\]%(path)s\[$(tput -T${TERM:-dumb} sgr0)\]\$ '
 proj_file = "%(home)s/.proj_current"
 
@@ -97,9 +97,9 @@ def get_prompt(path, home, user):
        tracked_branch = re.search("^##\s+(\S+)\.\.\.", output)
        branch_match = tracked_branch if tracked_branch else untracked_branch
        if not branch_match:
-         return proj_prompt % {'proj': proj, 'branch': '', 'path': prompt_path}
+         return proj_prompt % {'proj': proj, 'path': prompt_path}
        branch = branch_match.group(1)
-       return proj_prompt % {'proj': proj, 'branch': branch, 'path': prompt_path}
+       return proj_prompt % {'proj': '%s:%s' % (proj, branch), 'path': prompt_path}
     else:
         return default_prompt % {'path': prompt_path}
 
