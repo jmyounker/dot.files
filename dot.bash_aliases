@@ -1,0 +1,4 @@
+
+proj() {
+    ~/bin/projtool activate "$@"
+}

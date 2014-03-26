@@ -1,0 +1,252 @@
+#!/usr/bin/python
+
+import argparse
+import hashlib
+import os
+import shutil
+import subprocess
+import sys
+import re
+
+
+proj_file_basename = '.projrc'
+hist_to_keep = 50000  # number of project changes to keep
+
+
+def file_in_path(path, filename):
+    if os.path.exists(os.path.join(path, filename)):
+        return path
+    (parent, base) = os.path.split(path)
+    if parent == path:
+        return ""
+    else:
+        return file_in_path(parent, filename)
+
+
+def components(path):
+    (dirname, basename) = os.path.split(path)
+    if dirname == path:
+        return [dirname]
+    else:
+        return components(dirname) + [basename]
+
+
+def is_child_of(parent, child):
+    parent_path = components(os.path.normpath(parent))
+    child_path = components(os.path.normpath(child))
+    if len(child_path) < len(parent_path):
+        return False
+    else:
+        return parent_path == child_path[:len(parent_path)]
+
+
+def create(args):
+    pass
+
+
+def init(args):
+    pass
+
+
+def set(args):
+    # Read projects
+    proj_name = args.rest[0] if args.rest else None
+    # Read projects
+    proj = get_proj(proj_name)
+    if proj is None:
+        return 1
+    proj.read()
+    # This is a new project, so it goes in the DB
+    if proj_name is None:
+        proj_db = ProjDb()
+        proj_db.add_entry(proj)
+    # Set or remove variables.
+    for var_expr in args.vars:
+        match = re.search(r'(\S+)=(.*)', var_expr)
+        if not match:
+            continue
+        var = match.group(1)
+        val = match.group(2)
+        if not val and var in proj.entry:
+            del proj.entry[var]
+        else:
+            proj[var] = val
+    proj.write()
+    return 0
+
+
+def activate(args):
+    proj_name = args.rest[0] if args.rest else None
+    # Read projects
+    proj = get_proj(proj_name)
+    if proj is None:
+        return 1
+    proj.read()
+    # This is a new project, so it goes in the DB
+    if proj_name is None:
+        proj_db = ProjDb()
+        proj_db.add_entry(proj)
+    # Record the project change
+    hist = ProjHist()
+    hist.read()
+    hist.append(proj.name)
+    hist.write()
+    # Build commands to be executed
+    cmds = []
+    # Change into the new project if not in the project already
+    if not is_child_of(proj.root, os.getcwd()):
+        cmds.append('cd %s' % proj.root)
+    # Print line to be sourced by shell
+    cmds += proj.export_stmts()
+    print ' ; '.join(cmds)
+    return 0
+
+
+def get_proj(proj_name=None):
+    proj_db = ProjDb()
+    if proj_name is None:
+        proj_root = file_in_path(os.getcwd(), proj_file_basename)
+        proj_config = os.path.join(proj_root, proj_file_basename)
+        if proj_config is None:
+            return None
+        return ProjConfig(proj_config)
+    else:
+        return proj_db.get_config(proj_name)
+
+
+class ProjConfig(object):
+    def __init__(self, proj_config):
+        self.config = proj_config
+        self.entry = {}
+
+    def read(self):
+        if not os.path.exists(self.config):
+            return
+        with open(self.config) as f:
+            self.entry = eval(f.read())
+
+    def write(self):
+        with open(self.config, 'w') as f:
+            f.write(repr(self.entry))
+
+    @property
+    def name(self):
+        if 'name' in self.entry:
+            return self.entry['name']
+        else:
+            return os.path.basename(os.path.dirname(self.config))
+
+    @property
+    def root(self):
+        return os.path.dirname(self.config)
+
+    def exports(self):
+        exports = {}
+        exports['PROJ'] = self.name
+        exports['PROJ_ROOT'] = self.root
+        exports['PROJ_CONFIG'] = self.config
+        for expandable in ['GOPATH']:
+            if expandable in self.entry:
+                val = self.entry[expandable]
+                if not val.startswith('/'):
+                    val = os.path.join(self.root, val)
+                exports[expandable] = val
+        return exports
+
+    def export_stmts(self):
+        return ["export %s=%s" % (var, val) for var, val in self.exports().items()]
+
+
+class ProjDb(object):
+    def __init__(self):
+        self.db = os.path.join(os.environ['HOME'], '.projdb')
+
+    def add_entry(self, proj):
+        if not os.path.exists(self.db):
+            os.mkdir(self.db)
+        proj_db_entry = os.path.join(self.db, proj.name)
+        with open(proj_db_entry, 'w') as f:
+            f.write(proj.config)
+
+    def get_config_path(self, proj_name):
+        if not os.path.exists(self.db):
+            return None
+        proj_db_entry = os.path.join(self.db, proj_name)
+        if not os.path.exists(proj_db_entry):
+            return None
+        with open(proj_db_entry) as f:
+            for line in f:
+                match = re.search(r'^\s*(\S+)', line)
+                if match:
+                    return match.group(1)
+        return None
+
+    def get_config(self, proj_name):
+        proj_config = self.get_config_path(proj_name)
+        if proj_config is None:
+            return None
+        if not os.path.exists(proj_config):
+            return None
+        return ProjConfig(proj_config)
+
+
+class ProjHist(object):
+    def __init__(self):
+        self.db = os.path.join(os.environ['HOME'], '.projhist')
+        self.hist_to_keep = hist_to_keep
+        self.hist = []
+        self.dirty = False
+
+    def read(self):
+        if not os.path.exists(self.db):
+            return
+        with open(self.db) as f:
+            for line in f:
+                match = re.search(r'^\s*(\S+)', line)
+                if match:
+                    self.hist.append(match.group(1))
+        self.dirty = False
+
+
+    def last(self):
+        return self.hist[-1] if self.hist else None
+
+    def append(self, proj_name):
+        if self.last() == proj_name:
+            return
+        self.hist.append(proj_name)
+        self.dirty = True
+
+    def write(self):
+        if not self.dirty:
+            return
+        if len(self.hist) > self.hist_to_keep:
+            self.hist = self.hist[len(self.hist) - self.hist_to_keep:-1]
+        with open(self.db, 'w') as f:
+            for proj in self.hist:
+                f.write('%s\n' % proj)
+        self.dirty = False
+
+
+def main(args):
+    if args.cmd is None:
+        print >> sys.stderr, "No command found"
+        return 127
+    cmds = { 'create': create,
+             'init': init,
+             'activate': activate }
+    if args.cmd not in cmds:
+        print >> sys.stderr, "Recognized commands are:", ','.join(cmds.keys())
+        return 127
+    cmd = cmds[args.cmd]
+    return cmd(args)
+
+
+parser = argparse.ArgumentParser(description='install dot files')
+parser.add_argument('-v', '--var', metavar='VAR=VAL', dest='action', type=str,
+    help='set a project variables')
+parser.add_argument('cmd', metavar='CMD', type=str, help='command to execute')
+parser.add_argument('rest', metavar='REST', type=str, nargs='*', help='per command args')
+
+if __name__ == '__main__':
+    sys.exit(main(parser.parse_args()))

@@ -19,9 +19,11 @@ files = [
   ('dot.gitignore_global', '.gitignore_global'),
   ('dot.profile', '.profile'),
   ('bin/get_prompt', 'bin/get_prompt'),
+  ('bin/projtool', 'bin/projtool'),
 ]
 
-home = '/Users/jeff'
+home = os.environ['HOME']
+
 
 def md5_digest(filename):
     with open(filename) as f:
@@ -66,7 +68,7 @@ def diff(args):
         print "File %s not recovered from %s" % (source, deployed)
     elif os.path.exists(source) and os.path.exists(deployed):
       if md5_digest(source) != md5_digest(deployed):
-        subprocess.call(['p4merge', source, deployed])
+        subprocess.call(['p4merge', deployed, source])
 
 
 parser = argparse.ArgumentParser(description='install dot files')

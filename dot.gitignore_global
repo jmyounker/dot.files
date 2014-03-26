@@ -1,3 +1,4 @@
 READONLY.BACKUP.*
 *.orig
 *.pyc
+.projrc
