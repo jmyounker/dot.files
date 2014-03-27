@@ -111,10 +111,12 @@ def setvar(args):
             continue
         var = match.group(1)
         val = match.group(2)
-        proj.entry[var] = val
-        if var == 'name':
+        if var != 'name':
+            proj.entry[var] = val
+        else:
             proj_db = ProjDb()
-            proj_db.forget(proj.root_name)
+            proj_db.forget(proj.name)
+            proj.entry[var] = val
             proj_db.add_entry(proj)
     proj.write()
     ProjHist().add_entry(proj)

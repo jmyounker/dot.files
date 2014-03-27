@@ -21,6 +21,7 @@ path_condensations = [("java", "j"),
                       ("jyounker", "jy"),
                       ("jeff", "j"),
                       ("production", "p"),
+                      ("Python Testing for Dummies", "PTfD"),
                      ]
 
 
@@ -64,11 +65,24 @@ def prompt_assignment(prompt):
     return 'PS1=\'%s\'' % prompt
 
 
+def get_proj_name(proj_config):
+    with open(proj_config) as f:
+        proj_entry = eval(f.read())
+    if 'name' in proj_entry:
+        return proj_entry['name']
+    else:
+        return os.path.basename(os.path.dirname(proj_config))
+
+
 def get_prompt(path, home, user):
-    projroot = file_in_path(path, '.git')
+    proj_root = file_in_path(path, '.projrc')
     proj = ""
-    if projroot:
-        (_, proj) = os.path.split(projroot)
+    if proj_root:
+        proj_config = os.path.join(proj_root, '.projrc')
+        try:
+            proj = get_proj_name(proj_config)
+        except:
+            proj = os.path.basename(proj_root)
     prompt_path = condense_path(path, home, user, proj)
 
     if home:
@@ -88,46 +102,46 @@ def get_prompt(path, home, user):
         raise
 
     if proj:
-       try:
-          output = subprocess.check_output(['/usr/bin/git', 'status', '-b', '--porcelain'])
-       except:
-          return proj_prompt % {'proj': proj, 'branch': '', 'path': prompt_path}
+        try:
+            output = subprocess.check_output(['/usr/bin/git', 'status', '-b', '--porcelain'])
+        except:
+            return proj_prompt % {'proj': proj, 'path': prompt_path}
 
-       untracked_branch = re.search("^##\s+(\S+)\n", output)
-       tracked_branch = re.search("^##\s+(\S+)\.\.\.", output)
-       branch_match = tracked_branch if tracked_branch else untracked_branch
-       proj_tag = proj
-       if branch_match:
-           branch = branch_match.group(1)
-           proj_tag += ':%s' % branch
-       virtual_env = os.environ.get('VIRTUAL_ENV')
-       if virtual_env:
-           proj_tag  += ' %s' % os.path.basename(virtual_env)
-       return proj_prompt % {'proj': proj_tag, 'path': prompt_path}
+        untracked_branch = re.search("^##\s+(\S+)\n", output)
+        tracked_branch = re.search("^##\s+(\S+)\.\.\.", output)
+        branch_match = tracked_branch if tracked_branch else untracked_branch
+        proj_tag = proj
+        if branch_match:
+            branch = branch_match.group(1)
+            proj_tag += ':%s' % branch
+        virtual_env = os.environ.get('VIRTUAL_ENV')
+        if virtual_env:
+            proj_tag  += ',%s' % os.path.basename(virtual_env)
+        return proj_prompt % {'proj': proj_tag, 'path': prompt_path}
     else:
         return default_prompt % {'path': prompt_path}
 
 
 def condense_path(path, home, user, proj):
     if not path.endswith('/'):
-       path = path + '/'
+        path = path + '/'
 
     path = trim_initial_path_components(path, home, user, proj)
     if not path:
-      return ""
+        return ""
 
     has_leading_slash = path.startswith('/')
     if not has_leading_slash:
-      path = '/' + path
+        path = '/' + path
 
     for (component, condensed) in path_condensations:
-      path = path.replace("/" + component + "/", "/" + condensed + "/") 
+        path = path.replace("/" + component + "/", "/" + condensed + "/")
 
     if not has_leading_slash:
-       path = path[1:]
+        path = path[1:]
 
     if not path:
-       return path
+        return path
 
     # strip trailing slash
     return path[:-1]
@@ -137,9 +151,8 @@ def trim_initial_path_components(path, home, user, proj):
     # $HOME/baz/ -> ~/baz/
     # $HOME/ -> ~/
     if path.startswith(home + '/'):
-      path = path[(len(home) + 1):]
-      return "~/" + path
-
+        path = path[(len(home) + 1):]
+        return "~/" + path
     return path
 
 
@@ -183,7 +196,7 @@ def set_cdpath_expr(path, home, user):
 def get_cdpath(path, home, user):
     git_home = file_in_path(path, '.git')
     if not git_home:
-       return ':'.join([".", home])
+        return ':'.join([".", home])
     return ':'.join([".", git_home, home] + dev_paths(path, user, os.path.basename(git_home)))
 
 
@@ -191,13 +204,13 @@ def get_cdpath(path, home, user):
 # I begin doing big projects again.
 def dev_paths(path, user, proj):
     # A set of relative paths
-    devpaths = []
+    partial_dev_paths = []
 
     git5_component = 'git5'
     if ('/%s/' % git5_component) in path:
         git5_path = os.path.join(parent_of(path, git5_component),
                                  git5_component)
-        return [os.path.join(git5_path, p) for p in devpaths]
+        return [os.path.join(git5_path, p) for p in partial_dev_paths]
 
     return []
 
