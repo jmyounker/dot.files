@@ -9,8 +9,7 @@
 [user]
 	name = Jeff Younker
 	email = jeff@drinktomi.com
-[push]
-	default = simple
+
 [color]
 	ui = true
 	status = auto
@@ -25,6 +24,7 @@
         keepTemporaries = false
         trustExitCode = false
         keepBackup = false
+
 [diff]
         tool = p4diff
 

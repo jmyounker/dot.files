@@ -9,7 +9,8 @@ import sys
 
 
 dirs = [
-  'bin',
+    ('bin', None),
+    ('.ssh', 0700)
 ]
 
 files = [
@@ -20,6 +21,7 @@ files = [
   ('dot.profile', '.profile'),
   ('bin/get_prompt', 'bin/get_prompt'),
   ('bin/projtool', 'bin/projtool'),
+  ('dot.ssh/config', '.ssh/config'),
 ]
 
 home = os.environ['HOME']
@@ -44,11 +46,12 @@ def install(args):
   if os.path.exists(os.path.join(home, '.bash_profile')):
     print >> sys.stderr, ".bash_profile exists. This can cause problems. Maybe you should remove it."
 
-  for dir in dirs:
+  for (dir, perms) in dirs:
     dir_full_path = os.path.join(home, dir)
     if not os.path.exists(dir_full_path):
       os.mkdir(dir_full_path)
-
+    if not perms is None:
+      os.chmod(dir_full_path, perms)
   for (source, deployed) in targets(args):
     if os.path.exists(source):
       shutil.copy2(source, deployed)
