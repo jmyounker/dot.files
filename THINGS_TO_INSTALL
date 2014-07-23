@@ -1,12 +1,12 @@
 When I install onto a new machine I should install:
 
-easy_install pip
-pip install virtualenv
-pip install virtualenvwrapper
+sudo easy_install pip
+sudo pip install virtualenv
+sudo pip install virtualenvwrapper
 
 git
 brew (OSX)
-brew tig
+brew install tig
 
 
 
