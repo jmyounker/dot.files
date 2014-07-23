@@ -58,12 +58,7 @@ _proj_completion() {
     cur="${COMP_WORDS[COMP_CWORD]}"
     prev="${COMP_WORDS[COMP_CWORD-1]}"
     case "${prev}" in
-         proj)
-                projects=$( projtool ls )
-                COMPREPLY=( $(compgen -W "${projects}" -- ${cur}) )
-                return 0
-                ;;
-        projtool)
+         proj|projtools)
                 projects=$( projtool ls )
                 COMPREPLY=( $(compgen -W "${projects}" -- ${cur}) )
                 return 0
@@ -89,3 +84,26 @@ _virtualenv_completion() {
 }
 
 complete -F _virtualenv_completion workon
+
+
+_conn_completion() {
+    local cur prev conns
+    COMPREPLY=()
+    cur="${COMP_WORDS[COMP_CWORD]}"
+    prev="${COMP_WORDS[COMP_CWORD-1]}"
+    case "${prev}" in
+         ssh|conn)
+                conns=$( awk '/^host/{print $2}' $HOME/.ssh/config )
+                COMPREPLY=( $(compgen -W "${conns}" -- ${cur}) )
+                return 0
+                ;;
+        *)
+        ;;
+    esac
+
+    return 0
+}
+
+complete -F _conn_completion conn
+complete -F _conn_completion ssh
+

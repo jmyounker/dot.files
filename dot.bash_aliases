@@ -6,3 +6,8 @@ proj() {
         source $file
     fi
 }
+
+conn() {
+    ssh -t "$@" screen -xRR
+}
+
