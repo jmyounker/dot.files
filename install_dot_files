@@ -19,6 +19,7 @@ files = [
   ('dot.gitconfig', '.gitconfig'),
   ('dot.gitignore_global', '.gitignore_global'),
   ('dot.profile', '.profile'),
+  ('dot.screenrc', '.screenrc'),
   ('bin/get_prompt', 'bin/get_prompt'),
   ('bin/projtool', 'bin/projtool'),
   ('dot.ssh/config', '.ssh/config'),
