@@ -1,6 +1,11 @@
 # Harpoon development at SoundCloud
 host harp-vm01
-  hostname 192.168.169.128
+  hostname 192.168.169.4
+  user jmy
+  ForwardAgent yes
+
+host harp-vm02
+  hostname 192.168.169.5
   user jmy
   ForwardAgent yes
 
