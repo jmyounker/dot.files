@@ -1,4 +1,10 @@
 
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+alias .....='cd ../../../..'
+alias ......='cd ../../../../..'
+
 proj() {
     local file
     file=$(~/bin/projtool "$@")
