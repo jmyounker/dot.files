@@ -38,7 +38,22 @@ source /usr/local/bin/virtualenvwrapper.sh
 # Set up go language
 export GOROOT=/usr/local/go
 
-PATH=$PATH:$HOME/bin:$HOME/local/scala-2.0.12/bin:/Applications/p4merge.app/Contents/MacOS:$GOROOT/bin:$GOPATH/bin
+add_to_path () {
+    if [ ! -d "$1" ]; then
+        return 0
+    fi
+    if [[ "$PATH" =~ (^|:)"${1}"(:|$) ]]; then
+        return 0
+    fi
+    export PATH=$PATH:$1
+}
+
+add_to_path "$HOME/bin"
+add_to_path "$HOME/local/scala-2.0.12/bin"
+add_to_path "/Applications/p4merge.app/Contents/MacOS"
+add_to_path "$GOROOT/bin"
+add_to_path "$GOPATH/bin"
+add_to_path "$GOPATH/src/github.com/soundcloud/system/bin"
 
 # Set up most awesome command line prompt
 export EMERGENCY_PROMPT='${debian_chroot:+($debian_chroot)}\\u@\\h:\\[$(tput -T${TERM:-dumb} setaf 1)\\]DUDE!\ CANT\ RUN\ GET_PROMPT.\ WTF?\\[$(tput -T${TERM:-dumb} sgr0)\\]\\$ '
