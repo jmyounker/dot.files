@@ -111,6 +111,8 @@ def get_prompt(path, home, user):
         raise
 
     if proj:
+        if '/.git/' in path + '/':
+            return proj_prompt % {'proj': proj, 'path': prompt_path}
         try:
             output = subprocess.check_output(['/usr/bin/git', 'status', '-b', '--porcelain'])
         except:
