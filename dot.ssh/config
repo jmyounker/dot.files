@@ -6,7 +6,7 @@ host console-vm01
 
 host harp-vm02
   hostname 192.168.169.5
-  user jmy
+  user jy
   ForwardAgent yes
 
 host harp-shared

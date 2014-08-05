@@ -26,6 +26,11 @@ path_condensations = [("java", "j"),
                       ("github.com", "gh"),
                       ("soundcloud", "sc"),
                       ("harpoon", "hpn"),
+                      ("harpoon-agent", "hpn-agnt"),
+                      ("harpoon-scheduler", "hpn-schd"),
+                      ("harpoon-container", "hpn-cnt"),
+                      ("harpoon-configstore", "hpn-cfgstore"),
+                      ("harpoon-internal", "hpn-int"),
                      ]
 
 prefix_transforms = [(os.environ.get('HOME') + '/', '~/'),
