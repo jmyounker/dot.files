@@ -341,7 +341,8 @@
       </general>
     </ddl-file-settings>
   </component>
-  <component name="ProjectRootManager" version="2" project-jdk-name="Python 2.7.5 (/System/Library/Frameworks/Python.framework/Versions/2.7/bin/python)" project-jdk-type="Python SDK" />
+  <component name="IdProvider" IDEtalkID="D246B91E655496B181AD1D0B4E9FE1B1" />
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_3" assert-keyword="false" jdk-15="false" project-jdk-name="Python 2.7.5 (/System/Library/Frameworks/Python.framework/Versions/2.7/bin/python)" project-jdk-type="Python SDK" />
   <component name="UnicodeBrowser">
     <option name="fontName" value="Menlo" />
   </component>

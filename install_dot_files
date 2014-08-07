@@ -3,6 +3,8 @@
 import argparse
 import hashlib
 import os
+import platform
+import re
 import shutil
 import subprocess
 import sys
@@ -13,10 +15,16 @@ dirs = [
     ('.ssh', 0700)
 ]
 
+# Ensure that the set operation below includes UNKNOWN.
+uname_to_arch = {'Darwin': 'OSX', 'Linux': 'LINUX', '':'UNKNOWN'}
+
+archs = set(uname_to_arch.values())
+
 files = [
   ('dot.bash_aliases', '.bash_aliases'),
+  ('dot.tmux.conf', '.tmux.conf', True),
   ('dot.bashrc', '.bashrc'),
-  ('dot.gitconfig', '.gitconfig'),
+  ('dot.gitconfig', '.gitconfig', True),
   ('dot.gitignore_global', '.gitignore_global'),
   ('dot.profile', '.profile'),
   ('dot.screenrc', '.screenrc'),
@@ -34,38 +42,75 @@ def md5_digest(filename):
 
 
 def targets(args):
-    for (source, deployed) in files:
+    for target in files:
+        if len(target) == 2:
+            target = (target[0], target[1], False)
+        (source, deployed, translate) = target
         deployed_full_path = os.path.join(home, deployed)
         if (source in args.files or
             deployed in args.files or
             deployed_full_path in args.files or
             not args.files):
-            yield (source, deployed_full_path)
+            yield (source, deployed_full_path, translate)
 
 
 def install(args):
   if os.path.exists(os.path.join(home, '.bash_profile')):
-    print >> sys.stderr, ".bash_profile exists. This can cause problems. Maybe you should remove it."
+      print >> sys.stderr, ".bash_profile exists. This can cause problems. Maybe you should remove it."
 
   for (dir, perms) in dirs:
-    dir_full_path = os.path.join(home, dir)
-    if not os.path.exists(dir_full_path):
-      os.mkdir(dir_full_path)
-    if not perms is None:
-      os.chmod(dir_full_path, perms)
-  for (source, deployed) in targets(args):
-    if os.path.exists(source):
-      shutil.copy2(source, deployed)
+      dir_full_path = os.path.join(home, dir)
+      if not os.path.exists(dir_full_path):
+          os.mkdir(dir_full_path)
+      if not perms is None:
+          os.chmod(dir_full_path, perms)
+      for (source, deployed, translate) in targets(args):
+          if not os.path.exists(source):
+              continue
+          if translate:
+              process_file_for_arch(source, deployed, get_arch())
+          else:
+              shutil.copy2(source, deployed)
+
+
+
+def get_arch():
+    return uname_to_arch.get(platform.uname()[0], 'UNKNOWN')
+
+
+def process_file_for_arch(src, dest, arch):
+    with open(src, 'r') as src_file:
+        with open(dest, 'w') as dest_file:
+            for line in filter_for_arch(src_file, arch):
+                dest_file.write(line)
+
+
+has_arch = re.compile(r'^(%s):' % '|'.join(archs))
+
+
+def filter_for_arch(lines, arch):
+    for line in lines:
+        match = has_arch.search(line)
+        if match and match.group(1) != arch:
+            pass
+        elif match:
+            yield line[len(match.group(0)):]
+        else:
+            yield line
 
 
 def recover(args):
-  for (source, deployed) in targets(args):
-    if os.path.exists(deployed):
-      shutil.copy2(deployed, source)
+  for (source, deployed, translated) in targets(args):
+      if os.path.exists(deployed):
+          if  translated:
+              subprocess.call(['p4merge', deployed, source, source, source])
+          else:
+              shutil.copy2(deployed, source)
+
 
 
 def diff(args):
-  for (source, deployed) in targets(args):
+  for (source, deployed, translate) in targets(args):
     if os.path.exists(source) and not os.path.exists(deployed):
         print "File %s not deployed from %s" % (deployed, source)
     elif not os.path.exists(source) and os.path.exists(deployed):

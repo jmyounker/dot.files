@@ -3,14 +3,16 @@ host console-vm01
   hostname 192.168.169.4
   user jmy
   ForwardAgent yes
+  ForwardX11 yes
 
 host harp-vm02
   hostname 192.168.169.5
   user jy
   ForwardAgent yes
+  ForwardX11 yes
 
 host harp-shared
   hostname ip-10-70-26-232.eu-west.s-cloud.net
   user jy
   ForwardAgent yes
-
+  ForwardX11 yes

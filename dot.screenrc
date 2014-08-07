@@ -1,3 +1,3 @@
 startup_message off
 nethack on
-caption always ' %{r.}%H   %-w%{g.}%n %t%{r.} %+w %=%Y%m%d %c '
+caption always ' %-w%{r.}%n %t%{d.} %+w %=%Y%m%d %c '

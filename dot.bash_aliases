@@ -26,3 +26,16 @@ function ssh-reagent () {
   fi
   echo Cannot find ssh agent - maybe you should reconnect and forward it?
 }
+
+branch() {
+  if [ $# -ne 1 ]; then
+     echo "usage: $0 NEW_BRANCH_NAME"
+     return 127
+  fi
+  git checkout master
+  git pull origin master
+  git branch $1
+  git checkout $1
+  git pull origin master
+}
+
