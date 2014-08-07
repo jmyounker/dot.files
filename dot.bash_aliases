@@ -39,3 +39,9 @@ branch() {
   git pull origin master
 }
 
+reconn() {
+  update_env_script=$(tempfile)
+  tmux showenv | awk '{if (/^-/) {print "unset " substr($0 ,2)} else {sub(/=/, "=\""); print "export " $0 "\"" }}' > $update_env_script
+  source $update_env_script
+  rm $update_env_script
+}
