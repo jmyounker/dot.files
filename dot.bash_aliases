@@ -14,7 +14,7 @@ proj() {
 }
 
 conn() {
-    ssh -t "$@" screen -xRR
+    ssh -t "$@" tmux attach
 }
 
 function ssh-reagent () {

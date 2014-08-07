@@ -17,22 +17,22 @@
 
 [merge]
         keepBackup = false
-OSX:        tool = p4merge
+        tool = p4merge
 
 [mergetool "p4merge"]
-OSX:        cmd = p4merge "$BASE" "$LOCAL" "$REMOTE" "$MERGED"
+        cmd = p4merge "$BASE" "$LOCAL" "$REMOTE" "$MERGED"
         keepTemporaries = false
         trustExitCode = false
         keepBackup = false
 
-OSX:[diff]
-OSX:        tool = p4diff
-OSX:
+[diff]
+        tool = p4diff
+
 [difftool]
         prompt = false
 
 [difftool "p4diff"]
-OSX:        cmd = p4merge "$LOCAL" "$REMOTE"
+        cmd = p4merge "$LOCAL" "$REMOTE"
         keepBackup = false
 
 [core]

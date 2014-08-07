@@ -51,6 +51,7 @@ add_to_path () {
 add_to_path "$HOME/bin"
 add_to_path "$HOME/local/scala-2.0.12/bin"
 add_to_path "/Applications/p4merge.app/Contents/MacOS"
+add_to_path "$HOME/local/p4v/bin"
 add_to_path "$GOROOT/bin"
 add_to_path "$GOPATH/bin"
 add_to_path "$GOPATH/src/github.com/soundcloud/system/bin"

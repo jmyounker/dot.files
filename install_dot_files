@@ -103,7 +103,8 @@ def recover(args):
   for (source, deployed, translated) in targets(args):
       if os.path.exists(deployed):
           if  translated:
-              subprocess.call(['p4merge', deployed, source, source, source])
+              if md5_digest(source) != md5_digest(deployed):
+                  subprocess.call(['p4merge', deployed, source, source, source])
           else:
               shutil.copy2(deployed, source)
 
