@@ -30,7 +30,12 @@ case $cmd in
     ;;
 
   t)
-    tig status
+    which tig 1>/dev/null 2>&1
+    if [ $? -eq 0 ]; then
+        tig status
+    else
+        git status
+    fi
     ;;
 
   pm|pom)
