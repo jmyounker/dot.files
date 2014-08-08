@@ -42,17 +42,27 @@ def md5_digest(filename):
         return hashlib.md5(f.read()).hexdigest()
 
 
+
 def targets(args):
+    allowed = set(args.files)
     for target in files:
         if len(target) == 2:
             target = (target[0], target[1], False)
         (source, deployed, translate) = target
+        if not is_allowed_file(source, deployed, allowed):
+            continue
         deployed_full_path = os.path.join(home, deployed)
         if (source in args.files or
             deployed in args.files or
             deployed_full_path in args.files or
             not args.files):
             yield (source, deployed_full_path, translate)
+
+
+def is_allowed_file(src, dest, files):
+    if not files:
+        return True
+    return (src in files) or (dest in files)
 
 
 def install(args):
@@ -103,6 +113,7 @@ def filter_for_arch(lines, arch):
 def recover(args):
   for (source, deployed, translated) in targets(args):
       if os.path.exists(deployed):
+          continue
           if  translated:
               if md5_digest(source) != md5_digest(deployed):
                   subprocess.call(['p4merge', deployed, source, source, source])
