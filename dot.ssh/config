@@ -16,3 +16,10 @@ host harp-shared
   user jy
   ForwardAgent yes
   ForwardX11 yes
+
+host shell
+  hostname shell.int.s-cloud.net
+  user jy
+  ForwardAgent yes
+  ForwardX11 yes
+

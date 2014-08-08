@@ -33,7 +33,9 @@ fi
 # Set up virtualenvwrapper for Python development.
 export WORKON_HOME=$HOME/.virtualenv
 export PROJECT_HOME=$HOME/Projects
-source /usr/local/bin/virtualenvwrapper.sh
+if [ -e /usr/local/bin/virtualenvwrapper.sh ]; then
+    source /usr/local/bin/virtualenvwrapper.sh
+fi
 
 # Set up go language
 export GOROOT=/usr/local/go
