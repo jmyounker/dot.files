@@ -113,7 +113,6 @@ def filter_for_arch(lines, arch):
 def recover(args):
   for (source, deployed, translated) in targets(args):
       if os.path.exists(deployed):
-          continue
           if  translated:
               if md5_digest(source) != md5_digest(deployed):
                   subprocess.call(['p4merge', deployed, source, source, source])

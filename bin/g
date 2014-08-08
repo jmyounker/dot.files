@@ -3,12 +3,15 @@
 if [ $# -eq 0 ]; then
    cat <<EOUSAGE
 options include:
-   build - go build
-   install - go install
-   get - go get
-   s - tig status
-   b - create branch
+   down - git pull
+   pom - git pull origin master
+   pm - git pull origin master
+   slave - create branch from master ala soundcloud
+   t - tig status
+   up - git push
+ 
 EOUSAGE
+    exit 127
 fi
 
 cmd=$1
@@ -25,8 +28,21 @@ case $cmd in
     git checkout $1
     git pull origin master
     ;;
+
   t)
     tig status
+    ;;
+
+  pm|pom)
+    git pull origin master
+    ;;
+
+  down)
+    git pull
+    ;;
+
+  up)
+    git push
     ;;
 
   *)

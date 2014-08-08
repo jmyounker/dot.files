@@ -30,6 +30,7 @@ def shesc(s):
     s = re.sub(r'\t', '\\t', s)
     return re.sub(r'\n', '\\n', s)
 
+
 def components(path):
     (dirname, basename) = os.path.split(path)
     if dirname == path:
