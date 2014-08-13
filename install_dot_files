@@ -20,7 +20,7 @@ uname_to_arch = {'Darwin': 'OSX', 'Linux': 'LINUX', '':'UNKNOWN'}
 
 archs = set(uname_to_arch.values())
 
-files = [
+installs = [
   ('dot.bash_aliases', '.bash_aliases'),
   ('dot.tmux.conf', '.tmux.conf', True),
   ('dot.bashrc', '.bashrc'),
@@ -28,10 +28,16 @@ files = [
   ('dot.gitignore_global', '.gitignore_global'),
   ('dot.profile', '.profile'),
   ('dot.screenrc', '.screenrc'),
-  ('bin/g', 'bin/g'),
   ('bin/get_prompt', 'bin/get_prompt'),
+  ('bin/git_sclone', 'bin/git_sclone'),
+  ('bin/git_start', 'bin/git_start'),
+  ('bin/git_tig_status', 'bin/git_tig_status'),
   ('bin/projtool', 'bin/projtool'),
   ('dot.ssh/config', '.ssh/config'),
+]
+
+removals = [
+    ('bin/g', 'bin/g'),
 ]
 
 home = os.environ['HOME']
@@ -43,7 +49,7 @@ def md5_digest(filename):
 
 
 
-def targets(args):
+def targets(args, files):
     allowed = set(args.files)
     for target in files:
         if len(target) == 2:
@@ -75,13 +81,17 @@ def install(args):
           os.mkdir(dir_full_path)
       if not perms is None:
           os.chmod(dir_full_path, perms)
-      for (source, deployed, translate) in targets(args):
+      for (source, deployed, translate) in targets(args, installs):
           if not os.path.exists(source):
               continue
           if translate:
               process_file_for_arch(source, deployed, get_arch())
           else:
               shutil.copy2(source, deployed)
+      for (source, deployed, translate) in targets(args, removals):
+          if os.path.exists(deployed):
+              os.unlink(deployed)
+
 
 
 
@@ -111,7 +121,7 @@ def filter_for_arch(lines, arch):
 
 
 def recover(args):
-  for (source, deployed, translated) in targets(args):
+  for (source, deployed, translated) in targets(args, installs):
       if os.path.exists(deployed):
           if  translated:
               if md5_digest(source) != md5_digest(deployed):
@@ -122,7 +132,7 @@ def recover(args):
 
 
 def diff(args):
-  for (source, deployed, translate) in targets(args):
+  for (source, deployed, translate) in targets(args, installs):
     if os.path.exists(source) and not os.path.exists(deployed):
         print "File %s not deployed from %s" % (deployed, source)
     elif not os.path.exists(source) and os.path.exists(deployed):

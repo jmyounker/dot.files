@@ -1,0 +1,19 @@
+#!/bin/bash
+
+if [ $# -ne 1 ]; then
+    echo "usage: $0 GITHUB_BRANCH_NAME"
+    return 127
+fi
+gitpath="git@github.com:soundcloud/shibboleth"
+relpath="src/github.com/soundcloud/$1"
+projroot="$HOME/dev"
+
+if [ -d "$projroot/$relpath" ]; then
+    echo "Project $1 already exists"
+    return 0
+fi
+cd $projroot
+git clone $gitpath $relpath
+cd $projroot/$relpath
+projtool init
+

@@ -1,10 +1,19 @@
 [alias]
         b = branch
         br = branch
+        c = checkout
         ci = commit -m
         co = checkout
+        dt = difftool
+        mt = mergetool
+        p = pull
+        pm = pull origin master
+        pom = pull origin master
         s = status
+        sclone = !~/bin/git_sclone $1
+        start = !~/bin/git_start $1
         submit = commit
+        t = !git_tig_status
 
 [user]
 	name = Jeff Younker
@@ -36,7 +45,8 @@
         keepBackup = false
 
 [core]
-        excludesfile = /Users/jeff/.gitignore_global
+        editor = vi
+        excludesfile = ~/.gitignore_global
 
 [filter "media"]
 	clean = git-media-clean %f

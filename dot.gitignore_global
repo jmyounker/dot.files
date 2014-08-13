@@ -1,4 +1,9 @@
 READONLY.BACKUP.*
 *.orig
 *.pyc
+
+# Development tool droppings
+.eclipse
+.idea
 .projrc
+

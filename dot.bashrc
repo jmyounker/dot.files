@@ -125,3 +125,9 @@ _conn_completion() {
 complete -F _conn_completion conn
 complete -F _conn_completion ssh
 
+function_exists() {
+    declare -f $1 > /dev/null
+    return $?
+}
+
+function_exists _git && complete -F _git g
