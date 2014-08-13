@@ -4,6 +4,7 @@
         c = checkout
         ci = commit -m
         co = checkout
+        down = pull
         dt = difftool
         mt = mergetool
         p = pull
@@ -14,6 +15,7 @@
         start = !~/bin/git_start $1
         submit = commit
         t = !git_tig_status
+        up = push
 
 [user]
 	name = Jeff Younker
