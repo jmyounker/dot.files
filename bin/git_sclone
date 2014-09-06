@@ -1,8 +1,8 @@
 #!/bin/bash
 
-if [ $# -ne 1 ]; then
+if [ $# -ne 2 ]; then
     echo "usage: $0 GITHUB_BRANCH_NAME"
-    return 127
+    exit 127
 fi
 gitpath="git@github.com:soundcloud/shibboleth"
 relpath="src/github.com/soundcloud/$1"

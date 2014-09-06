@@ -1,25 +1,19 @@
 # Harpoon development at SoundCloud
-host console-vm01
+host harp-vm01 harp harpoon-vm01 harpoon
   hostname 192.168.169.4
   user jmy
   ForwardAgent yes
   ForwardX11 yes
 
-host harp-vm02
+host cs-vm02 codesearch-vm02 codesearch cs
   hostname 192.168.169.5
-  user jy
-  ForwardAgent yes
-  ForwardX11 yes
-
-host harp-shared
-  hostname ip-10-70-26-232.eu-west.s-cloud.net
-  user jy
+  user jmy
   ForwardAgent yes
   ForwardX11 yes
 
 host shell
   hostname shell.int.s-cloud.net
-  user jy
+  user jmy
   ForwardAgent yes
   ForwardX11 yes
 
