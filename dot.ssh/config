@@ -1,4 +1,6 @@
 # Harpoon development at SoundCloud
+ServerAliveInterval 300
+
 host harp-vm01 harp harpoon-vm01 harpoon
   hostname 192.168.169.4
   user jmy
@@ -13,6 +15,16 @@ host cs-vm02 codesearch-vm02 codesearch cs
 
 host shell
   hostname shell.int.s-cloud.net
+  user jmy
+  ForwardAgent yes
+  ForwardX11 yes
+
+host *.int.s-cloud.net
+  user jmy
+  ForwardAgent yes
+  ForwardX11 yes
+
+host ams-app???
   user jmy
   ForwardAgent yes
   ForwardX11 yes

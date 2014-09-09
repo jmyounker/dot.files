@@ -40,3 +40,67 @@ reconn() {
   source $update_env_script
   rm $update_env_script
 }
+
+# Install environment on a new host
+prov() {
+  if [ "$#" != 1 ]; then
+    echo usage: prov HOST
+    return 127
+  fi
+  local host prov_cmd
+  host=$1
+  prov_cmd=/tmp/prov.$$.$RANDOM
+  cat <<PROV_SCRIPT >$prov_cmd
+#!/bin/sh
+
+# Installs my dot files.  This is copied to remote hosts and executed
+# by the bash alias 'prov HOSTNAME'
+
+die() { echo "\$@" 1>&2 ; exit 1; }
+
+if [ ! -e \$HOME/repos ]; then
+  mkdir \$HOME/repos || die "Could not create repox directory"
+fi
+
+cd \$HOME/repos || die "Could not cd into repos directory"
+
+if [ ! -e \$HOME/.ssh ]; then
+   mkdir \$HOME/.ssh || die "Could not create .ssh directory"
+   chmod 700 \$HOME/.ssh || die "Could not set permissions on .ssh directory"
+fi
+
+GITHUB="github.com,192.30.252.130 ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAq2A7hRGmdnm9tUDbO9IDSwBK6TbQa+PXYPCPy6rbTrTtw7PHkccKrpp0yVhp5HdEIcKr6pLlVDBfOLX9QUsyCOV0wzfjIJNlGEYsdlLJizHhbn2mUjvSAHQqZETYP81eFzLQNnPHt4EVVUh7VfDESU84KezmD5QlWpXLmvU31/yMf+Se8xhHTvKSCZIFImWwoG6mbUoWf9nzpIoaSjB+weqqUUmpaaasXVal72J+UX2B+2RPW3RcT0eOzQgqlJL3RKrTJvdsjE3JEAvGq3lGHSZXy28G3skua2SmVi/w4yCE6gbODqnTWlg7+wC604ydGXA8VJiS5ap43JXiUFFAaQ=="
+
+if [ ! -e \$HOME/.ssh/known_hosts ]; then
+   echo \$GITHUB > \$HOME/.ssh/known_hosts || die "Could not create known_hosts file"
+   chmod 644 \$HOME/.ssh/known_hosts || die "Could not set permissions on known_hosts file"
+else
+   grep -q github.com \$HOME/.ssh/known_hosts
+   if [ \$? != 0 ]; then
+     echo \$GITHUB >> \$HOME/.ssh/known_hosts || die "Could not create known_hosts entry for github"
+   fi
+fi
+
+if [ ! -e \$HOME/repos/dot.files ]; then
+  git clone git@github.com:jmyounker/dot.files.git dot.files || die "Could not clone dot files"
+else
+  cd \$HOME/repos/dot.files
+  git pull || die "Could not pull most recent dot files changes"
+fi
+
+cd \$HOME/repos/dot.files || die "Could not change into dot files directory"
+
+./install || die "Could not install dot files"
+
+PROV_SCRIPT
+  chmod a+x $prov_cmd
+  scp $prov_cmd $host:$prov_cmd
+  rm $prov_cmd
+  ssh -A -x $host $prov_cmd
+  if [ "$?" == 0 ]; then
+     ssh -x $host rm $prov_cmd
+     conn $host 
+  else
+     ssh -x $host rm $prov_cmd
+  fi
+}

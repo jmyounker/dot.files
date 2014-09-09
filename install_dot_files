@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-import argparse
+import optparse
 import hashlib
 import os
 import platform
@@ -142,19 +142,18 @@ def diff(args):
         subprocess.call(['p4merge', deployed, source])
 
 
-parser = argparse.ArgumentParser(description='install dot files')
-parser.add_argument('--diff', dest='action', action='store_const',
+parser = optparse.OptionParser(description='install dot files')
+parser.add_option('--diff', dest='action', action='store_const',
     const=diff, help='diff deployed and source dot files')
-parser.add_argument('--install', dest='action', action='store_const',
+parser.add_option('--install', dest='action', action='store_const',
     const=install, help='install dot files')
-parser.add_argument('--recover', dest='action', action='store_const',
+parser.add_option('--recover', dest='action', action='store_const',
     const=recover, help='recover dot files from environment')
-parser.add_argument('files', metavar='FILE', type=str, nargs='*',
-                   help='a list of files to act on')
 
 if __name__ == '__main__':
-    args = parser.parse_args()
-    if args.action is None:
-        args.action = diff
-    args.action(args)
+    (opts, args) = parser.parse_args()
+    if opts.action is None:
+        opts.action = diff
+    opts.files = args
+    opts.action(opts)
 
