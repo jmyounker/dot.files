@@ -1,12 +1,12 @@
 #!/bin/bash
 
-if [ $# -ne 1 ]; then
+if [ $# -ne 2 ]; then
     echo "usage: $0 NEW_BRANCH_NAME"
-    return 127
+    exit 127
 fi
+branch_name=$1
 git checkout master
 git pull origin master
-git branch $1
-git checkout $1
+git branch $branch_name
+git checkout $branch_name
 git pull origin master
-
