@@ -12,7 +12,7 @@ resource() {
 }
 
 # Turn on precommit checking for unstaged modifications to staged files.
-GIT_PRECOMMIT_CHECK_UNSTAGED="TRUE"  # Any non-zero length string turns it on
+export GIT_PRECOMMIT_CHECK_UNSTAGED="TRUE"  # Any non-zero length string turns it on
 
 # don't put duplicate lines or lines starting with space in the history.
 # See bash(1) for more options
