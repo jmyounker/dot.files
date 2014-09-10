@@ -6,6 +6,7 @@
         co = checkout
         down = pull
         dt = difftool
+        master = checkout master
         mt = mergetool
         p = pull
         pm = pull origin master
