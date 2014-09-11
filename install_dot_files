@@ -32,6 +32,7 @@ installs = [
   ('bin/git_sclone', 'bin/git_sclone'),
   ('bin/git_start', 'bin/git_start'),
   ('bin/git_tig_status', 'bin/git_tig_status'),
+  ('bin/mkpdshgrpfiles.sh', 'bin/mkpdshgrpfiles.sh'),
   ('bin/projtool', 'bin/projtool'),
   ('dot.ssh/config', '.ssh/config'),
 ]
