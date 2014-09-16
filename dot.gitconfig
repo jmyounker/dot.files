@@ -6,6 +6,7 @@
         co = checkout
         down = pull
         dt = difftool
+        fix = !~/bin/git_fix_precommit
         master = checkout master
         mt = mergetool
         p = pull

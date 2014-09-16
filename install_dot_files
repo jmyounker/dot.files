@@ -29,6 +29,7 @@ installs = [
   ('dot.profile', '.profile'),
   ('dot.screenrc', '.screenrc'),
   ('bin/get_prompt', 'bin/get_prompt'),
+  ('bin/git_fix', 'bin/git_fix_precommit'),
   ('bin/git_sclone', 'bin/git_sclone'),
   ('bin/git_start', 'bin/git_start'),
   ('bin/git_tig_status', 'bin/git_tig_status'),
@@ -94,8 +95,6 @@ def install(args):
               os.unlink(deployed)
 
 
-
-
 def get_arch():
     return uname_to_arch.get(platform.uname()[0], 'UNKNOWN')
 
@@ -143,6 +142,12 @@ def diff(args):
         subprocess.call(['p4merge', deployed, source])
 
 
+def completions(args):
+  for (source, deployed, _) in targets(args, installs):
+    print source
+    print deployed
+
+
 parser = optparse.OptionParser(description='install dot files')
 parser.add_option('--diff', dest='action', action='store_const',
     const=diff, help='diff deployed and source dot files')
@@ -150,6 +155,8 @@ parser.add_option('--install', dest='action', action='store_const',
     const=install, help='install dot files')
 parser.add_option('--recover', dest='action', action='store_const',
     const=recover, help='recover dot files from environment')
+parser.add_option('--completions', dest='action', action='store_const',
+    const=completions, help='show possible file path completions')
 
 if __name__ == '__main__':
     (opts, args) = parser.parse_args()
