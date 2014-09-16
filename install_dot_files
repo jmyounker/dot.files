@@ -28,13 +28,13 @@ installs = [
   ('dot.gitignore_global', '.gitignore_global'),
   ('dot.profile', '.profile'),
   ('dot.screenrc', '.screenrc'),
-  ('bin/get_prompt', 'bin/get_prompt'),
-  ('bin/git_fix', 'bin/git_fix_precommit'),
-  ('bin/git_sclone', 'bin/git_sclone'),
-  ('bin/git_start', 'bin/git_start'),
-  ('bin/git_tig_status', 'bin/git_tig_status'),
-  ('bin/mkpdshgrpfiles.sh', 'bin/mkpdshgrpfiles.sh'),
-  ('bin/projtool', 'bin/projtool'),
+  ('bin/get_prompt', ),
+  ('bin/git_fix_precommit', ),
+  ('bin/git_sclone', ),
+  ('bin/git_start', ),
+  ('bin/git_tig_status', ),
+  ('bin/mkpdshgrpfiles.sh', ),
+  ('bin/projtool', ),
   ('dot.ssh/config', '.ssh/config'),
 ]
 
@@ -50,10 +50,11 @@ def md5_digest(filename):
         return hashlib.md5(f.read()).hexdigest()
 
 
-
 def targets(args, files):
     allowed = set(args.files)
     for target in files:
+        if len(target) == 1:
+            target = (target[0], target[0], False)
         if len(target) == 2:
             target = (target[0], target[1], False)
         (source, deployed, translate) = target
@@ -65,6 +66,15 @@ def targets(args, files):
             deployed_full_path in args.files or
             not args.files):
             yield (source, deployed_full_path, translate)
+
+
+def completions(args):
+    for target in installs:
+        if len(target) == 1:
+           target = (target[0], target[0])
+        print target[0]
+        print target[1]
+        print os.path.join(home, target[1])
 
 
 def is_allowed_file(src, dest, files):
@@ -122,13 +132,13 @@ def filter_for_arch(lines, arch):
 
 def recover(args):
   for (source, deployed, translated) in targets(args, installs):
+      print "RECOVERING:", source
       if os.path.exists(deployed):
           if  translated:
               if md5_digest(source) != md5_digest(deployed):
                   subprocess.call(['p4merge', deployed, source, source, source])
           else:
               shutil.copy2(deployed, source)
-
 
 
 def diff(args):
@@ -140,12 +150,6 @@ def diff(args):
     elif os.path.exists(source) and os.path.exists(deployed):
       if md5_digest(source) != md5_digest(deployed):
         subprocess.call(['p4merge', deployed, source])
-
-
-def completions(args):
-  for (source, deployed, _) in targets(args, installs):
-    print source
-    print deployed
 
 
 parser = optparse.OptionParser(description='install dot files')
