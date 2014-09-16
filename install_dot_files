@@ -132,7 +132,6 @@ def filter_for_arch(lines, arch):
 
 def recover(args):
   for (source, deployed, translated) in targets(args, installs):
-      print "RECOVERING:", source
       if os.path.exists(deployed):
           if  translated:
               if md5_digest(source) != md5_digest(deployed):
