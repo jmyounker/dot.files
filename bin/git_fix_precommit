@@ -1,0 +1,72 @@
+#!/bin/bash
+#
+# pre-commit hook which verifies that changes are formatted w/ gofmt and pass
+# go vet.
+
+function checkfmt() {
+  fix_script=$1
+  unformatted=$(gofmt -l $gofiles)
+  [ -z "$unformatted" ] && return 0
+
+  for fn in $unformatted; do
+    echo "gofmt -w $PWD/$fn" >> $fix_script
+    echo "go stage $PWD/$fn"
+  done
+
+  return 1
+}
+
+# This check ensures that staged files must not have unstaged modifications.
+#
+# It addresses the following recurring issue:  The developer tries to commit.
+# The pre-commit hook fails with an error.  The developer fixes the errors, but
+# does not stage the new changes.  The developer now commits again.  The pre-commit
+# hook checks the modified files on the filesystem. These are good, so the
+# pre-commit hook succeeds.
+#
+# Git then commits the *staged* version of the files, and not the *modified* version
+# of the files which were actaully checked, resulting in the orignal defective files
+# being submitted.
+#
+# Turn on this check by setting the environment variable GIT_PRECOMMIT_CHECK_UNSTAGED.
+function unstaged() {
+  fix_script=$1
+  unstaged_modifications=$(git status --porcelain | awk '/^[AM]M/{print $2}')
+  [ -z "$unstaged_modifications" ] && return 0
+
+  local file
+  for file in $unstaged_modifications; do
+     echo "git stage $PWD/$file" >> $fix_script
+  done
+
+  return 1
+}
+
+# If there are no modified files, then there is nothing to check.
+allfiles=$(git diff --cached --name-only --diff-filter=ACM)
+[ -z "$allfiles" ] && exit 0
+
+fix_script=/tmp/FIXSCRIPT.$$.$RANDOM.sh
+touch $fix_script || die "Could not create $fix_script"
+chmod 750 $fix_script || die "Could set $fix_script permissions"
+
+echo "# Automagically generated script to fix pre-commit errors." > $fix_script
+
+# Find all changed go files
+gofiles=$(git diff --cached --name-only --diff-filter=ACM | grep '.go$')
+
+if [ -n "$gofiles" ]; then
+  checkfmt $fix_script || fail=true
+fi
+
+if [ -n "$GIT_PRECOMMIT_CHECK_UNSTAGED" ]; then
+  unstaged $fix_script || fail=true
+fi
+
+if [ ! -z "$fail" ]; then
+   $fix_script
+fi
+
+rm $fix_script
+
+exit 0
