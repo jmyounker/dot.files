@@ -1,12 +1,16 @@
+#!/bin/bash
 
 mkdshgrp() {
 echo $role
- for r in "$role";
- do
-   if [ -f $HOME/repos/soundcloud/system/roles/$r.rb ]; then
+if [ ! -d "$HOME/.dsh/group" ]; then
+   mkdir -p "$HOME/.dsh/group"
+fi
+
+for r in "$role"; do
+   knife role show $role > /dev/null 2>&1
+   if [ $? == 0 ]; then
      grpfile="$HOME/.dsh/group/$r"
      echo -n "Creating $grpfile "
-     cd $HOME/repos/soundcloud/system
      knife search node "roles:$r" -i | grep net | sort > $grpfile
      echo "- $(wc -l ${grpfile} | awk '{print $1}') hosts"
      if [ -s $grpfile ]; then
