@@ -10,7 +10,7 @@ function checkfmt() {
 
   for fn in $unformatted; do
     echo "gofmt -w $PWD/$fn" >> $fix_script
-    echo "go stage $PWD/$fn"
+    echo "git stage $PWD/$fn" >> $fix_script
   done
 
   return 1
