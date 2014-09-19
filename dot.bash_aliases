@@ -104,3 +104,17 @@ PROV_SCRIPT
      ssh -x $host rm $prov_cmd
   fi
 }
+
+nukem() {
+  if [ "$#" != 1 ]; then
+     echo "usage: nukem PTRN"
+     return 127
+  fi
+  local ptrn pids
+  ptrn=$1
+  pids=$( ps wwaux | grep $ptrn | grep -v grep | awk '{print $2}' )
+  if [ ! -z "$pids" ]; then
+     kill -9 $pids
+  fi
+}
+
