@@ -3,9 +3,10 @@ ServerAliveInterval 300
 
 host harp-vm01 harp harpoon-vm01 harpoon
   hostname 192.168.169.4
-  user jmy
+  user vagrant
   ForwardAgent yes
   ForwardX11 yes
+  IdentityFile ~/.vagrant.d/insecure_private_key
 
 host cs-vm02 codesearch-vm02 codesearch cs
   hostname 192.168.169.5
@@ -29,3 +30,18 @@ host ams-app???
   ForwardAgent yes
   ForwardX11 yes
 
+host vm01
+  user vagrant
+  hostname 192.168.169.130
+  ForwardAgent yes
+  ForwardX11 yes
+  IdentityFile ~/.vagrant.d/insecure_private_key
+
+host vagrant01
+  user vagrant
+  hostname 127.0.0.1
+  port 2222
+  ForwardAgent yes
+  ForwardX11 yes
+  IdentityFile ~/.vagrant.d/insecure_private_key
+ 
