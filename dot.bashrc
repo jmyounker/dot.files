@@ -11,6 +11,16 @@ resource() {
     source ~/.bashrc
 }
 
+if [ -e /usr/local/go ]; then
+   export GOPATH=/usr/local/go
+   if [ -e $HOME/repos ]; then
+      GOPATH=$HOME/repos
+   fi
+   if [ -e $HOME/dev ]; then
+      GOPATH=$HOME/dev
+   fi
+fi
+
 # Turn on precommit checking for unstaged modifications to staged files.
 export GIT_PRECOMMIT_CHECK_UNSTAGED="TRUE"  # Any non-zero length string turns it on
 
