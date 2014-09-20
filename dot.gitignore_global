@@ -2,6 +2,9 @@ READONLY.BACKUP.*
 *.orig
 *.pyc
 
+# Mac Finder metadata
+.DS_Store
+
 # Development tool droppings
 .eclipse
 .idea

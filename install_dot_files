@@ -33,6 +33,7 @@ installs = [
   ('bin/git_sclone', ),
   ('bin/git_start', ),
   ('bin/git_tig_status', ),
+  ('bin/git_track', ),
   ('bin/mkpdshgrpfiles.sh', ),
   ('bin/nukem', ),
   ('bin/projtool', ),
