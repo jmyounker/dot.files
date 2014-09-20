@@ -10,9 +10,13 @@ alias g=git
 # A wrapper around the projtool
 proj() {
     local file
-    file=$(~/bin/projtool "$@")
+    if [ $# -eq 0 ]; then
+      file=$( ~/bin/projtool . )
+    else
+      file=$( ~/bin/projtool "$@" )
+    fi
     if [[ -r $file ]]; then
-        source $file
+      source $file
     fi
 }
 
