@@ -28,6 +28,7 @@ installs = [
   ('dot.gitignore_global', '.gitignore_global'),
   ('dot.profile', '.profile'),
   ('dot.screenrc', '.screenrc'),
+  ('bin/cleanm', ),
   ('bin/get_prompt', ),
   ('bin/git_fix_precommit', ),
   ('bin/git_sclone', ),

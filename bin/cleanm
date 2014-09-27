@@ -1,0 +1,21 @@
+#!/usr/bin/python
+
+"""Delete all the droppings left behind by merges."""
+
+import os
+import re
+import sys
+
+if len(sys.argv) != 2:
+  print >> sys.stderr, 'usage: %s DIRECTORY' % sys.argv[0]
+  sys.exit(2)
+
+ptrn_strings = [r'.*\.(?:REMOTE|LOCAL|BASE|BACKUP)\.\d+$', r'\.orig$' ]
+ptrns = [re.compile(x) for x in ptrn_strings]
+
+for root, dirs, files in os.walk(sys.argv[1]):
+  for f in files:
+    matches = [ptrn.search(f) for ptrn in ptrns]
+    if any(matches):
+      os.unlink(os.path.join(root, f))
+
