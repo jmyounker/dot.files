@@ -38,6 +38,7 @@ installs = [
   ('bin/mkpdshgrpfiles.sh', ),
   ('bin/nukem', ),
   ('bin/projtool', ),
+  ('bin/retry', ),
   ('dot.ssh/config', '.ssh/config'),
 ]
 
