@@ -25,6 +25,7 @@ path_condensations = [("java", "j"),
                       # SoundCloud abbreviations
                       ("github.com", "gh"),
                       ("soundcloud", "sc"),
+                      ("soundcloud-cookbooks", "sc-cb"),
                       ("harpoon", "hpn"),
                       ("harpoon-agent", "hpn-agnt"),
                       ("harpoon-container", "hpn-cnt"),
