@@ -109,3 +109,14 @@ PROV_SCRIPT
   fi
 }
 
+on_exit_acc () {
+    local next="$1"
+    eval "on_exit () {
+        local oldcmd='$(echo "$next" | sed -e s/\'/\'\\\\\'\'/g)'
+        local newcmd=\"\$oldcmd; \$1\"
+        trap -- \"\$newcmd\" 0
+        on_exit_acc \"\$newcmd\"
+    }"
+}
+on_exit_acc true
+
