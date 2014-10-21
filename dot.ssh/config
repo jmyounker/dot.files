@@ -20,7 +20,7 @@ host shell
   ForwardAgent yes
   ForwardX11Trusted yes
 
-host *.int.s-cloud.net
+host *.s-cloud.net
   user jmy
   ForwardAgent yes
   ForwardX11 yes
