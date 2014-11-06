@@ -4,7 +4,7 @@ if [ $# -ne 2 ]; then
     echo "usage: $0 GITHUB_BRANCH_NAME"
     exit 127
 fi
-gitpath="git@github.com:soundcloud/shibboleth"
+gitpath="git@github.com:soundcloud/$1.git"
 relpath="src/github.com/soundcloud/$1"
 projroot="$HOME/dev"
 
