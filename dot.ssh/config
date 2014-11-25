@@ -30,3 +30,27 @@ host ams-app???
   ForwardAgent yes
   ForwardX11 yes
 
+host pharp-sched-ams05
+  hostname 10.33.51.52
+  user jmy
+  ForwardAgent yes
+  ForwardX11 yes
+
+host pharp-agent01-ams05
+  hostname 10.33.51.42
+  user jmy
+  ForwardAgent yes
+  ForwardX11 yes
+
+host pharp-agent02-ams05
+  hostname 10.33.51.48
+  user jmy
+  ForwardAgent yes
+  ForwardX11 yes
+
+host 10.3*
+  user jmy
+  ForwardAgent yes
+  ForwardX11 yes
+ 
+
