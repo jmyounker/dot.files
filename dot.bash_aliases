@@ -120,3 +120,6 @@ on_exit_acc () {
 }
 on_exit_acc true
 
+rmkh() {
+  sed -iback -e "${1}d" $HOME/.ssh/known_hosts
+}
