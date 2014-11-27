@@ -84,6 +84,11 @@ if [[ -r ~/google-cloud-sdk ]]; then
   source ~/google-cloud-sdk/completion.bash.inc
 fi
 
+if [[ $(uname) == "Darwin" ]]; then
+  if [ -f $(brew --prefix)/etc/bash_completion ]; then
+    . $(brew --prefix)/etc/bash_completion
+  fi
+fi
 
 _proj_completion() {
     local cur prev opts projects
