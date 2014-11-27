@@ -2,8 +2,14 @@ cs-vm02 codesearch-vm02 codesearch cs 192.168.169.5
 shell shell.int.s-cloud.net
 *.s-cloud.net
 ams-app???
+10.3*
+10.7*
 pharp-sched-ams05 10.33.51.52
 pharp-agent01-ams05 10.33.51.42
 pharp-agent02-ams05 10.33.51.48
-10.3*
-10.7*
+files files.int.s-cloud.net
+debian debian.int.s-cloud.net
+kernel-test-db2-a 10.33.83.22
+kernel-test-db2-b 10.33.84.23
+kernel-test-norm-a kernel-test-cass 10.33.24.50
+kernel-test-norm-b kernel-test-app-3 10.33.51.42
