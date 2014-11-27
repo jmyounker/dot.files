@@ -97,9 +97,10 @@ def install(args):
   for (dir, perms) in dirs:
       dir_full_path = os.path.join(home, dir)
       if not os.path.exists(dir_full_path):
-          if opts.verbose:
-              print >> sys.stderr, "Creating directory %s" % dir_full_path
-          os.mkdir(dir_full_path)
+          if opts.verbose or opts.dry_run:
+              print >> sys.stderr, "Creating directory: %s" % dir_full_path
+          if not opts.dry_run:
+              os.mkdir(dir_full_path)
       if not perms is None:
           os.chmod(dir_full_path, perms)
   if opts.verbose:
@@ -108,7 +109,11 @@ def install(args):
       if not os.path.exists(source):
           continue
       source_mtime = os.path.getmtime(source)
-      deployed_mtime = os.path.getmtime(deployed)
+      # If the file doesn't exist then don't try to check the time.
+      if os.path.exist(deployed):
+          deployed_mtime = os.path.getmtime(deployed)
+      else:
+          deployed_mtime = 0
       if not opts.force and deployed_mtime > source_mtime:
           if opts.verbose:
               print >> sys.stderr, "Skipping locally modified file %s: Use -f to override this." % source
@@ -123,11 +128,15 @@ def install(args):
           if not opts.dry_run:
               shutil.copy2(source, deployed)
       if not opts.dry_run:
-          shutil.copystats(source, deployed)
-  print >> sys.stderr, "Removing stale files..."
+          shutil.copystat(source, deployed)
+  if opts.verbose:
+      print >> sys.stderr, "Removing stale files..."
   for (source, deployed, translate) in targets(args, removals):
       if os.path.exists(deployed):
-          os.unlink(deployed)
+          if opts.verbose or opts.dry_run:
+              print >> sys.stderr, "Removing stale file: %s" % deployed
+          if not opts.dry_run:
+              os.unlink(deployed)
 
 
 def get_arch():
