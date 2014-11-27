@@ -1,0 +1,9 @@
+cs-vm02 codesearch-vm02 codesearch cs 192.168.169.5
+shell shell.int.s-cloud.net
+*.s-cloud.net
+ams-app???
+pharp-sched-ams05 10.33.51.52
+pharp-agent01-ams05 10.33.51.42
+pharp-agent02-ams05 10.33.51.48
+10.3*
+10.7*
