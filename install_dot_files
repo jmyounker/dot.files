@@ -110,7 +110,7 @@ def install(args):
           continue
       source_mtime = os.path.getmtime(source)
       # If the file doesn't exist then don't try to check the time.
-      if os.path.exist(deployed):
+      if os.path.exists(deployed):
           deployed_mtime = os.path.getmtime(deployed)
       else:
           deployed_mtime = 0
