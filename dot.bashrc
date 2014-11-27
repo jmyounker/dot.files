@@ -143,6 +143,7 @@ _conn_completion() {
 }
 
 complete -F _conn_completion conn
+complete -F _conn_completion prov
 complete -F _conn_completion ssh
 
 function_exists() {
