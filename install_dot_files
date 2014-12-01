@@ -23,12 +23,13 @@ archs = set(uname_to_arch.values())
 
 installs = [
   ('dot.bash_aliases', '.bash_aliases'),
-  ('dot.tmux.conf', '.tmux.conf', True),
   ('dot.bashrc', '.bashrc'),
+  ('dot.dput.cf', '.dput.cf'),
   ('dot.gitconfig', '.gitconfig', True),
   ('dot.gitignore_global', '.gitignore_global'),
   ('dot.profile', '.profile'),
   ('dot.screenrc', '.screenrc'),
+  ('dot.tmux.conf', '.tmux.conf', True),
   ('bin/cleanm', ),
   ('bin/get_prompt', ),
   ('bin/git_fix_precommit', ),
