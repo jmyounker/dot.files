@@ -1,5 +1,5 @@
 [apt-int]
-login       = jmy
+login       = *
 fqdn        = debian.int.s-cloud.net
 method      = scp
 incoming    = /srv/apt-repository/mini-dinstall/incoming/
