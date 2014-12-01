@@ -1,0 +1,34 @@
+#!/usr/bin/python
+
+dirs = [
+    ('bin', None),
+    ('.ssh', 0700)
+]
+
+installs = [
+  ('dot.bash_aliases', '.bash_aliases'),
+  ('dot.bashrc', '.bashrc'),
+  ('dot.dput.cf', '.dput.cf'),
+  ('dot.gitconfig', '.gitconfig', True),
+  ('dot.gitignore_global', '.gitignore_global'),
+  ('dot.profile', '.profile'),
+  ('dot.screenrc', '.screenrc'),
+  ('dot.tmux.conf', '.tmux.conf', True),
+  ('bin/cleanm', ),
+  ('bin/get_prompt', ),
+  ('bin/git_fix_precommit', ),
+  ('bin/git_sclone', ),
+  ('bin/git_start', ),
+  ('bin/git_tig_status', ),
+  ('bin/git_track', ),
+  ('bin/mkpdshgrpfiles.sh', ),
+  ('bin/nukem', ),
+  ('bin/projtool', ),
+  ('bin/retry', ),
+  ('dot.ssh/config', '.ssh/config', True),
+]
+
+removals = [
+    ('bin/g', 'bin/g'),
+]
+
