@@ -7,6 +7,7 @@ sudo pip install virtualenvwrapper
 git
 brew (OSX)
 brew install tig
-
+brew install tmux
+brew install reattach-to-user-namespace
 
 
