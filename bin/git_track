@@ -1,0 +1,4 @@
+#!/bin/sh
+
+git fetch origin $1 && git co $1
+
