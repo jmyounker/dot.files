@@ -6,6 +6,8 @@ case $- in
       *) return;;
 esac
 
+export EDITOR=vi
+
 # Reload the environemnt
 resource() {
     source ~/.bashrc
@@ -26,14 +28,14 @@ export GIT_PRECOMMIT_CHECK_UNSTAGED="TRUE"  # Any non-zero length string turns i
 
 # don't put duplicate lines or lines starting with space in the history.
 # See bash(1) for more options
-HISTCONTROL=ignoreboth
+export HISTCONTROL=ignoreboth
 
 # append to the history file, don't overwrite it
 shopt -s histappend
 
 # for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
-HISTSIZE=1000
-HISTFILESIZE=2000
+export HISTSIZE=1000
+export HISTFILESIZE=2000
 
 # enable color support of ls
 if [ -x /usr/bin/dircolors ]; then
@@ -82,6 +84,11 @@ if [[ -r ~/google-cloud-sdk ]]; then
   source ~/google-cloud-sdk/completion.bash.inc
 fi
 
+if [[ $(uname) == "Darwin" ]]; then
+  if [ -f $(brew --prefix)/etc/bash_completion ]; then
+    . $(brew --prefix)/etc/bash_completion
+  fi
+fi
 
 _proj_completion() {
     local cur prev opts projects
@@ -136,6 +143,7 @@ _conn_completion() {
 }
 
 complete -F _conn_completion conn
+complete -F _conn_completion prov
 complete -F _conn_completion ssh
 
 function_exists() {

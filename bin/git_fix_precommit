@@ -43,7 +43,7 @@ function unstaged() {
 }
 
 # If there are no modified files, then there is nothing to check.
-allfiles=$(git diff --cached --name-only --diff-filter=ACM)
+allfiles=$(git diff --cached --name-only --diff-filter=ACM | grep -v '^Godeps/_workspace/')
 [ -z "$allfiles" ] && exit 0
 
 fix_script=/tmp/FIXSCRIPT.$$.$RANDOM.sh
@@ -53,7 +53,7 @@ chmod 750 $fix_script || die "Could set $fix_script permissions"
 echo "# Automagically generated script to fix pre-commit errors." > $fix_script
 
 # Find all changed go files
-gofiles=$(git diff --cached --name-only --diff-filter=ACM | grep '.go$')
+gofiles=$(git diff --cached --name-only --diff-filter=ACM | grep '.go$' | grep -v '^Godeps/_workspace/')
 
 if [ -n "$gofiles" ]; then
   checkfmt $fix_script || fail=true

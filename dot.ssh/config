@@ -7,26 +7,5 @@ host harp-vm01 harp harpoon-vm01 harpoon
   ForwardAgent yes
   ForwardX11 yes
   IdentityFile /Users/jeff/.vagrant.d/insecure_private_key
-  
-host cs-vm02 codesearch-vm02 codesearch cs
-  hostname 192.168.169.5
-  user jmy
-  ForwardAgent yes
-  ForwardX11 yes
 
-host shell
-  hostname shell.int.s-cloud.net
-  user jmy
-  ForwardAgent yes
-  ForwardX11 yes
-
-host *.int.s-cloud.net
-  user jmy
-  ForwardAgent yes
-  ForwardX11 yes
-
-host ams-app???
-  user jmy
-  ForwardAgent yes
-  ForwardX11 yes
-
+GEN:./scripts/gen_soundcloud_ssh_hosts dot.ssh/soundcloud_hosts

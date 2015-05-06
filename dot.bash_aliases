@@ -23,7 +23,7 @@ proj() {
 # Start a session on a remote machine.  It assumes that .tmux.config has already been
 # deployed to the remote host.
 conn() {
-    if [ $# == 0 ]; then
+    if [ $# -eq 0 ]; then
         tmux attach
     else
         ssh -t "$@" tmux attach

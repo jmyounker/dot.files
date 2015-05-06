@@ -25,6 +25,7 @@ path_condensations = [("java", "j"),
                       # SoundCloud abbreviations
                       ("github.com", "gh"),
                       ("soundcloud", "sc"),
+                      ("soundcloud-cookbooks", "sc-cb"),
                       ("harpoon", "hpn"),
                       ("harpoon-agent", "hpn-agnt"),
                       ("harpoon-container", "hpn-cnt"),
@@ -117,10 +118,12 @@ def get_prompt(path, home, user):
         raise
 
     if proj:
+        # This line allows the prompt to work while inside .git directory trees.
         if '/.git/' in path + '/':
             return proj_prompt % {'proj': proj, 'path': prompt_path}
         try:
-            output = subprocess.check_output(['/usr/bin/git', 'status', '-b', '--porcelain'])
+            output = subprocess.check_output(['/usr/bin/git', 'status', '-b', '--porcelain'],
+                stderr=subprocess.STDOUT)
         except:
             return proj_prompt % {'proj': proj, 'path': prompt_path}
 
