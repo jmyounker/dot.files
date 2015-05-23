@@ -1,7 +1,5 @@
 #!/bin/sh
 
-echo $#
-
 if [ $# -ne 2 ]; then
    echo "usage: $0 NEW_BRANCH" >& 2
    exit -127
