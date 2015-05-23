@@ -1,5 +1,6 @@
 [alias]
         b = branch
+        bn = !~/bin/git_branch_new $1
         br = branch
         c = checkout
         ci = commit -m
@@ -9,6 +10,7 @@
         fix = !~/bin/git_fix_precommit
         master = checkout master
         mt = mergetool
+        nb = !~/bin/git_branch_new $1
         p = pull
         pm = pull origin master
         pom = pull origin master

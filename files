@@ -16,6 +16,7 @@ installs = [
   ('dot.tmux.conf', '.tmux.conf', True),
   ('bin/cleanm', ),
   ('bin/get_prompt', ),
+  ('bin/git_branch_new', ),
   ('bin/git_fix_precommit', ),
   ('bin/git_sclone', ),
   ('bin/git_start', ),
