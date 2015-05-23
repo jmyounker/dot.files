@@ -16,6 +16,7 @@
         pom = pull origin master
         s = status
         sclone = !~/bin/git_sclone $1
+        st = stage
         start = !~/bin/git_start $1
         submit = commit
         t = !~/bin/git_tig_status
