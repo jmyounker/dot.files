@@ -72,7 +72,7 @@ add_to_path "$HOME/local/p4v/bin"
 add_to_path "$GOROOT/bin"
 add_to_path "$GOPATH/bin"
 add_to_path "$GOPATH/src/github.com/soundcloud/system/bin"
-add_to_path "/usr/local/mysql-5.6.24-osx10.8-x86_64/bin/"
+add_to_path "/usr/local/mysql/bin/"
 
 # Set up most awesome command line prompt
 export EMERGENCY_PROMPT='${debian_chroot:+($debian_chroot)}\\u@\\h:\\[$(tput -T${TERM:-dumb} setaf 1)\\]DUDE!\ CANT\ RUN\ GET_PROMPT.\ WTF?\\[$(tput -T${TERM:-dumb} sgr0)\\]\\$ '
