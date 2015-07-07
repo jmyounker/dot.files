@@ -61,9 +61,6 @@ def is_allowed_file(src, dest, files):
 
 
 def install(args):
-  if os.path.exists(os.path.join(home, '.bash_profile')):
-      print >> sys.stderr, ".bash_profile exists. This can cause problems. Maybe you should remove it."
-
   if opts.verbose:
       print >> sys.stderr, "Creating directories..."
   for (dir, perms) in dirs:

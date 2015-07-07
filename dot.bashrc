@@ -178,3 +178,13 @@ complete -F _dot_files_completion -o filenames ./install
 complete -F _dot_files_completion -o filenames ./recover
 complete -F _dot_files_completion -o filenames ./diff
 
+# SavingGlobal
+
+if [ $( uname -n ) == "Jeffs-MacBook-Pro.local" ]; then
+  export MAVEN_HOME=/usr/local/Cellar/maven/3.2.3
+  export ANT_HOME=/usr/local/Cellar/ant/1.9.4
+
+  function setjdk() { if [ $# -ne 0 ]; then export JAVA_HOME=`/usr/libexec/java_home -v $@`; fi; }
+  setjdk 1.7
+fi
+

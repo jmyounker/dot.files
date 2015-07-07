@@ -126,3 +126,40 @@ nukem() {
   fi
 }
 
+
+# SavingGlobal
+alias mvnd='mvn dependency:tree'
+alias mvno='mvn -o'
+alias mvnr='mvn dependency:resolve'
+
+function vip() {
+    vagrant ssh -c "ifconfig eth1" 2>/dev/null | grep -E "inet addr" | sed -e 's/inet addr:\([^ ]*\).*/\1/' | tr -d " ";
+}
+
+function vgo() {
+    cd ~/optrunk/opsys/vagrant/init;
+}
+function vsh() {
+    if [ -z "$1" ]; then
+        vgo
+        vagrant ssh;
+    else
+        if [ "$1" == "local" ]; then
+            if [ -z "$2" ]; then
+                vgo
+                vagrant ssh;
+            else
+                vgo
+                vagrant ssh -c "$2";
+            fi;
+        else
+            ssh remote-testsparen-$1 "$2";
+        fi;
+    fi;
+}
+function vup() {
+    [ ! -f Vagrantfile ] && vgo
+    vagrant up;
+}
+function vli() { vagrant global-status; }
+
