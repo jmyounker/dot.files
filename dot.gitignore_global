@@ -11,3 +11,6 @@ READONLY.BACKUP.*
 .idea
 .projrc
 
+# Jrebel
+rebel.xml
+
