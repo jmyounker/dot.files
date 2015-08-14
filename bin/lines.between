@@ -1,0 +1,24 @@
+#!/usr/bin/env python
+
+import re
+import sys
+
+start = re.compile(sys.argv[1])
+end = re.compile(sys.argv[2])
+
+OUTSIDE = 1
+INSIDE = 2
+
+state = OUTSIDE
+for line in sys.stdin:
+  if state == OUTSIDE:
+    if start.search(line):
+      state = INSIDE
+  elif state == INSIDE:
+    if end.search(line):
+      state = OUTSIDE
+    else:
+      sys.stdout.write(line)
+  else:
+    raise Exception("reached bogus state: %s" % state)
+ 
