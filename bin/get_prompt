@@ -33,6 +33,13 @@ path_condensations = [("java", "j"),
                       ("harpoon-internal", "hpn-int"),
                       ("harpoon-scheduler", "hpn-schd"),
                       ("harpoon-supervisor", "hpn-spv"),
+		      # SavingGlobal abbreviations
+                      ("dev", "d"),
+                      ("svn", "s"),
+                      ("git", "g"),
+                      ("opsys", "o"),
+                      ("trunk", "t"),
+                      ("branches", "b"),
                      ]
 
 prefix_transforms = [(os.environ.get('HOME') + '/', '~/'),
