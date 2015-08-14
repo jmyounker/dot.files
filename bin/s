@@ -121,6 +121,7 @@ def expn(fmt, subst):
     """Expands escaped patters as if they were mustache expansions"""
     return ptrn.sub(r'%(\1)s', fmt) % subst
 
+
 def exec_cmd(cmd):
     global debug
     if debug:
