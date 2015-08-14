@@ -12,6 +12,7 @@ installs = [
   ('dot.gitconfig', '.gitconfig', True),
   ('dot.gitignore_global', '.gitignore_global'),
   ('dot.profile', '.profile'),
+  ('dot.s.config', '.s.config'),
   ('dot.screenrc', '.screenrc'),
   ('dot.tmux.conf', '.tmux.conf', True),
   ('bin/cleanm', ),
@@ -26,6 +27,7 @@ installs = [
   ('bin/nukem', ),
   ('bin/projtool', ),
   ('bin/retry', ),
+  ('bin/s', ),
   ('dot.ssh/config', '.ssh/config', True),
 ]
 

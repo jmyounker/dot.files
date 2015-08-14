@@ -1,0 +1,152 @@
+#!/usr/bin/env python
+
+
+import os
+import json
+import re
+import sys
+
+
+debug = False
+
+
+def main():
+    prog = sys.argv[0]
+    if len(sys.argv) < 2:
+        print >> sys.stderr, "usage: %s CMD [opts...]" % prog
+        return 127
+    cmd = sys.argv[1]
+
+    pn = os.path.basename(os.path.abspath(prog))
+
+    fn = os.path.join(os.environ['HOME'], '.%s.config' % pn)
+    try:
+        with open(fn) as f:
+            cfg_raw = f.read()
+    except IOError, e:
+        print >> sys.stderr, "could not open config file %s: %s" % (fn, e)
+        return 1
+
+    try:
+        cfg = json.loads(cfg_raw)
+    except Exception, e:
+        print >> sys.stderr, "could not parse config file: %s" % e
+        return 1
+
+    if 'cmds' not in cfg and 'default' not in cfg:
+        print >> sys.stderr, "cmds or default must be defined in the config file"
+        return 1
+
+    global debug;
+    if 'debug' in cfg:
+        debug = cfg['debug']
+
+    root = os.getcwd()
+    if 'root' in cfg:
+        if 'contains' not in cfg['root']:
+            print >> sys.stderr, "root description does not define 'contains'"
+            return 1
+        default = cfg['root']['default'] if 'default' in cfg['root'] else os.getcwd()
+        d = get_dir_in_path_containing(cfg['root']['contains'])
+        root = default if d is None else d
+
+    subst = {}
+    # fill in numbered arguments
+    for i, arg in enumerate(sys.argv[2:]):
+        subst[str(i+1)] = arg
+    subst['@'] = " ".join(sys.argv[1:]) # all arguments
+    subst['args'] = " ".join(sys.argv[2:]) # all but cmd
+    subst['prog'] = prog # program path from sys.argv[0]
+    subst['pn'] = pn # basename of program as called
+    subst['cmd'] = cmd # first argument from command line
+    subst['pwd'] = os.getcwd() # pwd
+    subst['home'] = os.environ['HOME'] # home environment
+
+    # config variables are expanded with above substitutions
+    if 'vars' in cfg:
+        for (var, val) in cfg['vars'].items():
+            if var in subst:
+                print >> sys.stderr, "var %s cannot override existing value" % var
+                return 1
+            subst[var] = expn(val, subst)
+
+    # calculated root is expanded too
+    subst['root'] = expn(root, subst)
+
+    if 'cmds' in cfg:
+        possible_cmds = with_matching_prefixes(cmd, cfg['cmds'].keys())
+        if len(possible_cmds) > 1:
+            print >> sys.stderr, "possibly you meant one of: %s" % ', '.join(sorted(possible_cmds))
+            return 1
+        if len(possible_cmds) == 1:
+            cmd = possible_cmds[0]
+            check_cmd(cmd, cfg['cmds'][cmd], subst)
+            exec_cmd(expn(cfg['cmds'][cmd], subst))
+
+    if 'default' not in cfg:
+        print >> sys.stderr, "don't know what to do with '%(@)s'" % subst
+        return 1
+
+    check_cmd('default', cfg['default'], subst)
+    exec_cmd(expn(cfg['default'], subst))
+
+
+ptrn = re.compile(r'\{\{([^\s}]+)\}\}')
+
+
+def check_cmd(cmd, fmt, subst):
+    args = set(ptrn.findall(fmt))
+    known_args = set(subst.keys())
+
+    pos_args = set(x for x in args if is_int(x))
+    if not pos_args.issubset(known_args):
+        exp_arg_cnt = max(int(x) for x in pos_args)
+        print >> sys.stderr, "command %s requires %s argument(s)" % (cmd, exp_arg_cnt)
+        sys.exit(1)
+
+    if not args.issubset(known_args):
+        print >> sys.stderr, "these variables are unknown: %s" % ', '.join(args.difference(known_args))
+        sys.exit(1)
+
+
+def is_int(x):
+    try:
+        int(x)
+        return True
+    except ValueError:
+        return False
+
+
+def expn(fmt, subst):
+    """Expands escaped patters as if they were mustache expansions"""
+    return ptrn.sub(r'%(\1)s', fmt) % subst
+
+def exec_cmd(cmd):
+    global debug
+    if debug:
+        print cmd
+        sys.exit(0)
+    else:
+        os.execlp('/bin/sh', '/bin/sh', '-c', cmd)
+
+
+def get_dir_in_path_containing(marker_files):
+    marker_files = set(marker_files)
+    def get_in_path(p):
+        if marker_files.issubset(set(os.listdir(p))):
+            return p
+        elif p == '/':
+            return None
+        else:
+            return get_in_path(os.path.dirname(p))
+    return get_in_path(os.getcwd())
+
+
+def with_matching_prefixes(s, seq):
+    return [x for x in seq if x[:len(s)] == s]
+
+
+if __name__ == '__main__':
+    sys.exit(main())
+
+
