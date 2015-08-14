@@ -44,6 +44,12 @@ fi
 
 # Read .bash_aliases to pick up all my shortcuts
 [[ -r ~/.bash_aliases ]] && . ~/.bash_aliases
+if [[ -d ~/.env.d/*/bash_aliases ]]; then
+   for f in $( ls ~/.env.d/*/bash_aliases ); do
+       source $f
+   done
+fi
+
 
 # Set up virtualenvwrapper for Python development.
 export WORKON_HOME=$HOME/.virtualenv
@@ -71,7 +77,6 @@ add_to_path "/Applications/p4merge.app/Contents/MacOS"
 add_to_path "$HOME/local/p4v/bin"
 add_to_path "$GOROOT/bin"
 add_to_path "$GOPATH/bin"
-add_to_path "$GOPATH/src/github.com/soundcloud/system/bin"
 add_to_path "/usr/local/mysql/bin/"
 
 # Set up most awesome command line prompt
@@ -79,11 +84,26 @@ export EMERGENCY_PROMPT='${debian_chroot:+($debian_chroot)}\\u@\\h:\\[$(tput -T$
 PROMPT_COMMAND='eval `~/bin/get_prompt || echo export PS1=$EMERGENCY_PROMPT` '
 
 
+# Read in bashrc for other environments
+if [[ -d ~/.env.d/*/bashrc ]]; then
+    for f in $( ls $HOME/.env.d/*/bashrc ); do
+        source $f
+    done
+fi
+
+
+# Include command line completions from brew.
+if [ -d /usr/local/etc/bash_completion.d ]; then
+  source /usr/local/etc/bash_completion.d/*
+fi
+
+
 # Google Cloud SDK.
 if [[ -r ~/google-cloud-sdk ]]; then
   source ~/google-cloud-sdk/path.bash.inc
   source ~/google-cloud-sdk/completion.bash.inc
 fi
+
 
 if [[ $(uname) == "Darwin" ]]; then
   if [ -f $(brew --prefix)/etc/bash_completion ]; then
@@ -178,13 +198,5 @@ complete -F _dot_files_completion -o filenames ./install
 complete -F _dot_files_completion -o filenames ./recover
 complete -F _dot_files_completion -o filenames ./diff
 
-# SavingGlobal
-
-if [ $( uname -n ) == "Jeffs-MacBook-Pro.local" ]; then
-  export MAVEN_HOME=/usr/local/Cellar/maven/3.2.3
-  export ANT_HOME=/usr/local/Cellar/ant/1.9.4
-
-  function setjdk() { if [ $# -ne 0 ]; then export JAVA_HOME=`/usr/libexec/java_home -v $@`; fi; }
-  setjdk 1.7
-fi
-
+# Docker
+redock

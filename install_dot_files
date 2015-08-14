@@ -11,8 +11,31 @@ import subprocess
 import sys
 
 
+def canonicalize_target(t):
+    if len(t) == 1:
+        return (t[0], None, False)
+    elif len(t) == 2:
+        return (t[0], t[1], False)
+    elif len(t) == 3:
+        return t
+    else:
+        raise Exception("misformatted file definition")
+
+
+def add_missing_dest(t):
+    src, dest, trans = t
+    if dest is not None:
+        return t
+    if src.startswith('dot.'):
+        return (src, src[3:], trans)
+    else:
+        return (src, src, trans)
+
+
 # Suck in configuration information
 execfile('files')
+installs = [add_missing_dest(canonicalize_target(t)) for t in installs]
+
 
 # Ensure that the set operation below includes UNKNOWN.
 uname_to_arch = {'Darwin': 'OSX', 'Linux': 'LINUX', '':'UNKNOWN'}
@@ -29,12 +52,7 @@ def md5_digest(filename):
 
 def targets(args, files):
     allowed = set(args.files)
-    for target in files:
-        if len(target) == 1:
-            target = (target[0], target[0], False)
-        if len(target) == 2:
-            target = (target[0], target[1], False)
-        (source, deployed, translate) = target
+    for (source, deployed, translate) in files:
         if not is_allowed_file(source, deployed, allowed):
             continue
         deployed_full_path = os.path.join(home, deployed)
@@ -44,11 +62,8 @@ def targets(args, files):
             not args.files):
             yield (source, deployed_full_path, translate)
 
-
 def completions(args):
     for target in installs:
-        if len(target) == 1:
-           target = (target[0], target[0])
         print target[0]
         print target[1]
         print os.path.join(home, target[1])
@@ -119,9 +134,10 @@ def translate_file(src, dest, arch):
                 print "Generated file: %s -> %s" % (src, dest)
             for line in filter_for_arch(src_file, arch):
                 for expanded_line in expansion(line):
-                    if opts.verbose and not opts.dry_run:
-			sys.stdout.write(expanded_line)
-                    dest_file.write(expanded_line)
+                    if opts.verbose or opts.dry_run:
+                        sys.stdout.write(expanded_line)
+                    if not opts.dry_run:
+                        dest_file.write(expanded_line)
 
 
 @contextmanager
