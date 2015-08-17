@@ -11,32 +11,33 @@ proj_prompt = '${debian_chroot:+($debian_chroot)}\u@\h[\[$(tput -T${TERM:-dumb} 
 msg_prompt = '${debian_chroot:+($debian_chroot)}\u@\h[\[$(tput -T${TERM:-dumb} setaf 1)\]%(msg)s\[$(tput -T${TERM:-dumb} sgr0)\]]:\[$(tput -T${TERM:-dumb} setaf 4)\]%(path)s\[$(tput -T${TERM:-dumb} sgr0)\]\$ '
 proj_file = "%(home)s/.proj_current"
 
-path_condensations = [("java", "j"),
-                      ("javatests", "jt"),
-                      ("tests", "ts"),
-                      ("test", "t"),
-                      ("harness", "har"),
-                      ("analytics", "anal"),
-                      ("experimental", "exp"),
-                      ("jyounker", "jy"),
-                      ("jeff", "j"),
-                      ("production", "p"),
-                      ("Python Testing for Dummies", "PTfD"),
-                      ("github.com", "gh"),
+path_condensations = {"java": "j",
+                      "javatests": "jt",
+                      "tests": "ts",
+                      "test": "t",
+                      "harness": "har",
+                      "analytics": "anal",
+                      "experimental": "exp",
+                      "jyounker": "jy",
+                      "jeff": "j",
+                      "production": "p",
+                      "Python Testing for Dummies": "PTfD",
+                      "github.com": "gh",
+                      "repos": "r",
         		      # SavingGlobal abbreviations
-                      ("dev", "d"),
-                      ("svn", "s"),
-                      ("git", "g"),
-                      ("opsys", "o"),
-                      ("trunk", "t"),
-                      ("branches", "b"),
-                     ]
+                      "dev": "d",
+                      "svn": "s",
+                      "git": "g",
+                      "opsys": "o",
+                      "trunk": "t",
+                      "branches": "b",
+}
 
-prefix_transforms = [(os.environ.get('HOME') + '/', '~/'),
+prefix_transforms = {os.environ.get('HOME'): '~',
                      # SoundCloud VMWare shared directory fixes
-                     ("/mnt/hgfs/dev/", "~/dev/"),
-                     ("/mnt/hgfs/repos/", "~/repos/"),
-                    ]
+                     "/mnt/hgfs/dev": "~/dev",
+                     "/mnt/hgfs/repos": "~/repos",
+}
 
 def log(message):
     """Appends a log message to a file. Used for debugging."""
@@ -168,40 +169,22 @@ def get_git_branch(path):
 
 
 def condense_path(path, home, user, proj):
-    if not path.endswith('/'):
-        path = path + '/'
-
-    path = transform_prefix(path, prefix_transforms)
-    if not path:
-        return ""
-
-    # The replacement logic depends upon starting with a slash, so we add one if it is not present. This
-    # will be removed later.
-    has_leading_slash = path.startswith('/')
-    if not has_leading_slash:
-        path = '/' + path
-
-    for (component, condensed) in path_condensations:
-        path = path.replace("/" + component + "/", "/" + condensed + "/")
-
-    # Trim the leading slash if we added it.
-    if not has_leading_slash:
-        path = path[1:]
-
-    if not path:
-        return path
-
-    # strip trailing slash
-    return path[:-1]
+    def _condense_path(p):
+        if p == '/':
+            return '/'
+        if p in prefix_transforms:
+            return prefix_transforms[p]
+        dn, bn = os.path.split(p)
+        if bn == '':
+            return _condense_path(dn)
+        return os.path.join(_condense_path(dn), condense_basename(bn, home, user, proj))
+    return _condense_path(path)
 
 
-def transform_prefix(path, prefix_transforms):
-    """Replaces the first prefix it finds."""
-    for (prefix, transform) in prefix_transforms:
-        if path.startswith(prefix):
-            path = path[(len(prefix)):]
-            return transform + path
-    return path
+def condense_basename(component, home, user, proj):
+    if component in path_condensations:
+        return path_condensations[component]
+    return component
 
 
 def write_file(filename, contents):
