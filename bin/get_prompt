@@ -124,29 +124,57 @@ def get_prompt(path, home, user):
                                  'msg': 'THE DIRECTORY %s IS GONE!' % path}
         raise
 
-    if proj:
-        # This line allows the prompt to work while inside .git directory trees.
-        if '/.git/' in path + '/':
-            return proj_prompt % {'proj': proj, 'path': prompt_path}
-        try:
-            output = subprocess.check_output(['/usr/bin/git', 'status', '-b', '--porcelain'],
-                stderr=subprocess.STDOUT)
-        except:
-            return proj_prompt % {'proj': proj, 'path': prompt_path}
-
-        untracked_branch = re.search("^##\s+(\S+)\n", output)
-        tracked_branch = re.search("^##\s+(\S+)\.\.\.", output)
-        branch_match = tracked_branch if tracked_branch else untracked_branch
-        proj_tag = proj
-        if branch_match:
-            branch = branch_match.group(1)
-            proj_tag += ':%s' % branch
-        virtual_env = os.environ.get('VIRTUAL_ENV')
-        if virtual_env:
-            proj_tag  += ',%s' % os.path.basename(virtual_env)
-        return proj_prompt % {'proj': proj_tag, 'path': prompt_path}
-    else:
+    if not proj:
         return default_prompt % {'path': prompt_path}
+
+    rcs = rcs_system(path)
+    if rcs == RCS_GIT:
+        branch = get_git_branch(path)
+    else:
+        branch = None
+
+    proj_tag = proj
+    if branch:
+        proj_tag += ':%s' % branch
+
+    virtual_env = os.environ.get('VIRTUAL_ENV')
+    if virtual_env:
+        proj_tag  += ',%s' % os.path.basename(virtual_env)
+
+    return proj_prompt % {'proj': proj_tag, 'path': prompt_path}
+
+
+RCS_SVN = 'svn'
+RCS_GIT = 'git'
+
+
+def rcs_system(path):
+    files = set(os.listdir(path))
+    if os.path.basename(path) == '.git':
+        return None
+    elif '.svn' in files:
+        return RCS_SVN
+    elif '.git' in files:
+        return RCS_GIT
+    elif path == '/':
+        return None
+    else:
+        return rcs_system(os.path.dirname(path))
+
+
+def get_git_branch(path):
+    try:
+        output = subprocess.check_output(['/usr/bin/git', 'status', '-b', '--porcelain'],
+                                         stderr=subprocess.STDOUT)
+    except:
+        return None
+
+    untracked_branch = re.search("^##\s+(\S+)\n", output)
+    tracked_branch = re.search("^##\s+(\S+)\.\.\.", output)
+    branch_match = tracked_branch if tracked_branch else untracked_branch
+    if not branch_match:
+        return None
+    return branch_match.group(1)
 
 
 def condense_path(path, home, user, proj):

@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
 import argparse
+from contextlib import contextmanager
 import os
 import re
 import string
@@ -30,6 +31,7 @@ def shesc(s):
     s = re.sub(r'\t', '\\t', s)
     return re.sub(r'\n', '\\n', s)
 
+
 def components(path):
     (dirname, basename) = os.path.split(path)
     if dirname == path:
@@ -57,27 +59,25 @@ def create(args):
     proj = ProjConfig(os.path.join(proj_base, proj_name, proj_file_basename))
     if os.path.exists(proj.config):
         proj_db.add_entry(proj)
-        return 0
+        return activate(args)
     if not os.path.exists(proj.root):
         os.mkdir(proj.root)
-    init_proj(proj.root)
-    return 0
+    proj.write()
+    proj_db.add_entry(proj)
+    if not os.path.exists(os.path.join(proj.root, '.git')):
+        with open('/dev/null', 'w') as FNULL:
+            subprocess.call(['git', 'init'], stdout=FNULL, stderr=FNULL, cwd=proj.root)
+    return activate(args)
 
 
 def init(args):
     proj = init_proj(os.getcwd())
     ProjDb().add_entry(proj)
     ProjHist().add_entry(proj)
+    return 0
 
 
 def init_proj(proj_root):
-    cwd = os.getcwd()
-    os.chdir(proj_root)
-    try:
-        if not os.path.exists('.git'):
-            subprocess.call(['git', 'init'])
-    finally:
-        os.chdir(cwd)
     proj = ProjConfig(os.path.join(proj_root, proj_file_basename))
     proj.write()
     return proj
@@ -182,17 +182,32 @@ def activate(args):
             if current_virtualenv and (current_virtualenv == proj_managed_virtualenv):
                 cmds.append('deactivate')
     # Write to temp file that will be executed by the calling process
-    if args.dump:
-        for cmd in cmds:
-            print cmd
-        return 0
-    with tempfile.NamedTemporaryFile('w', delete=False) as f:
-        print f.name
+    with executed_cmds(args) as f:
         for cmd in cmds:
             print >> f, cmd
-        # Delete script as the last thing it does.
-        print >> f, "rm %s" % f.name
     return 0
+
+
+@contextmanager
+def executed_cmds(args):
+    """Manage the file of commands that will be executed by the shell function proj().
+
+    Normally, opens a named temporary file that the caller populates with commands.
+    The last action in the file will be a command to remote the file itself.
+    Finally, print the name of the executed file to stdout, so that proj() can locate it.
+
+    If the --dump options is specified then write the commands to stdout instead.
+
+    """
+    if args.dump:
+        yield sys.stdout
+    else:
+        with tempfile.NamedTemporaryFile('w', delete=False) as f:
+            # Print name of this script to stdout
+            print f.name
+            yield f
+            # Delete script as the last thing it does.
+            print >> f, "rm %s" % f.name
 
 
 def get_proj(proj_name=None):
@@ -371,7 +386,7 @@ def main(args):
 parser = argparse.ArgumentParser(description='install dot files')
 parser.add_argument('-v', '--var', metavar='VAR=VAL', dest='vars', type=str,
     help='set a project variables')
-parser.add_argument('--dump', dest='dump', type=bool, default=False,
+parser.add_argument('--dump', dest='dump', action='store_true', default=False,
     help='dump information to command line instead of files')
 parser.add_argument('cmd', metavar='CMD', type=str, help='command to execute')
 parser.add_argument('rest', metavar='REST', type=str, nargs='*', help='per command args')
