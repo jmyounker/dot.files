@@ -38,6 +38,7 @@ path_condensations = {
                       "private": "priv",
                       "net": "n",
                       "sbin": "sb",
+                      "src": "src",
                       "usr": "u",
                       "var": "v",
                       # Mac defaults
@@ -59,11 +60,15 @@ path_condensations = {
                       "branches": "br",
                       "dev": "d",
                       "git": "g",
+                      "main": "mn",
                       "opsys": "o",
+                      "savingglobal": "sg",
                       "svn": "s",
                       "trunk": "tr",
+                      "webapp": "wa",
                       # Java abbreviations
                       "hibernate": "hbnt",
+                      "com": "c",
 }
 
 prefix_transforms = {
@@ -263,12 +268,12 @@ def abbreviate_seg(seg, used_abbr):
 
     # Run condensations on lower case version.
     seg = seg.lower()
-    abbr = consonant_seg_abbreviator(seg, used_abbr)
+    abbr = seq_seg_abbreviator(seg, used_abbr)
     if abbr not in used_abbr:
         return abbr
     if seg == used_abbr[abbr]:
         return abbr
-    return seq_seg_abbreviator(seg, used_abbr)
+    return consonant_seg_abbreviator(seg, used_abbr)
 
 
 def seq_seg_abbreviator(seg, used_abbr):
