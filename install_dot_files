@@ -35,6 +35,7 @@ def add_missing_dest(t):
 # Suck in configuration information
 execfile('files')
 installs = [add_missing_dest(canonicalize_target(t)) for t in installs]
+removals = [add_missing_dest(canonicalize_target(t)) for t in removals]
 
 
 # Ensure that the set operation below includes UNKNOWN.
