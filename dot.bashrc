@@ -44,7 +44,7 @@ fi
 
 # Read .bash_aliases to pick up all my shortcuts
 [[ -r ~/.bash_aliases ]] && . ~/.bash_aliases
-if [[ -d ~/.env.d/*/bash_aliases ]]; then
+if [ -f ~/.env.d/*/bash_aliases ]; then
    for f in $( ls ~/.env.d/*/bash_aliases ); do
        source $f
    done
@@ -85,7 +85,7 @@ PROMPT_COMMAND='eval `~/bin/get_prompt || echo export PS1=$EMERGENCY_PROMPT` '
 
 
 # Read in bashrc for other environments
-if [[ -d ~/.env.d/*/bashrc ]]; then
+if [ -f ~/.env.d/*/bashrc ]; then
     for f in $( ls $HOME/.env.d/*/bashrc ); do
         source $f
     done
