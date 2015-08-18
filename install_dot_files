@@ -63,9 +63,21 @@ def targets(args, files):
             not args.files):
             yield (source, deployed_full_path, translate)
 
+
+def target_links(args, links):
+    allowed = set(args.files)
+    for (source, dest) in links:
+        if not is_allowed_file(dest, os.path.join(home, dest), allowed):
+            continue
+        yield (os.path.join(home, source), os.path.join(home, dest))
+
+
 def completions(args):
     for target in installs:
         print target[0]
+        print target[1]
+        print os.path.join(home, target[1])
+    for target in links:
         print target[1]
         print os.path.join(home, target[1])
 
@@ -88,6 +100,7 @@ def install(args):
               os.mkdir(dir_full_path)
       if not perms is None:
           os.chmod(dir_full_path, perms)
+
   if opts.verbose:
       print >> sys.stderr, "Installing files..."
   for (source, deployed, translate) in targets(args, installs):
@@ -114,6 +127,7 @@ def install(args):
               shutil.copy2(source, deployed)
       if not opts.dry_run:
           shutil.copystat(source, deployed)
+
   if opts.verbose:
       print >> sys.stderr, "Removing stale files..."
   for (source, deployed, translate) in targets(args, removals):
@@ -122,6 +136,17 @@ def install(args):
               print >> sys.stderr, "Removing stale file: %s" % deployed
           if not opts.dry_run:
               os.unlink(deployed)
+
+  if opts.verbose:
+      print >> sys.stderr, "Linking files..."
+  for (source, dest) in target_links(args, links):
+      if opts.verbose or opts.dry_run:
+          print >> sys.stderr, "Linking file: %s -> %s" % (source, dest)
+      if not opts.dry_run:
+          if os.path.exists(dest):
+              os.unlink(dest)
+          if os.path.exists(source):
+              os.symlink(source, dest)
 
 
 def get_arch():
@@ -207,6 +232,7 @@ parser.add_option('-f', dest='force', action='store_true', default=False,
     help='force deployment')
 parser.add_option('-v', dest='verbose', action='store_true', default=False,
     help='be verbose about what is happening')
+
 
 if __name__ == '__main__':
     (opts, args) = parser.parse_args()
