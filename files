@@ -40,7 +40,7 @@ installs = [
 ]
 
 removals = [
-    ('bin/g', 'bin/g'),
+    ('bin/g', ),
 ]
 
 links = [
