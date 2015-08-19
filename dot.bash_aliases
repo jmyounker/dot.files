@@ -24,9 +24,9 @@ proj() {
 # deployed to the remote host.
 conn() {
     if [ $# -eq 0 ]; then
-        tmux attach
+        tmux new-session -t main
     else
-        ssh -t "$@" tmux attach
+        ssh -t "$@" tmux new-session -t main
     fi
 }
 

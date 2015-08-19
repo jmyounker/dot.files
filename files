@@ -13,12 +13,13 @@ installs = [
   ('dot.dput.cf', ),
   ('dot.gitconfig', None, True),
   ('dot.gitignore_global', ),
-  ('dot.m.config', ),
+  ('dot.m.config', ),  # maven shortcuts
   ('dot.profile', ),
-  ('dot.s.config', ),
+  ('dot.s.config', ),  # subversion shortcuts
+  ('dot.t.config', ),  # tmux shortcuts
   ('dot.screenrc', ),
   ('dot.tmux.conf', None, True),
-  ('dot.v.config', ),
+  ('dot.v.config', ),  # vagrant shortcuts
   ('bin/cleanm', ),
   ('bin/get_prompt', ),
   ('bin/git_branch_new', ),
@@ -45,7 +46,8 @@ removals = [
 ]
 
 links = [
-  ('bin/cmdplx', 'bin/m'),
-  ('bin/cmdplx', 'bin/s'),
-  ('bin/cmdplx', 'bin/v'),
+  ('bin/cmdplx', 'bin/m'),  # maven shortcuts
+  ('bin/cmdplx', 'bin/s'),  # subversion shortcuts
+  ('bin/cmdplx', 'bin/t'),  # tmux shortcuts
+  ('bin/cmdplx', 'bin/v'),  # vagrant shortcuts
 ]
