@@ -18,6 +18,7 @@ installs = [
   ('dot.s.config', ),
   ('dot.screenrc', ),
   ('dot.tmux.conf', None, True),
+  ('dot.v.config', ),
   ('bin/cleanm', ),
   ('bin/get_prompt', ),
   ('bin/git_branch_new', ),
@@ -33,7 +34,7 @@ installs = [
   ('bin/nukem', ),
   ('bin/projtool', ),
   ('bin/retry', ),
-  ('bin/s', ),
+  ('bin/cmdplx', ),
   ('dot.ssh/config', None, True),
   ('dot.env.d/savingglobal/bash_aliases', ),
   ('dot.env.d/savingglobal/bashrc', ),
@@ -44,5 +45,7 @@ removals = [
 ]
 
 links = [
-  ('bin/s', 'bin/m'),
+  ('bin/cmdplx', 'bin/m'),
+  ('bin/cmdplx', 'bin/s'),
+  ('bin/cmdplx', 'bin/v'),
 ]
