@@ -113,8 +113,7 @@ def install(args):
       else:
           deployed_mtime = 0
       if not opts.force and deployed_mtime > source_mtime:
-          if opts.verbose:
-              print >> sys.stderr, "Skipping locally modified file %s: Use -f to override this." % source
+          print >> sys.stderr, "Skipping locally modified file %s: Use -f to override this." % source
           continue
       if translate:
           if opts.verbose or opts.verbose:
@@ -214,7 +213,13 @@ def diff(args):
         print "File %s not recovered from %s" % (source, deployed)
     elif os.path.exists(source) and os.path.exists(deployed):
       if md5_digest(source) != md5_digest(deployed):
-        subprocess.call(['p4merge', deployed, source])
+        if args.summary:
+           print "%s %s differ" % (source, deployed)
+        else:
+           try:
+              subprocess.call(['p4merge', deployed, source])
+           except KeyboardInterrupt:
+              sys.exit(0)
 
 
 parser = optparse.OptionParser(description='install dot files')
@@ -228,6 +233,8 @@ parser.add_option('--completions', dest='action', action='store_const',
     const=completions, help='show possible file path completions')
 parser.add_option('-n', dest='dry_run', action='store_true', default=False,
     help='dry_run')
+parser.add_option('-s', '-b', '--summary', '--brief',  dest='summary',
+    action='store_true', default=False, help='show a summary of diffs')
 parser.add_option('-f', dest='force', action='store_true', default=False,
     help='force deployment')
 parser.add_option('-v', dest='verbose', action='store_true', default=False,
