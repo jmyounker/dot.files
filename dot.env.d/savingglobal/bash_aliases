@@ -45,4 +45,10 @@ function vup() {
 
 function vli() { vagrant global-status; }
 
+function mmaster() {
+  mysql -u root --port 13306 --host 127.0.0.1 -p 
+}
 
+function mslave() {
+  mysql -u root --port 13307 --host 127.0.0.1 -p
+}
