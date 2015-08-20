@@ -41,9 +41,7 @@ installs = [
   ('dot.env.d/savingglobal/bashrc', ),
 ]
 
-removals = [
-    ('bin/g', ),
-]
+removals = []
 
 links = [
   ('bin/cmdplx', 'bin/m'),  # maven shortcuts
