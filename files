@@ -28,6 +28,7 @@ installs = [
   ('bin/git_start', ),
   ('bin/git_tig_status', ),
   ('bin/git_track', ),
+  ('bin/inplace', ),
   ('bin/lines.before', ),
   ('bin/lines.after', ),
   ('bin/lines.between', ),
