@@ -1,14 +1,7 @@
-# Harpoon development at SoundCloud
-ServerAliveInterval 300
+ServerAliveInterval 60
 
-host harp-vm01 harp harpoon-vm01 harpoon
-  hostname 192.168.169.4
-  user vagrant
-  ForwardAgent yes
-  ForwardX11 yes
-  IdentityFile /Users/jeff/.vagrant.d/insecure_private_key
-
-GEN:./scripts/gen_soundcloud_ssh_hosts dot.ssh/soundcloud_hosts
+host github.com
+  user jmyounker
 
 # SavingGlobal hosts
 
@@ -42,3 +35,10 @@ Host remote-testsparen-*
   ForwardAgent yes
   ExitOnForwardFailure yes
   ProxyCommand ssh ssh2 -W %h:%p
+
+host upsource
+ Hostname 148.251.18.202
+ User root
+ ForwardAgent no
+ IdentityFile ~/.ssh/id_rsa
+
