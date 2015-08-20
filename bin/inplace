@@ -9,11 +9,12 @@ import tempfile
 
 def main():
     if len(sys.argv) != 2:
-        print >> sys.stderr, "usage: foo | %s OUTFILE" % sys.argv[0]
+        print >> sys.stderr, 'usage: cat FILE | ... | %s FILE' % sys.argv[0]
         sys.exit(127)
     with open_replace(os.path.abspath(sys.argv[1])) as f:
         for line in sys.stdin:
             f.write(line)
+    sys.exit(0)
 
 
 @contextlib.contextmanager
@@ -21,10 +22,15 @@ def open_replace(filename):
     dirname, basename = os.path.split(filename)
     tf = tempfile.NamedTemporaryFile(dir=dirname, prefix=basename, delete=False)
     try:
-        yield tf
-    finally:
-        tf.close()
-    os.rename(filename, filename + '.back')
+        try:
+            yield tf
+        finally:
+            tf.close()
+        if os.path.exists(filename):
+            os.rename(filename, filename + '.bak')
+    except Exception:
+        os.unlink(tf.name)
+        sys.exit(1)
     os.rename(tf.name, filename)
 
 
