@@ -14,6 +14,7 @@ installs = [
   ('dot.gitconfig', None, True),
   ('dot.gitignore_global', ),
   ('dot.m.config', ),  # maven shortcuts
+  ('dot.cmdplx.config', ),  # master config
   ('dot.profile', ),
   ('dot.s.config', ),  # subversion shortcuts
   ('dot.t.config', ),  # tmux shortcuts
