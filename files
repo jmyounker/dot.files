@@ -20,6 +20,7 @@ installs = [
   ('dot.screenrc', ),
   ('dot.tmux.conf', None, True),
   ('dot.v.config', ),  # vagrant shortcuts
+  ('dot.ve.config', ),  # virtualenv shortcuts
   ('bin/cleanm', ),
   ('bin/get_prompt', ),
   ('bin/git_branch_new', ),
@@ -45,8 +46,4 @@ installs = [
 removals = []
 
 links = [
-  ('bin/cmdplx', 'bin/m'),  # maven shortcuts
-  ('bin/cmdplx', 'bin/s'),  # subversion shortcuts
-  ('bin/cmdplx', 'bin/t'),  # tmux shortcuts
-  ('bin/cmdplx', 'bin/v'),  # vagrant shortcuts
 ]

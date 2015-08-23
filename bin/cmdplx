@@ -12,34 +12,26 @@ debug = False
 
 def main():
     prog = sys.argv[0]
-    if len(sys.argv) < 2:
-        print >> sys.stderr, "usage: %s CMD [opts...]" % prog
-        return 127
-    cmd = sys.argv[1]
 
-    pn = os.path.basename(os.path.abspath(prog))
+    if len(sys.argv) >= 2:
+        pn = sys.argv[1]
 
-    fn = os.path.join(os.environ['HOME'], '.%s.config' % pn)
-    try:
-        with open(fn) as f:
-            cfg_raw = f.read()
-    except IOError, e:
-        print >> sys.stderr, "could not open config file %s: %s" % (fn, e)
-        return 1
-
-    try:
-        cfg = json.loads(cfg_raw)
-    except Exception, e:
-        print >> sys.stderr, "could not parse config file: %s" % e
-        return 1
-
-    if 'cmds' not in cfg and 'default' not in cfg:
-        print >> sys.stderr, "cmds or default must be defined in the config file"
-        return 1
+    cfg = read_config(pn)
 
     global debug;
     if 'debug' in cfg:
         debug = cfg['debug']
+
+    if len(sys.argv) == 2:
+        if not 'cmds' in cfg:
+            sys.exit(1)
+        print "echo cmds: %s" % ', '.join(sorted(cfg['cmds'].keys()))
+        sys.exit(1)
+
+    if len(sys.argv) < 3:
+        print >> sys.stderr, "usage: %s CONFIG_NAME CMD [opts...]" % prog
+        return 127
+    cmd = sys.argv[2]
 
     root = os.getcwd()
     if 'root' in cfg:
@@ -51,16 +43,18 @@ def main():
         root = default if d is None else d
 
     subst = {}
+    # fill in environment variables
+    for var, val in os.environ.items():
+        subst[var] = val
     # fill in numbered arguments
-    for i, arg in enumerate(sys.argv[2:]):
+    for i, arg in enumerate(sys.argv[3:]):
         subst[str(i+1)] = arg
-    subst['@'] = " ".join(sys.argv[1:]) # all arguments
-    subst['args'] = " ".join(sys.argv[2:]) # all but cmd
+    subst['@'] = " ".join(sys.argv[2:]) # all arguments
+    subst['args'] = " ".join(sys.argv[3:]) # all but cmd
     subst['prog'] = prog # program path from sys.argv[0]
     subst['pn'] = pn # basename of program as called
     subst['cmd'] = cmd # first argument from command line
     subst['pwd'] = os.getcwd() # pwd
-    subst['home'] = os.environ['HOME'] # home environment
 
     # config variables are expanded with above substitutions
     if 'vars' in cfg:
@@ -91,8 +85,64 @@ def main():
     exec_cmd(expn(cfg['default'], subst))
 
 
-ptrn = re.compile(r'\{\{([^\s}]+)\}\}')
+def read_config(pn):
+    cfg = read_master_config()
+    cmd_cfg = read_cmd_config(pn)
+    if 'debug' in cmd_cfg:
+        cfg['debug'] = cmd_cfg['debug']
+    if 'default' in cmd_cfg:
+        cfg['default'] = cmd_cfg['default']
+    def merge(var):
+        if var in cmd_cfg:
+            if var in cfg:
+                cfg[var].update(cmd_cfg[var])
+            else:
+                cfg[var] = cmd_cfg[var]
+    merge('root')
+    merge('vars')
+    merge('cmds')
+    return cfg
 
+def read_master_config():
+    fn = os.path.join(os.environ['HOME'], 'cmdplx.config')
+    try:
+        with open(fn) as f:
+            cfg_raw = f.read()
+    except IOError:
+        return {}
+
+    try:
+        cfg = json.loads(cfg_raw)
+    except Exception, e:
+        print >> sys.stderr, "could not parse master config file: %s" % e
+        sys.exit(1)
+
+    return cfg
+
+
+def read_cmd_config(pn):
+    fn = os.path.join(os.environ['HOME'], '.%s.config' % pn)
+    try:
+        with open(fn) as f:
+            cfg_raw = f.read()
+    except IOError, e:
+        print >> sys.stderr, "could not open config file %s: %s" % (fn, e)
+        sys.exit(1)
+
+    try:
+        cfg = json.loads(cfg_raw)
+    except Exception, e:
+        print >> sys.stderr, "could not parse config file: %s" % e
+        sys.exit(1)
+
+    if 'cmds' not in cfg and 'default' not in cfg:
+        print >> sys.stderr, "cmds or default must be defined in the config file"
+        sys.exit(1)
+
+    return cfg
+
+
+ptrn = re.compile(r'\{\{([^\s}]+)\}\}')
 
 def check_cmd(cmd, fmt, subst):
     args = set(ptrn.findall(fmt))
@@ -125,10 +175,12 @@ def expn(fmt, subst):
 def exec_cmd(cmd):
     global debug
     if debug:
-        print cmd
+        print >> sys.stderr, cmd
         sys.exit(0)
     else:
-        os.execlp('/bin/sh', '/bin/sh', '-c', cmd)
+        print cmd
+        sys.exit(0)
+        # os.execlp('/bin/sh', '/bin/sh', '-c', cmd)
 
 
 def get_dir_in_path_containing(marker_files):

@@ -138,3 +138,19 @@ redock() {
 }
 
 
+s() {
+  eval $( cmdplx s "$@" )
+}
+
+t() {
+  eval $( cmdplx t "$@" )
+}
+
+v() {
+  eval $( cmdplx v "$@" )
+}
+
+ve() {
+  eval $( cmdplx ve "$@" )
+}
+
