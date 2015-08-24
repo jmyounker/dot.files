@@ -68,6 +68,10 @@ def main():
     subst['root'] = expn(root, subst)
 
     if 'cmds' in cfg:
+        if cmd in cfg['cmds']:
+            check_cmd(cmd, cfg['cmds'][cmd], subst)
+            exec_cmd(expn(cfg['cmds'][cmd], subst))
+
         possible_cmds = with_matching_prefixes(cmd, cfg['cmds'].keys())
         if len(possible_cmds) > 1:
             print >> sys.stderr, "possibly you meant one of: %s" % ', '.join(sorted(possible_cmds))
