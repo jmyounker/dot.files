@@ -136,7 +136,7 @@ def read_cmd_config(pn):
     try:
         cfg = json.loads(cfg_raw)
     except Exception, e:
-        print >> sys.stderr, "could not parse config file: %s" % e
+        print >> sys.stderr, "could not parse config file %s: %s" % (fn, e)
         sys.exit(1)
 
     if 'cmds' not in cfg and 'default' not in cfg:
