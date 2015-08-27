@@ -141,6 +141,10 @@ ptp() {
   ptpython
 }
 
+m() {
+  eval $( cmdplx m "$@" )
+}
+
 s() {
   eval $( cmdplx s "$@" )
 }
