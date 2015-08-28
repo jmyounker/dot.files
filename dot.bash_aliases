@@ -4,6 +4,9 @@ alias ...='cd ../..'
 alias ....='cd ../../..'
 alias .....='cd ../../../..'
 alias ......='cd ../../../../..'
+alias .......='cd ../../../../../..'
+alias ........='cd ../../../../../../..'
+alias .........='cd ../../../../../../../..'
 
 alias g=git
 
@@ -66,6 +69,23 @@ prov() {
 
 die() { echo "\$@" 1>&2 ; exit 1; }
 
+for f in "git" "wget" "tmux"; do
+    ( which \$f > /dev/null 2>&1 )
+    if [ \$? -eq 1 ]; then
+      ( which yum > /dev/null 2>&1 )
+      if [ \$? -eq 0 ]; then
+        sudo yum -y install \$f
+        if [ \$? -eq 1 ]; then
+          echo "could not install \$f via yum" >&2
+          exit 1
+        fi
+      else
+        echo "could not install \$f" >&2
+        exit 1
+      fi
+    fi
+done
+
 if [ ! -e \$HOME/repos ]; then
   mkdir \$HOME/repos || die "Could not create repox directory"
 fi
@@ -75,6 +95,13 @@ cd \$HOME/repos || die "Could not cd into repos directory"
 if [ ! -e \$HOME/.ssh ]; then
    mkdir \$HOME/.ssh || die "Could not create .ssh directory"
    chmod 700 \$HOME/.ssh || die "Could not set permissions on .ssh directory"
+fi
+
+if [ ! -e \$HOME/.ssh/config ]; then
+   chmod 700 \$HOME/.ssh/config || die "Could not set permissions on .ssh/config"
+else
+   touch \$HOME/.ssh/config || die "Could not create .ssh/config"
+   chmod 644 \$HOME/.ssh/config || die "Could not permissions on .ssh/config"
 fi
 
 GITHUB="github.com,192.30.252.130 ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAq2A7hRGmdnm9tUDbO9IDSwBK6TbQa+PXYPCPy6rbTrTtw7PHkccKrpp0yVhp5HdEIcKr6pLlVDBfOLX9QUsyCOV0wzfjIJNlGEYsdlLJizHhbn2mUjvSAHQqZETYP81eFzLQNnPHt4EVVUh7VfDESU84KezmD5QlWpXLmvU31/yMf+Se8xhHTvKSCZIFImWwoG6mbUoWf9nzpIoaSjB+weqqUUmpaaasXVal72J+UX2B+2RPW3RcT0eOzQgqlJL3RKrTJvdsjE3JEAvGq3lGHSZXy28G3skua2SmVi/w4yCE6gbODqnTWlg7+wC604ydGXA8VJiS5ap43JXiUFFAaQ=="
@@ -139,6 +166,10 @@ redock() {
 
 ptp() {
   ptpython
+}
+
+j() {
+  eval $( cmdplx j "$@" )
 }
 
 m() {
