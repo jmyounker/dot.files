@@ -23,6 +23,7 @@ path_condensations = {
                       "javatests": "jt",
                       "jeff": "j",
                       "jyounker": "jy",
+                      "progperday", "ppd",
                       "production": "prod",
                       "Python Testing for Dummies": "PTfD",
                       "repos": "r",
