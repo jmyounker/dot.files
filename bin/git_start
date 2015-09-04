@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-if [ $# -ne 1 ]; then
+if [ $# -ne 2 ]; then
   echo "usage: $0 NEW_BRANCH_NAME" >&2
   exit 127
 fi
@@ -15,7 +15,6 @@ branch=$(git branch | grep '^\*' | awk '{print $2}')
 if [ "$branch" != "master" ]; then
   git checkout master
 fi
-exit 0
 
 git pull || die "Could not sync master"
 git branch $1 || die "Could not cut new branch $1"
