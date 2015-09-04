@@ -207,5 +207,15 @@ complete -F _dot_files_completion -o filenames ./install
 complete -F _dot_files_completion -o filenames ./recover
 complete -F _dot_files_completion -o filenames ./diff
 
+# Completion for the 'g' cmdplx
+if ( function_exists "__git_complete" && function_exists "__git_main" ); then
+   __git_complete g __git_main
+fi
+
+# Completion for the 's' cmdplx
+if ( function_exists "_svn" ); then
+  complete -F _svn -o default -X '@(*/.svn|*/.svn/|.svn|.svn/)' s
+fi
+
 # Docker
 redock
