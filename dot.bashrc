@@ -72,6 +72,7 @@ add_to_path () {
 }
 
 add_to_path "$HOME/bin"
+add_to_path "/usr/local/go/bin"
 add_to_path "$HOME/local/scala-2.0.12/bin"
 add_to_path "/Applications/p4merge.app/Contents/MacOS"
 add_to_path "$HOME/local/p4v/bin"
@@ -91,12 +92,21 @@ if [ -f ~/.env.d/*/bashrc ]; then
     done
 fi
 
+function_exists() {
+    declare -f $1 > /dev/null
+    return $?
+}
 
-# Include command line completions from brew.
-if [ -d /usr/local/etc/bash_completion.d ]; then
-  source /usr/local/etc/bash_completion.d/*
-fi
+executable_in_path() {
+    which $1 > /dev/null
+    return $?
+}
 
+source_if_exists() {
+    if [ -f $1 ]; then
+        source $1
+    fi
+}
 
 # Google Cloud SDK.
 if [[ -r ~/google-cloud-sdk ]]; then
@@ -104,11 +114,17 @@ if [[ -r ~/google-cloud-sdk ]]; then
   source ~/google-cloud-sdk/completion.bash.inc
 fi
 
-
-if [[ $(uname) == "Darwin" ]]; then
-  if [ -f $(brew --prefix)/etc/bash_completion ]; then
-    . $(brew --prefix)/etc/bash_completion
-  fi
+# Include command line completions from brew.
+if $(which brew > /dev/null); then
+    brew_compl_dir=$(brew --prefix)/etc/bash_completion.d
+    if [ -d $brew_compl_dir ]; then
+        # AG completions are broken
+        # source_if_exists $brew_compl_dir/ag.completion.bash
+        source_if_exists $brew_compl_dir/git-completion.bash
+        source_if_exists $brew_compl_dir/tig-completion.bash
+        source_if_exists $brew_compl_dir/tmux
+        source_if_exists $brew_compl_dir/subversion
+    fi
 fi
 
 _proj_completion() {
@@ -166,13 +182,6 @@ _conn_completion() {
 complete -F _conn_completion conn
 complete -F _conn_completion prov
 complete -F _conn_completion ssh
-
-function_exists() {
-    declare -f $1 > /dev/null
-    return $?
-}
-
-function_exists _git && complete -F _git g
 
 _dot_files_completion() {
    if [ ! -x ./install_dot_files ]; then
