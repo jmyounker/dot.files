@@ -7,15 +7,16 @@ import os
 import platform
 import re
 import shutil
+import StringIO
 import subprocess
 import sys
 
 
 def canonicalize_target(t):
     if len(t) == 1:
-        return (t[0], None, False)
+        return (t[0], None, None)
     elif len(t) == 2:
-        return (t[0], t[1], False)
+        return (t[0], t[1], None)
     elif len(t) == 3:
         return t
     else:
@@ -112,13 +113,26 @@ def install(args):
           deployed_mtime = os.path.getmtime(deployed)
       else:
           deployed_mtime = 0
-      if not opts.force and deployed_mtime > source_mtime:
+      if not opts.force and deployed_mtime > source_mtime and (translate is None or translate != 'COMPOSITE') :
           print >> sys.stderr, "Skipping locally modified file %s: Use -f to override this." % source
           continue
-      if translate:
-          if opts.verbose or opts.verbose:
-              print >> sys.stderr, "Translating and installing file: %s -> %s" % (source, deployed)
-          translate_file(source, deployed, get_arch())
+      if translate is not None:
+          if translate == 'TRANSLATE':
+              if opts.dry_run or opts.verbose:
+                  print >> sys.stderr, "Translating and installing file: %s -> %s" % (source, deployed)
+              if opts.dry_run:
+                  outfile = StringIO.StringIO()
+                  translate_file(source, outfile, get_arch())
+                  print >> sys.stderr, outfile.getvalue()
+              else:
+                  translate_file(source, deployed, get_arch())
+          elif translate == 'COMPOSITE':
+              if opts.dry_run or opts.verbose:
+                  print >> sys.stderr, "Compositing and installing file: %s -> %s" % (source, deployed)
+              composite_file(source, deployed, get_arch())
+          else:
+              print >> sys.stderr, "unknown operation field: %s" % translate
+              break
       else:
           if opts.verbose or opts.dry_run:
               print >> sys.stderr, "Installing file: %s -> %s" % (source, deployed)
@@ -155,19 +169,15 @@ def get_arch():
 def translate_file(src, dest, arch):
     with open(src, 'r') as src_file:
         with output_sink(dest) as dest_file:
-            if opts.verbose or opts.dry_run:
-                print "Generated file: %s -> %s" % (src, dest)
             for line in filter_for_arch(src_file, arch):
                 for expanded_line in expansion(line):
-                    if opts.verbose or opts.dry_run:
-                        sys.stdout.write(expanded_line)
-                    if not opts.dry_run:
-                        dest_file.write(expanded_line)
-
+                    dest_file.write(expanded_line)
 
 @contextmanager
 def output_sink(dest):
-    if opts.dry_run:
+    if isinstance(dest, StringIO.StringIO):
+        yield dest
+    elif opts.dry_run:
         yield sys.stdout
     else:
        with open(dest, 'w') as f:
@@ -220,6 +230,28 @@ def diff(args):
               subprocess.call(['p4merge', deployed, source])
            except KeyboardInterrupt:
               sys.exit(0)
+
+
+def composite_file(src, dest, arch, comment_char='#'):
+    generated_part = StringIO.StringIO()
+    translate_file(src, generated_part, arch)
+    comment_line = '%s ------------ Below here auto-generated. Modifications will be lost. ------------\n' % comment_char
+    fixed_part = ""
+    if os.path.exists(dest):
+        with open(dest, 'r') as dest_file:
+            for line in dest_file:
+                if line == comment_line:
+                    break
+                fixed_part += line
+    with open(dest, 'w') as dest_file:
+        if opts.dry_run or opts.verbose:
+            sys.stdout.write(fixed_part)
+            sys.stdout.write(comment_line)
+            sys.stdout.write(generated_part.getvalue())
+        if not opts.dry_run:
+            dest_file.write(fixed_part)
+            dest_file.write(comment_line)
+            dest_file.write(generated_part.getvalue())
 
 
 parser = optparse.OptionParser(description='install dot files')

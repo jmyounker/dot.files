@@ -1,5 +1,8 @@
 #!/usr/bin/python
 
+TRANSLATE='TRANSLATE'
+COMPOSITE='COMPOSITE'
+
 dirs = [
   ('bin', None),
   ('.ssh', 0700),
@@ -11,7 +14,7 @@ installs = [
   ('dot.bash_aliases', ),
   ('dot.bashrc', ),
   ('dot.dput.cf', ),
-  ('dot.gitconfig', None, True),
+  ('dot.gitconfig', None, TRANSLATE),
   ('dot.gitignore_global', ),
   ('dot.m.config', ),  # maven shortcuts
   ('dot.cmdplx.config', ),  # master config
@@ -19,7 +22,7 @@ installs = [
   ('dot.s.config', ),  # subversion shortcuts
   ('dot.t.config', ),  # tmux shortcuts
   ('dot.screenrc', ),
-  ('dot.tmux.conf', None, True),
+  ('dot.tmux.conf', None, TRANSLATE),
   ('dot.v.config', ),  # vagrant shortcuts
   ('dot.ve.config', ),  # virtualenv shortcuts
   ('bin/cleanm', ),
@@ -31,6 +34,7 @@ installs = [
   ('bin/git_tig_status', ),
   ('bin/git_track', ),
   ('bin/inplace', ),
+  ('bin/jvar', ),
   ('bin/lines.before', ),
   ('bin/lines.after', ),
   ('bin/lines.between', ),
@@ -39,7 +43,7 @@ installs = [
   ('bin/projtool', ),
   ('bin/retry', ),
   ('bin/cmdplx', ),
-  ('dot.ssh/config', None, True),
+  ('dot.ssh/config', None, COMPOSITE),
   ('dot.env.d/savingglobal/bash_aliases', ),
   ('dot.env.d/savingglobal/bashrc', ),
 ]
