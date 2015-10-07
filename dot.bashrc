@@ -207,6 +207,29 @@ complete -F _dot_files_completion -o filenames ./install
 complete -F _dot_files_completion -o filenames ./recover
 complete -F _dot_files_completion -o filenames ./diff
 
+
+_bm_completion() {
+    local cur prev completions
+    COMPREPLY=()
+    cur="${COMP_WORDS[COMP_CWORD]}"
+    prev="${COMP_WORDS[COMP_CWORD-1]}"
+    case "${prev}" in
+         bm|bmtool)
+                completions=$( bmtool --list )
+                COMPREPLY=( $(compgen -W "${completions}" -- ${cur}) )
+                return 0
+                ;;
+        *)
+        ;;
+    esac
+
+    return 0
+}
+
+complete -F _bm_completion bm
+complete -F _bm_completion bmtool
+
+
 # Completion for the 'g' cmdplx
 if ( function_exists "__git_complete" && function_exists "__git_main" ); then
    __git_complete g __git_main

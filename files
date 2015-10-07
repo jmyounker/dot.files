@@ -26,6 +26,7 @@ installs = [
   ('dot.v.config', ),  # vagrant shortcuts
   ('dot.ve.config', ),  # virtualenv shortcuts
   ('bin/cleanm', ),
+  ('bin/bmtool', ),
   ('bin/get_prompt', ),
   ('bin/git_branch_new', ),
   ('bin/git_fix_precommit', ),
