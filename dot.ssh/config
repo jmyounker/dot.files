@@ -5,7 +5,7 @@ host github.com
 
 # SavingGlobal hosts
 
-host jenkins
+host ci jenkins
   HostName ci.savingglobal.com
   User jyounker
   IdentityFile ~/.ssh/id_rsa
