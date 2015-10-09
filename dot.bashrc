@@ -115,7 +115,7 @@ if [[ -r ~/google-cloud-sdk ]]; then
 fi
 
 # Include command line completions from brew.
-if $(which brew > /dev/null); then
+if $( which brew > /dev/null 2>&1 ); then
     brew_compl_dir=$(brew --prefix)/etc/bash_completion.d
     if [ -d $brew_compl_dir ]; then
         # AG completions are broken
