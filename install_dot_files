@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
 from contextlib import contextmanager
+import distutils.spawn
 import optparse
 import hashlib
 import os
@@ -161,6 +162,9 @@ def install(args):
           if os.path.exists(source):
               os.symlink(source, dest)
 
+  os.chmod(os.path.join(home, '.ssh', 'config'), 0600)
+  os.chmod(os.path.join(home, '.ssh', 'authorized_keys'), 0600)
+
 
 def get_arch():
     return uname_to_arch.get(platform.uname()[0], 'UNKNOWN')
@@ -172,6 +176,7 @@ def translate_file(src, dest, arch):
             for line in filter_for_arch(src_file, arch):
                 for expanded_line in expansion(line):
                     dest_file.write(expanded_line)
+
 
 @contextmanager
 def output_sink(dest):
@@ -227,7 +232,10 @@ def diff(args):
            print "%s %s differ" % (source, deployed)
         else:
            try:
-              subprocess.call(['p4merge', deployed, source])
+              if distutils.spawn.find_executable('p4merge'):
+                  subprocess.call(['p4merge', deployed, source])
+              else:
+                  subprocess.call(['diff', deployed, source])
            except KeyboardInterrupt:
               sys.exit(0)
 
