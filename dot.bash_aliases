@@ -167,27 +167,54 @@ ptp() {
   ptpython
 }
 
+# Jenkins
 j() {
   eval $( cmdplx j "$@" )
 }
 
+# Jar
+jr() {
+  eval $( cmdplx jr "$@" )
+}
+
+# Maven
 m() {
   eval $( cmdplx m "$@" )
 }
 
+# Subversion
 s() {
   eval $( cmdplx s "$@" )
 }
 
+# TMUX
 t() {
   eval $( cmdplx t "$@" )
 }
 
+# Vagrant
 v() {
   eval $( cmdplx v "$@" )
 }
 
+# Virtualenv
 ve() {
   eval $( cmdplx ve "$@" )
 }
 
+ff() {
+  find . -type f -name "$@"
+}
+
+fd() {
+  find . -type d -name "$@"
+}
+
+bm() {
+  eval $( bmtool --shell "$@" )
+}
+
+lsr() {
+  find "$@" -exec ls -lad {} \;
+}
+ 
