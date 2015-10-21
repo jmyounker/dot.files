@@ -71,16 +71,11 @@ def create(args):
 
 
 def init(args):
-    proj = init_proj(os.getcwd())
+    proj = ProjConfig(os.path.join(os.getcwd(), proj_file_basename))
+    proj.write()
     ProjDb().add_entry(proj)
     ProjHist().add_entry(proj)
     return 0
-
-
-def init_proj(proj_root):
-    proj = ProjConfig(os.path.join(proj_root, proj_file_basename))
-    proj.write()
-    return proj
 
 
 def ls(args):
@@ -251,6 +246,10 @@ class ProjConfig(object):
             return self.entry['name']
         else:
             return self.root_name
+
+    @name.setter
+    def name(self, x):
+        self.entry['name'] = x
 
     @property
     def root(self):
