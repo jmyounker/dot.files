@@ -230,6 +230,101 @@ complete -F _bm_completion bm
 complete -F _bm_completion bmtool
 
 
+_cmdplx_completion() {
+    local cur prev
+    cur="${COMP_WORDS[COMP_CWORD]}"
+    prev="${COMP_WORDS[COMP_CWORD-1]}"
+    case "${prev}" in
+       j|m|s|t|v|ve)
+          _cmdplx_completer_cmds "${prev}" "${cur}"
+       ;;
+       *)
+       ;;
+    esac
+}
+
+complete -F _cmdplx_completion j
+complete -F _cmdplx_completion m
+complete -F _cmdplx_completion s
+complete -F _cmdplx_completion t
+complete -F _cmdplx_completion v
+complete -F _cmdplx_completion ve
+
+
+_jar_completion() {
+    local cur prev1 prev2 prev3 completions
+    COMPREPLY=()
+    cur="${COMP_WORDS[COMP_CWORD]}"
+    prev1="${COMP_WORDS[COMP_CWORD-1]}"
+    case "${#COMP_WORDS[@]}" in
+        2)
+            case "${prev1}" in
+                jr)
+                    _cmdplx_completer_cmds jr "${cur}"
+                    ;;
+                jar-map|jar-apply)
+                    COMPREPLY=( $( compgen -A command -- "${cur}" ) )
+                    ;;
+                *)
+                ;;
+            esac
+            return 0
+            ;;
+        3)
+            prev2="${COMP_WORDS[COMP_CWORD-2]}"
+            case "${prev2}" in
+                *)  # will default to filename completion if set up with -o default
+                ;;
+            esac
+            return 0
+            ;;
+        4)
+            prev3="${COMP_WORDS[COMP_CWORD-3]}"
+            case "${prev3}" in
+                jr|jar-map|jar-apply)
+                    _jar_completer_from_jarfile "${prev1}" "${cur}"
+                    ;;
+                *)
+                ;;
+            esac
+            return 0
+            ;;
+        *)
+        ;;
+    esac
+    return 0
+}
+
+
+_cmdplx_completer_cmds() {
+    local cur plx completions
+    plx=$1
+    cur=$2
+    if [ -f "${HOME}/.${plx}.config" ]; then
+        completions=$( cmdplx ${plx} | sed 's/echo cmds://' | tr ',' ' ')
+        COMPREPLY=( $(compgen -W "${completions}" -- ${cur} ) )
+    else
+        COMPREPLY=()
+    fi
+}
+
+
+_jar_completer_from_jarfile() {
+    local cur jar_file
+    jar_file=$1
+    cur=$2
+    if [ -f "${jar_file}" ]; then
+        completions=$( jar tf ${jar_file} )
+        COMPREPLY=( $( compgen -W "${completions}" -- ${cur}) )
+    fi
+}
+
+complete -o nospace -o default -F _jar_completion jar
+complete -o nospace -o default -F _jar_completion jr
+complete -o nospace -o default -F _jar_completion jar-map
+complete -o nospace -o default -F _jar_completion jar-apply
+
+
 # Completion for the 'g' cmdplx
 if ( function_exists "__git_complete" && function_exists "__git_main" ); then
    __git_complete g __git_main

@@ -52,3 +52,12 @@ function mmaster() {
 function mslave() {
   mysql -u root --port 13307 --host 127.0.0.1 -p
 }
+
+function rts() {
+  ssh remote-testsparen-$1
+}
+
+function rts-tunnel() {
+  ssh -L 25005:localhost:5005 -L 28080:localhost:8080 remote-testsparen-$1
+}
+

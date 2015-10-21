@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+
+# create working directory and remote if something goes wrong
+td=$( mktemp -d )
+
+cmd=$1
+if [ "$cmd" == "" ]; then
+   echo "usage: $0 CMD JAR FILE [OPTS...]" >&2
+   exit 127
+fi
+shift
+
+jar_path_rel=$1
+if [ "$jar_path_rel" == "" ]; then
+   echo "usage: $0 CMD JAR FILE [OPTS...]" >&2
+   exit 127
+fi
+shift
+
+f=$1
+if [ "$f" == "" ]; then
+   echo "usage: $0 CMD JAR FILE [OPTS...]" >&2
+   exit 127
+fi
+shift
+
+jar_path_abs=$( echo "$(cd "$(dirname "$jar_path_rel")"; pwd)/$(basename "$jar_path_rel")" )
+
+( cd ${td}; jar xf ${jar_path_abs} )
+${cmd} "$@" ${td}/META-INF/${f}
+
+( cd ${td}; jar cMf ${jar_path_abs} . )
+
+if [ "${td}" != "" ]; then
+  rm -rf ${td}
+fi
+
