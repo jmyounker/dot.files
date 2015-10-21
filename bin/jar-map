@@ -27,7 +27,7 @@ shift
 jar_path_abs=$( echo "$(cd "$(dirname "$jar_path_rel")"; pwd)/$(basename "$jar_path_rel")" )
 
 ( cd ${td}; jar xf ${jar_path_abs} )
-${cmd} "$@" ${td}/META-INF/${f}
+${cmd} "$@" ${td}/${f}
 
 if [ "${td}" != "" ]; then
   rm -rf ${td}

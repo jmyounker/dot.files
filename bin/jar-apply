@@ -27,9 +27,15 @@ shift
 jar_path_abs=$( echo "$(cd "$(dirname "$jar_path_rel")"; pwd)/$(basename "$jar_path_rel")" )
 
 ( cd ${td}; jar xf ${jar_path_abs} )
-${cmd} "$@" ${td}/META-INF/${f}
+${cmd} "$@" ${td}/${f}
 
-( cd ${td}; jar cMf ${jar_path_abs} . )
+if [ -f ${td}/META-INF/MANIFEST.MF ]; then
+   manifest=
+else
+   manifest=M
+fi
+
+( cd ${td}; jar c${manifest}f ${jar_path_abs} . )
 
 if [ "${td}" != "" ]; then
   rm -rf ${td}
