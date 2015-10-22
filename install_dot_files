@@ -162,8 +162,10 @@ def install(args):
           if os.path.exists(source):
               os.symlink(source, dest)
 
-  os.chmod(os.path.join(home, '.ssh', 'config'), 0600)
-  os.chmod(os.path.join(home, '.ssh', 'authorized_keys'), 0600)
+  if os.path.exists(os.path.join(home, '.ssh', 'config')):
+      os.chmod(os.path.join(home, '.ssh', 'config'), 0600)
+  if os.path.exists(os.path.join(home, '.ssh', 'authorized_keys')):
+      os.chmod(os.path.join(home, '.ssh', 'authorized_keys'), 0600)
 
 
 def get_arch():
