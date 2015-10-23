@@ -29,31 +29,31 @@ host upsource
 Host remote-testsparen-*
   Hostname %h.savingglobal.com
 
-Host rts1
+Host rts01
   Hostname remote-testsparen-1.savingglobal.com
 
-Host rts2
+Host rts02
   Hostname remote-testsparen-2.savingglobal.com
 
-Host rts3
+Host rts03
   Hostname remote-testsparen-3.savingglobal.com
 
-Host rts4
+Host rts04
   Hostname remote-testsparen-4.savingglobal.com
 
-Host rts5
+Host rts05
   Hostname remote-testsparen-5.savingglobal.com
 
-Host rts6
+Host rts06
   Hostname remote-testsparen-6.savingglobal.com
 
-Host rts7
+Host rts07
   Hostname remote-testsparen-7.savingglobal.com
 
-Host rts8
+Host rts08
   Hostname remote-testsparen-8.savingglobal.com
 
-Host rts9
+Host rts09
   Hostname remote-testsparen-9.savingglobal.com
 
 Host rts10
@@ -134,31 +134,37 @@ Host rts34
 Host rts35
   Hostname remote-testsparen-35.savingglobal.com
 
-Host tun1
+Host rts36
+  Hostname remote-testsparen-36.savingglobal.com
+
+Host rts37
+  Hostname remote-testsparen-37.savingglobal.com
+
+Host tun01
   Hostname remote-testsparen-1.savingglobal.com
 
-Host tun2
+Host tun02
   Hostname remote-testsparen-2.savingglobal.com
 
-Host tun3
+Host tun03
   Hostname remote-testsparen-3.savingglobal.com
 
-Host tun4
+Host tun04
   Hostname remote-testsparen-4.savingglobal.com
 
-Host tun5
+Host tun05
   Hostname remote-testsparen-5.savingglobal.com
 
-Host tun6
+Host tun06
   Hostname remote-testsparen-6.savingglobal.com
 
-Host tun7
+Host tun07
   Hostname remote-testsparen-7.savingglobal.com
 
-Host tun8
+Host tun08
   Hostname remote-testsparen-8.savingglobal.com
 
-Host tun9
+Host tun09
   Hostname remote-testsparen-9.savingglobal.com
 
 Host tun10
@@ -238,6 +244,12 @@ Host tun34
 
 Host tun35
   Hostname remote-testsparen-35.savingglobal.com
+
+Host tun36
+  Hostname remote-testsparen-36.savingglobal.com
+
+Host tun37
+  Hostname remote-testsparen-37.savingglobal.com
 
 Host rts* remote-testsparen-* 136.243.209.* 148.251.203.*
   User svgl
