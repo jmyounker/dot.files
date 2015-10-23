@@ -50,6 +50,12 @@ installs = [
   ('dot.ssh/config', None, COMPOSITE),
   ('dot.env.d/savingglobal/bash_aliases', ),
   ('dot.env.d/savingglobal/bashrc', ),
+  ('dot.completion.d/bm.bash', ),
+  ('dot.completion.d/cmdplx.bash', ),
+  ('dot.completion.d/dot.files.bash', ),
+  ('dot.completion.d/jar.bash', ),
+  ('dot.completion.d/projtool.bash', ),
+  ('dot.completion.d/virtualenv.bash', ),
 ]
 
 removals = []
