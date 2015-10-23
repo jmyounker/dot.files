@@ -26,13 +26,13 @@ host upsource
 
 EOBLOCK
 
-for i in {1..35}; do
+for i in {01..37}; do
     echo "Host rts${i}"
     echo "  Hostname remote-testsparen-${i}.savingglobal.com"
     echo
 done
 
-for i in {1..35}; do
+for i in {01..37}; do
     echo "Host tun${i}"
     echo "  Hostname remote-testsparen-${i}.savingglobal.com"
     echo
