@@ -52,6 +52,7 @@ installs = [
   ('dot.env.d/savingglobal/bashrc', ),
   ('dot.completion.d/bm.bash', ),
   ('dot.completion.d/cmdplx.bash', ),
+  ('dot.completion.d/conn.bash', ),
   ('dot.completion.d/dot.files.bash', ),
   ('dot.completion.d/jar.bash', ),
   ('dot.completion.d/projtool.bash', ),
