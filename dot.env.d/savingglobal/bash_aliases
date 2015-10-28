@@ -45,19 +45,15 @@ function vup() {
 
 function vli() { vagrant global-status; }
 
-function mmaster() {
+function ms-master() {
   mysql -u root --port 13306 --host 127.0.0.1 -p 
 }
 
-function mslave() {
+function ms-slave() {
   mysql -u root --port 13307 --host 127.0.0.1 -p
 }
 
-function rts() {
-  ssh remote-testsparen-$1
-}
-
-function rts-tunnel() {
-  ssh -L 25005:localhost:5005 -L 28080:localhost:8080 remote-testsparen-$1
+function sg-tail() {
+  multitail -i /var/log/tomcat6/catalina.out -i /var/log/savingglobal/sg-webui.log -i /var/log/savingglobal/sg-statemover.log -i /var/log/httpd/error_log
 }
 
