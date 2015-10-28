@@ -5,6 +5,7 @@ COMPOSITE='COMPOSITE'
 
 dirs = [
   ('bin', None),
+  ('.completion.d', None),
   ('.ssh', 0700),
   ('.env.d', None),
   ('.env.d/savingglobal', None),
