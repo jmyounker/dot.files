@@ -46,7 +46,7 @@ function ssh-reagent () {
 
 # Reconnects a TMUX session to the underlying x display and ssh-agents
 reconn() {
-  update_env_script=$(tempfile)
+  update_env_script=$(mktemp reconnXXXXXXX)
   tmux showenv | awk '{if (/^-/) {print "unset " substr($0 ,2)} else {sub(/=/, "=\""); print "export " $0 "\"" }}' > $update_env_script
   source $update_env_script
   rm $update_env_script
