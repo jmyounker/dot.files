@@ -163,6 +163,17 @@ redock() {
   eval "$(boot2docker shellinit 2>/dev/null)" 
 }
 
+idea() {
+    if [ $# -eq 1 ]; then
+        if [ "$1" == "." ]; then
+            prj="$(basename $(pwd))"
+            cd ..; /usr/local/bin/idea "$prj"
+            return
+        fi
+    fi
+    /usr/local/bin/idea "$@"
+}
+
 ptp() {
   ptpython
 }
