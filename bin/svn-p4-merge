@@ -1,38 +1,23 @@
 #!/usr/bin/env python
 
 
-import os
 import subprocess
 import sys
-import tempfile
+
+
+MERGE = "/Applications/p4merge.app/Contents/MacOS/p4merge"
 
 
 def main():
-  with open('/tmp/log.txt', 'w') as lf:
-    print >> lf, 'SYS.ARGV = %s' % str(sys.argv)
+  BASE = sys.argv[1]
+  THEIRS = sys.argv[2]
+  MINE = sys.argv[3]
+  MERGED = sys.argv[4]
 
-  MERGE = "/Applications/p4merge.app/Contents/MacOS/p4merge"
-
-  BASE = sys.argv[9]
-  THEIRS = sys.argv[10]
-  MINE = sys.argv[11]
-
-  with tempfile.NamedTemporaryFile() as out:
-    cmd = [MERGE, BASE, MINE, THEIRS, out.name]
-    with open('/tmp/log.txt', 'a') as lf:
-      print >> lf, 'EXECUTING %s' % cmd
-      print >> lf, '%s %s %s %s' % (BASE, THEIRS, MINE, out.name)
-    try:
-      res = subprocess.call(cmd)
-      if res != 0:
-        print ""
-        return res
-      with open(out.name, 'r') as f:
-        print f.read()
-      return 0
-    except:
-      print ""
-      return 1
+  try:
+    return subprocess.call([MERGE, BASE, MINE, THEIRS, MERGED])
+  except:
+    return 1
 
 
 if __name__ == '__main__':
