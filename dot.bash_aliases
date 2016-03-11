@@ -229,4 +229,8 @@ bm() {
 lsr() {
   find "$@" -exec ls -lad {} \;
 }
+
+abspath() {
+  echo $(pwd)/$1
+}
  
