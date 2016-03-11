@@ -33,29 +33,56 @@ host upsource
  ForwardAgent no
  IdentityFile ~/.ssh/id_rsa
 
+Host rts01
+  Hostname remote-testsparen-1.savingglobal.com
+
 Host rts1
   Hostname remote-testsparen-1.savingglobal.com
+
+Host rts02
+  Hostname remote-testsparen-2.savingglobal.com
 
 Host rts2
   Hostname remote-testsparen-2.savingglobal.com
 
+Host rts03
+  Hostname remote-testsparen-3.savingglobal.com
+
 Host rts3
   Hostname remote-testsparen-3.savingglobal.com
+
+Host rts04
+  Hostname remote-testsparen-4.savingglobal.com
 
 Host rts4
   Hostname remote-testsparen-4.savingglobal.com
 
+Host rts05
+  Hostname remote-testsparen-5.savingglobal.com
+
 Host rts5
   Hostname remote-testsparen-5.savingglobal.com
+
+Host rts06
+  Hostname remote-testsparen-6.savingglobal.com
 
 Host rts6
   Hostname remote-testsparen-6.savingglobal.com
 
+Host rts07
+  Hostname remote-testsparen-7.savingglobal.com
+
 Host rts7
   Hostname remote-testsparen-7.savingglobal.com
 
+Host rts08
+  Hostname remote-testsparen-8.savingglobal.com
+
 Host rts8
   Hostname remote-testsparen-8.savingglobal.com
+
+Host rts09
+  Hostname remote-testsparen-9.savingglobal.com
 
 Host rts9
   Hostname remote-testsparen-9.savingglobal.com
@@ -225,29 +252,56 @@ Host rts63
 Host rts64
   Hostname remote-testsparen-64.savingglobal.com
 
+Host tun01
+  Hostname remote-testsparen-1.savingglobal.com
+
 Host tun1
   Hostname remote-testsparen-1.savingglobal.com
+
+Host tun02
+  Hostname remote-testsparen-2.savingglobal.com
 
 Host tun2
   Hostname remote-testsparen-2.savingglobal.com
 
+Host tun03
+  Hostname remote-testsparen-3.savingglobal.com
+
 Host tun3
   Hostname remote-testsparen-3.savingglobal.com
+
+Host tun04
+  Hostname remote-testsparen-4.savingglobal.com
 
 Host tun4
   Hostname remote-testsparen-4.savingglobal.com
 
+Host tun05
+  Hostname remote-testsparen-5.savingglobal.com
+
 Host tun5
   Hostname remote-testsparen-5.savingglobal.com
+
+Host tun06
+  Hostname remote-testsparen-6.savingglobal.com
 
 Host tun6
   Hostname remote-testsparen-6.savingglobal.com
 
+Host tun07
+  Hostname remote-testsparen-7.savingglobal.com
+
 Host tun7
   Hostname remote-testsparen-7.savingglobal.com
 
+Host tun08
+  Hostname remote-testsparen-8.savingglobal.com
+
 Host tun8
   Hostname remote-testsparen-8.savingglobal.com
+
+Host tun09
+  Hostname remote-testsparen-9.savingglobal.com
 
 Host tun9
   Hostname remote-testsparen-9.savingglobal.com

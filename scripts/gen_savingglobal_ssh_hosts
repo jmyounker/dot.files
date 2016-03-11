@@ -38,13 +38,31 @@ host upsource
 
 EOBLOCK
 
-for i in {01..64}; do
+for i in {01..09}; do
+    echo "Host rts0${i}"
+    echo "  Hostname remote-testsparen-${i}.savingglobal.com"
+    echo
     echo "Host rts${i}"
     echo "  Hostname remote-testsparen-${i}.savingglobal.com"
     echo
 done
 
-for i in {01..64}; do
+for i in {10..64}; do
+    echo "Host rts${i}"
+    echo "  Hostname remote-testsparen-${i}.savingglobal.com"
+    echo
+done
+
+for i in {01..09}; do
+    echo "Host tun0${i}"
+    echo "  Hostname remote-testsparen-${i}.savingglobal.com"
+    echo
+    echo "Host tun${i}"
+    echo "  Hostname remote-testsparen-${i}.savingglobal.com"
+    echo
+done
+
+for i in {10..64}; do
     echo "Host tun${i}"
     echo "  Hostname remote-testsparen-${i}.savingglobal.com"
     echo
