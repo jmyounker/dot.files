@@ -28,9 +28,8 @@ Host gitlab.savingglobal.com
   IdentityFile ~/.ssh/id_rsa
 
 host upsource
- Hostname 148.251.18.202
- User root
- ForwardAgent no
+ Hostname upsource.raisin.systems
+ ForwardAgent yes
  IdentityFile ~/.ssh/id_rsa
 
 Host rts01
@@ -252,6 +251,54 @@ Host rts63
 Host rts64
   Hostname remote-testsparen-64.savingglobal.com
 
+Host rts65
+  Hostname remote-testsparen-65.savingglobal.com
+
+Host rts66
+  Hostname remote-testsparen-66.savingglobal.com
+
+Host rts67
+  Hostname remote-testsparen-67.savingglobal.com
+
+Host rts68
+  Hostname remote-testsparen-68.savingglobal.com
+
+Host rts69
+  Hostname remote-testsparen-69.savingglobal.com
+
+Host rts70
+  Hostname remote-testsparen-70.savingglobal.com
+
+Host rts71
+  Hostname remote-testsparen-71.savingglobal.com
+
+Host rts72
+  Hostname remote-testsparen-72.savingglobal.com
+
+Host rts73
+  Hostname remote-testsparen-73.savingglobal.com
+
+Host rts74
+  Hostname remote-testsparen-74.savingglobal.com
+
+Host rts75
+  Hostname remote-testsparen-75.savingglobal.com
+
+Host rts76
+  Hostname remote-testsparen-76.savingglobal.com
+
+Host rts77
+  Hostname remote-testsparen-77.savingglobal.com
+
+Host rts78
+  Hostname remote-testsparen-78.savingglobal.com
+
+Host rts79
+  Hostname remote-testsparen-79.savingglobal.com
+
+Host rts80
+  Hostname remote-testsparen-80.savingglobal.com
+
 Host tun01
   Hostname remote-testsparen-1.savingglobal.com
 
@@ -470,6 +517,54 @@ Host tun63
 
 Host tun64
   Hostname remote-testsparen-64.savingglobal.com
+
+Host tun65
+  Hostname remote-testsparen-65.savingglobal.com
+
+Host tun66
+  Hostname remote-testsparen-66.savingglobal.com
+
+Host tun67
+  Hostname remote-testsparen-67.savingglobal.com
+
+Host tun68
+  Hostname remote-testsparen-68.savingglobal.com
+
+Host tun69
+  Hostname remote-testsparen-69.savingglobal.com
+
+Host tun70
+  Hostname remote-testsparen-70.savingglobal.com
+
+Host tun71
+  Hostname remote-testsparen-71.savingglobal.com
+
+Host tun72
+  Hostname remote-testsparen-72.savingglobal.com
+
+Host tun73
+  Hostname remote-testsparen-73.savingglobal.com
+
+Host tun74
+  Hostname remote-testsparen-74.savingglobal.com
+
+Host tun75
+  Hostname remote-testsparen-75.savingglobal.com
+
+Host tun76
+  Hostname remote-testsparen-76.savingglobal.com
+
+Host tun77
+  Hostname remote-testsparen-77.savingglobal.com
+
+Host tun78
+  Hostname remote-testsparen-78.savingglobal.com
+
+Host tun79
+  Hostname remote-testsparen-79.savingglobal.com
+
+Host tun80
+  Hostname remote-testsparen-80.savingglobal.com
 
 Host rts* remote-testsparen-* 136.243.209.* 148.251.203.*
   User svgl

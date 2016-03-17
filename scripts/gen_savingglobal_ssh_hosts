@@ -31,9 +31,8 @@ Host gitlab.savingglobal.com
   IdentityFile ~/.ssh/id_rsa
 
 host upsource
- Hostname 148.251.18.202
- User root
- ForwardAgent no
+ Hostname upsource.raisin.systems
+ ForwardAgent yes
  IdentityFile ~/.ssh/id_rsa
 
 EOBLOCK
@@ -47,7 +46,7 @@ for i in {01..09}; do
     echo
 done
 
-for i in {10..64}; do
+for i in {10..80}; do
     echo "Host rts${i}"
     echo "  Hostname remote-testsparen-${i}.savingglobal.com"
     echo
@@ -62,7 +61,7 @@ for i in {01..09}; do
     echo
 done
 
-for i in {10..64}; do
+for i in {10..80}; do
     echo "Host tun${i}"
     echo "  Hostname remote-testsparen-${i}.savingglobal.com"
     echo
