@@ -69,7 +69,7 @@ prov() {
 
 die() { echo "\$@" 1>&2 ; exit 1; }
 
-for f in "git" "wget" "tmux" "multitail"; do
+for f in "git" "wget" "tmux" "multitail" "inotify-tools"; do
     ( which \$f > /dev/null 2>&1 )
     if [ \$? -eq 1 ]; then
       ( which yum > /dev/null 2>&1 )
