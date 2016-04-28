@@ -9,7 +9,7 @@ host vagrant
  User vagrant
  ForwardAgent yes
  ForwardX11 yes
- IdentityFile ~/dev/svn/opsys/trunk/opsys/vagrant/init/.vagrant/machines/default/virtualbox/private_key
+ IdentityFile ~/dev/svn/opsys/work/vagrant/init/.vagrant/machines/default/virtualbox/private_key
 
 host yum
  Hostname 148.251.18.203
