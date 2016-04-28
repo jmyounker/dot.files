@@ -32,6 +32,22 @@ host upsource
  ForwardAgent yes
  IdentityFile ~/.ssh/id_rsa
 
+Host ts01 ts1 ts ts-deu
+  HostName banking.testsparen.de
+  IdentityFile ~/.ssh/id_rsa
+  StrictHostKeyChecking no
+  ForwardAgent yes
+  ExitOnForwardFailure yes
+  ProxyCommand ssh ssh2 -W %h:%p
+
+Host ts03 ts3 ts-eur
+  HostName 194.76.243.233
+  IdentityFile ~/.ssh/id_rsa
+  StrictHostKeyChecking no
+  ForwardAgent yes
+  ExitOnForwardFailure yes
+  ProxyCommand ssh ssh2 -W %h:%p
+
 Host rts01
   Hostname remote-testsparen-1.savingglobal.com
 
