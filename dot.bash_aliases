@@ -152,6 +152,13 @@ nukem() {
   fi
 }
 
+khrm() {
+  if [ "$#" != 1 ]; then
+     echo "usage: khrm LINENO"
+     return 127
+  fi
+  sed -i -e "$1d" $HOME/.ssh/known_hosts
+}
 
 # Docker
 
