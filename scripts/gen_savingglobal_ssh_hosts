@@ -12,8 +12,12 @@ host vagrant
  IdentityFile ~/dev/svn/opsys/work/vagrant/init/.vagrant/machines/default/virtualbox/private_key
 
 host yum
- Hostname 148.251.18.203
- User yumman
+ Hostname yum.raisin.systems
+ User systool
+ ProxyCommand ssh ssh2 -W %h:%p
+
+host selenium-hub
+  Hostname selenium-hub.savingglobal.com
 
 host ci jenkins
   HostName ci.savingglobal.com
@@ -44,7 +48,7 @@ Host ts01 ts1 ts ts-deu
   ProxyCommand ssh ssh2 -W %h:%p
 
 Host ts03 ts3 ts-eur
-  HostName 194.76.243.233
+  HostName banking.testraisin.com
   IdentityFile ~/.ssh/id_rsa
   StrictHostKeyChecking no
   ForwardAgent yes
@@ -68,6 +72,18 @@ for i in {10..80}; do
     echo
 done
 
+for i in {101..130}; do
+    echo "Host rts${i}"
+    echo "  Hostname rvm-${i}.testraisin.com"
+    echo
+    echo "Host rvm${i}"
+    echo "  Hostname rvm-${i}.testraisin.com"
+    echo
+    echo "Host rvm-${i}"
+    echo "  Hostname rvm-${i}.testraisin.com"
+    echo
+done
+
 for i in {01..09}; do
     echo "Host tun0${i}"
     echo "  Hostname remote-testsparen-${i}.savingglobal.com"
@@ -83,8 +99,14 @@ for i in {10..80}; do
     echo
 done
 
+for i in {101..130}; do
+    echo "Host tun${i}"
+    echo "  Hostname rvm-${i}.testraisin.com"
+    echo
+done
+
 cat <<EOBLOCK
-Host rts* remote-testsparen-* 136.243.209.* 148.251.203.*
+Host rvm* rts* remote-testsparen-* 136.243.209.* 148.251.203.*
   User svgl
   StrictHostKeyChecking no
   ForwardAgent yes
