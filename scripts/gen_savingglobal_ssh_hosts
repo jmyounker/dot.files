@@ -3,6 +3,17 @@
 cat <<EOBLOCK
 # SavingGlobal hosts
 
+host hub selenium-hub
+ Hostname selenium-hub.savingglobal.com
+ User svgl
+ ProxyCommand ssh ssh2 -W %h:%p
+
+host prod-jenkins ci-prod
+ Hostname ci-prod.raisin.systems
+ User jyounker
+ LocalForward 58080 localhost:8080
+ LocalForward 9443 localhost:443
+
 host vagrant
  Hostname 127.0.0.1
  Port 2222
@@ -13,20 +24,17 @@ host vagrant
 
 host yum
  Hostname yum.raisin.systems
- User systool
+ User root
  ProxyCommand ssh ssh2 -W %h:%p
-
-host selenium-hub
-  Hostname selenium-hub.savingglobal.com
 
 host ci jenkins
   HostName ci.savingglobal.com
-  User jyounker
+  User %u
   IdentityFile ~/.ssh/id_rsa
 
 host ssh2
   HostName ssh2.savingglobal.com
-  User jyounker
+  User %u
   LocalForward 3128 localhost:3128
   ForwardAgent yes
   LogLevel quiet
@@ -84,6 +92,18 @@ for i in {101..130}; do
     echo
 done
 
+for i in {201..220}; do
+    echo "Host rts${i}"
+    echo "  Hostname rvm-${i}.testraisin.com"
+    echo
+    echo "Host rvm${i}"
+    echo "  Hostname rvm-${i}.testraisin.com"
+    echo
+    echo "Host rvm-${i}"
+    echo "  Hostname rvm-${i}.testraisin.com"
+    echo
+done
+
 for i in {01..09}; do
     echo "Host tun0${i}"
     echo "  Hostname remote-testsparen-${i}.savingglobal.com"
@@ -100,6 +120,12 @@ for i in {10..80}; do
 done
 
 for i in {101..130}; do
+    echo "Host tun${i}"
+    echo "  Hostname rvm-${i}.testraisin.com"
+    echo
+done
+
+for i in {201..220}; do
     echo "Host tun${i}"
     echo "  Hostname rvm-${i}.testraisin.com"
     echo
