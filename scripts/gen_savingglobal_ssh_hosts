@@ -3,12 +3,8 @@
 cat <<EOBLOCK
 # SavingGlobal hosts
 
-host devtools-centos
- Hostname rvm-118.savingglobal.com
- User jyounker
-
-host devtools-debian devtools
- Hostname rvm-214.testraisin.com
+host devtools devtools-debian
+ Hostname remote-testsparen-48.savingglobal.com
  User jyounker
 
 host hub selenium-hub
