@@ -3,16 +3,26 @@
 cat <<EOBLOCK
 # SavingGlobal hosts
 
+host devtools-centos
+ Hostname rvm-118.savingglobal.com
+ User jyounker
+
+host devtools-debian devtools
+ Hostname rvm-214.testraisin.com
+ User jyounker
+
 host hub selenium-hub
  Hostname selenium-hub.savingglobal.com
- User svgl
+ User systool
  ProxyCommand ssh ssh2 -W %h:%p
 
 host prod-jenkins ci-prod
  Hostname ci-prod.raisin.systems
  User jyounker
- LocalForward 58080 localhost:8080
- LocalForward 9443 localhost:443
+
+host maven archiva
+ Hostname maven.raisin.systems
+ User systool
 
 host vagrant
  Hostname 127.0.0.1
@@ -24,17 +34,17 @@ host vagrant
 
 host yum
  Hostname yum.raisin.systems
- User root
+ User systool
  ProxyCommand ssh ssh2 -W %h:%p
 
 host ci jenkins
   HostName ci.savingglobal.com
-  User %u
+  User jyounker
   IdentityFile ~/.ssh/id_rsa
 
 host ssh2
   HostName ssh2.savingglobal.com
-  User %u
+  User jyounker
   LocalForward 3128 localhost:3128
   ForwardAgent yes
   LogLevel quiet
@@ -157,6 +167,8 @@ Host tun*
   LocalForward 20080 localhost:80
   # Opsys/OBS Tomcat
   LocalForward 28080 localhost:8080
+  # Webtools
+  LocalForward 28081 localhost:8081
 
 EOBLOCK
 
