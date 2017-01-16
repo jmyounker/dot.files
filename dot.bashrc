@@ -140,5 +140,14 @@ if ( function_exists "_svn" ); then
   complete -F _svn -o default -X '@(*/.svn|*/.svn/|.svn|.svn/)' s
 fi
 
+if [ -d /usr/local/ec2-api-tools ]; then
+    export EC2_HOME=/usr/local/ec2-api-tools
+    add_to_path $EC2_HOME/bin
+    if [ -f $HOME/.aws/credentials ]; then
+        export AWS_ACCESS_KEY=$(grep aws_access_key_id $HOME/.aws/credentials | head -1 | awk '{print $3}')
+        export AWS_SECRET_KEY=$(grep aws_secret_access_key $HOME/.aws/credentials | head -1 | awk '{print $3}')
+    fi
+fi
+
 # Docker
 redock
