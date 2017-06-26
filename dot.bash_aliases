@@ -229,6 +229,10 @@ fd() {
   find . -type d -name "$@"
 }
 
+ga() {
+  find . -type f -exec grep -Hn $1 {} \;
+}
+
 bm() {
   eval $( bmtool --shell "$@" )
 }
