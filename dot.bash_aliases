@@ -244,4 +244,9 @@ lsr() {
 abspath() {
   echo $(pwd)/$1
 }
- 
+
+source $HOME/.aliases.d/*.sh
+
+
+
+
