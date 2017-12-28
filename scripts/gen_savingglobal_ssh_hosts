@@ -3,6 +3,36 @@
 cat <<EOBLOCK
 # SavingGlobal hosts
 
+host devtools devtools-debian
+ Hostname remote-testsparen-48.savingglobal.com
+ User jyounker
+
+host hub selenium-hub
+ Hostname selenium-hub.savingglobal.com
+ User systool
+ ProxyCommand ssh ssh2 -W %h:%p
+
+host prod-jenkins ci-prod
+ Hostname ci-prod.raisin.systems
+ User jyounker
+
+host maven archiva
+ Hostname maven.raisin.systems
+ User systool
+
+host vagrant
+ Hostname 127.0.0.1
+ Port 2222
+ User vagrant
+ ForwardAgent yes
+ ForwardX11 yes
+ IdentityFile ~/dev/svn/opsys/work/vagrant/init/.vagrant/machines/default/virtualbox/private_key
+
+host yum
+ Hostname yum.raisin.systems
+ User systool
+ ProxyCommand ssh ssh2 -W %h:%p
+
 host ci jenkins
   HostName ci.savingglobal.com
   User jyounker
@@ -19,27 +49,96 @@ Host gitlab.savingglobal.com
   IdentityFile ~/.ssh/id_rsa
 
 host upsource
- Hostname 148.251.18.202
- User root
- ForwardAgent no
+ Hostname upsource.raisin.systems
+ ForwardAgent yes
  IdentityFile ~/.ssh/id_rsa
+
+Host ts01 ts1 ts ts-deu
+  HostName banking.testsparen.de
+  IdentityFile ~/.ssh/id_rsa
+  StrictHostKeyChecking no
+  ForwardAgent yes
+  ExitOnForwardFailure yes
+  ProxyCommand ssh ssh2 -W %h:%p
+
+Host ts03 ts3 ts-eur
+  HostName banking.testraisin.com
+  IdentityFile ~/.ssh/id_rsa
+  StrictHostKeyChecking no
+  ForwardAgent yes
+  ExitOnForwardFailure yes
+  ProxyCommand ssh ssh2 -W %h:%p
 
 EOBLOCK
 
-for i in {01..37}; do
+for i in {01..09}; do
+    echo "Host rts0${i}"
+    echo "  Hostname remote-testsparen-${i}.savingglobal.com"
+    echo
     echo "Host rts${i}"
     echo "  Hostname remote-testsparen-${i}.savingglobal.com"
     echo
 done
 
-for i in {01..37}; do
+for i in {10..80}; do
+    echo "Host rts${i}"
+    echo "  Hostname remote-testsparen-${i}.savingglobal.com"
+    echo
+done
+
+for i in {101..130}; do
+    echo "Host rts${i}"
+    echo "  Hostname rvm-${i}.testraisin.com"
+    echo
+    echo "Host rvm${i}"
+    echo "  Hostname rvm-${i}.testraisin.com"
+    echo
+    echo "Host rvm-${i}"
+    echo "  Hostname rvm-${i}.testraisin.com"
+    echo
+done
+
+for i in {201..220}; do
+    echo "Host rts${i}"
+    echo "  Hostname rvm-${i}.testraisin.com"
+    echo
+    echo "Host rvm${i}"
+    echo "  Hostname rvm-${i}.testraisin.com"
+    echo
+    echo "Host rvm-${i}"
+    echo "  Hostname rvm-${i}.testraisin.com"
+    echo
+done
+
+for i in {01..09}; do
+    echo "Host tun0${i}"
+    echo "  Hostname remote-testsparen-${i}.savingglobal.com"
+    echo
     echo "Host tun${i}"
     echo "  Hostname remote-testsparen-${i}.savingglobal.com"
     echo
 done
 
+for i in {10..80}; do
+    echo "Host tun${i}"
+    echo "  Hostname remote-testsparen-${i}.savingglobal.com"
+    echo
+done
+
+for i in {101..130}; do
+    echo "Host tun${i}"
+    echo "  Hostname rvm-${i}.testraisin.com"
+    echo
+done
+
+for i in {201..220}; do
+    echo "Host tun${i}"
+    echo "  Hostname rvm-${i}.testraisin.com"
+    echo
+done
+
 cat <<EOBLOCK
-Host rts* remote-testsparen-* 136.243.209.* 148.251.203.*
+Host rvm* rts* remote-testsparen-* 136.243.209.* 148.251.203.*
   User svgl
   StrictHostKeyChecking no
   ForwardAgent yes
@@ -64,6 +163,8 @@ Host tun*
   LocalForward 20080 localhost:80
   # Opsys/OBS Tomcat
   LocalForward 28080 localhost:8080
+  # Webtools
+  LocalForward 28081 localhost:8081
 
 EOBLOCK
 

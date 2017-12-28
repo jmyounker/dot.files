@@ -61,7 +61,17 @@ fi
 # Set up go language
 export GOROOT=/usr/local/go
 
-add_to_path () {
+prepend_to_path () {
+    if [ ! -d "$1" ]; then
+        return 0
+    fi
+    if [[ "$PATH" =~ (^|:)"${1}"(:|$) ]]; then
+        return 0
+    fi
+    export PATH=$1:$PATH
+}
+
+append_to_path () {
     if [ ! -d "$1" ]; then
         return 0
     fi
@@ -71,14 +81,16 @@ add_to_path () {
     export PATH=$PATH:$1
 }
 
-add_to_path "$HOME/bin"
-add_to_path "/usr/local/go/bin"
-add_to_path "$HOME/local/scala-2.0.12/bin"
-add_to_path "/Applications/p4merge.app/Contents/MacOS"
-add_to_path "$HOME/local/p4v/bin"
-add_to_path "$GOROOT/bin"
-add_to_path "$GOPATH/bin"
-add_to_path "/usr/local/mysql/bin/"
+prepend_to_path "/usr/local/go/bin"
+prepend_to_path "$HOME/bin"
+prepend_to_path "$HOME/.jenv/shims"
+append_to_path "$HOME/local/scala-2.0.12/bin"
+append_to_path "/Applications/p4merge.app/Contents/MacOS"
+append_to_path "$HOME/local/p4v/bin"
+append_to_path "$GOROOT/bin"
+append_to_path "$GOPATH/bin"
+append_to_path "/usr/local/mysql/bin/"
+append_to_path "/usr/local/apache-ant/bin"
 
 # Set up most awesome command line prompt
 export EMERGENCY_PROMPT='${debian_chroot:+($debian_chroot)}\\u@\\h:\\[$(tput -T${TERM:-dumb} setaf 1)\\]DUDE!\ CANT\ RUN\ GET_PROMPT.\ WTF?\\[$(tput -T${TERM:-dumb} sgr0)\\]\\$ '
@@ -138,6 +150,15 @@ source ${HOME}/.completion.d/projtool.bash
 # Completion for the 's' cmdplx
 if ( function_exists "_svn" ); then
   complete -F _svn -o default -X '@(*/.svn|*/.svn/|.svn|.svn/)' s
+fi
+
+if [ -d /usr/local/ec2-api-tools ]; then
+    export EC2_HOME=/usr/local/ec2-api-tools
+    append_to_path $EC2_HOME/bin
+    if [ -f $HOME/.aws/credentials ]; then
+        export AWS_ACCESS_KEY=$(grep aws_access_key_id $HOME/.aws/credentials | head -1 | awk '{print $3}')
+        export AWS_SECRET_KEY=$(grep aws_secret_access_key $HOME/.aws/credentials | head -1 | awk '{print $3}')
+    fi
 fi
 
 # Docker

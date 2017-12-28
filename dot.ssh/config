@@ -1,9 +1,16 @@
-ServerAliveInterval 60
-
-host github.com
-  user jmyounker
-
 # SavingGlobal hosts
+
+host vagrant
+ Hostname 127.0.0.1
+ Port 2222
+ User vagrant
+ ForwardAgent yes
+ ForwardX11 yes
+ IdentityFile ~/dev/svn/opsys/work/vagrant/init/.vagrant/machines/default/virtualbox/private_key
+
+host yum
+ Hostname 148.251.18.203
+ User yumman
 
 host ci jenkins
   HostName ci.savingglobal.com
@@ -21,39 +28,78 @@ Host gitlab.savingglobal.com
   IdentityFile ~/.ssh/id_rsa
 
 host upsource
- Hostname 148.251.18.202
- User root
- ForwardAgent no
+ Hostname upsource.raisin.systems
+ ForwardAgent yes
  IdentityFile ~/.ssh/id_rsa
 
-Host remote-testsparen-*
-  Hostname %h.savingglobal.com
+Host ts01 ts1 ts ts-deu
+  HostName banking.testsparen.de
+  IdentityFile ~/.ssh/id_rsa
+  StrictHostKeyChecking no
+  ForwardAgent yes
+  ExitOnForwardFailure yes
+  ProxyCommand ssh ssh2 -W %h:%p
+
+Host ts03 ts3 ts-eur
+  HostName 194.76.243.233
+  IdentityFile ~/.ssh/id_rsa
+  StrictHostKeyChecking no
+  ForwardAgent yes
+  ExitOnForwardFailure yes
+  ProxyCommand ssh ssh2 -W %h:%p
 
 Host rts01
+  Hostname remote-testsparen-1.savingglobal.com
+
+Host rts1
   Hostname remote-testsparen-1.savingglobal.com
 
 Host rts02
   Hostname remote-testsparen-2.savingglobal.com
 
+Host rts2
+  Hostname remote-testsparen-2.savingglobal.com
+
 Host rts03
+  Hostname remote-testsparen-3.savingglobal.com
+
+Host rts3
   Hostname remote-testsparen-3.savingglobal.com
 
 Host rts04
   Hostname remote-testsparen-4.savingglobal.com
 
+Host rts4
+  Hostname remote-testsparen-4.savingglobal.com
+
 Host rts05
+  Hostname remote-testsparen-5.savingglobal.com
+
+Host rts5
   Hostname remote-testsparen-5.savingglobal.com
 
 Host rts06
   Hostname remote-testsparen-6.savingglobal.com
 
+Host rts6
+  Hostname remote-testsparen-6.savingglobal.com
+
 Host rts07
+  Hostname remote-testsparen-7.savingglobal.com
+
+Host rts7
   Hostname remote-testsparen-7.savingglobal.com
 
 Host rts08
   Hostname remote-testsparen-8.savingglobal.com
 
+Host rts8
+  Hostname remote-testsparen-8.savingglobal.com
+
 Host rts09
+  Hostname remote-testsparen-9.savingglobal.com
+
+Host rts9
   Hostname remote-testsparen-9.savingglobal.com
 
 Host rts10
@@ -140,31 +186,187 @@ Host rts36
 Host rts37
   Hostname remote-testsparen-37.savingglobal.com
 
+Host rts38
+  Hostname remote-testsparen-38.savingglobal.com
+
+Host rts39
+  Hostname remote-testsparen-39.savingglobal.com
+
+Host rts40
+  Hostname remote-testsparen-40.savingglobal.com
+
+Host rts41
+  Hostname remote-testsparen-41.savingglobal.com
+
+Host rts42
+  Hostname remote-testsparen-42.savingglobal.com
+
+Host rts43
+  Hostname remote-testsparen-43.savingglobal.com
+
+Host rts44
+  Hostname remote-testsparen-44.savingglobal.com
+
+Host rts45
+  Hostname remote-testsparen-45.savingglobal.com
+
+Host rts46
+  Hostname remote-testsparen-46.savingglobal.com
+
+Host rts47
+  Hostname remote-testsparen-47.savingglobal.com
+
+Host rts48
+  Hostname remote-testsparen-48.savingglobal.com
+
+Host rts49
+  Hostname remote-testsparen-49.savingglobal.com
+
+Host rts50
+  Hostname remote-testsparen-50.savingglobal.com
+
+Host rts51
+  Hostname remote-testsparen-51.savingglobal.com
+
+Host rts52
+  Hostname remote-testsparen-52.savingglobal.com
+
+Host rts53
+  Hostname remote-testsparen-53.savingglobal.com
+
+Host rts54
+  Hostname remote-testsparen-54.savingglobal.com
+
+Host rts55
+  Hostname remote-testsparen-55.savingglobal.com
+
+Host rts56
+  Hostname remote-testsparen-56.savingglobal.com
+
+Host rts57
+  Hostname remote-testsparen-57.savingglobal.com
+
+Host rts58
+  Hostname remote-testsparen-58.savingglobal.com
+
+Host rts59
+  Hostname remote-testsparen-59.savingglobal.com
+
+Host rts60
+  Hostname remote-testsparen-60.savingglobal.com
+
+Host rts61
+  Hostname remote-testsparen-61.savingglobal.com
+
+Host rts62
+  Hostname remote-testsparen-62.savingglobal.com
+
+Host rts63
+  Hostname remote-testsparen-63.savingglobal.com
+
+Host rts64
+  Hostname remote-testsparen-64.savingglobal.com
+
+Host rts65
+  Hostname remote-testsparen-65.savingglobal.com
+
+Host rts66
+  Hostname remote-testsparen-66.savingglobal.com
+
+Host rts67
+  Hostname remote-testsparen-67.savingglobal.com
+
+Host rts68
+  Hostname remote-testsparen-68.savingglobal.com
+
+Host rts69
+  Hostname remote-testsparen-69.savingglobal.com
+
+Host rts70
+  Hostname remote-testsparen-70.savingglobal.com
+
+Host rts71
+  Hostname remote-testsparen-71.savingglobal.com
+
+Host rts72
+  Hostname remote-testsparen-72.savingglobal.com
+
+Host rts73
+  Hostname remote-testsparen-73.savingglobal.com
+
+Host rts74
+  Hostname remote-testsparen-74.savingglobal.com
+
+Host rts75
+  Hostname remote-testsparen-75.savingglobal.com
+
+Host rts76
+  Hostname remote-testsparen-76.savingglobal.com
+
+Host rts77
+  Hostname remote-testsparen-77.savingglobal.com
+
+Host rts78
+  Hostname remote-testsparen-78.savingglobal.com
+
+Host rts79
+  Hostname remote-testsparen-79.savingglobal.com
+
+Host rts80
+  Hostname remote-testsparen-80.savingglobal.com
+
 Host tun01
+  Hostname remote-testsparen-1.savingglobal.com
+
+Host tun1
   Hostname remote-testsparen-1.savingglobal.com
 
 Host tun02
   Hostname remote-testsparen-2.savingglobal.com
 
+Host tun2
+  Hostname remote-testsparen-2.savingglobal.com
+
 Host tun03
+  Hostname remote-testsparen-3.savingglobal.com
+
+Host tun3
   Hostname remote-testsparen-3.savingglobal.com
 
 Host tun04
   Hostname remote-testsparen-4.savingglobal.com
 
+Host tun4
+  Hostname remote-testsparen-4.savingglobal.com
+
 Host tun05
+  Hostname remote-testsparen-5.savingglobal.com
+
+Host tun5
   Hostname remote-testsparen-5.savingglobal.com
 
 Host tun06
   Hostname remote-testsparen-6.savingglobal.com
 
+Host tun6
+  Hostname remote-testsparen-6.savingglobal.com
+
 Host tun07
+  Hostname remote-testsparen-7.savingglobal.com
+
+Host tun7
   Hostname remote-testsparen-7.savingglobal.com
 
 Host tun08
   Hostname remote-testsparen-8.savingglobal.com
 
+Host tun8
+  Hostname remote-testsparen-8.savingglobal.com
+
 Host tun09
+  Hostname remote-testsparen-9.savingglobal.com
+
+Host tun9
   Hostname remote-testsparen-9.savingglobal.com
 
 Host tun10
@@ -251,6 +453,135 @@ Host tun36
 Host tun37
   Hostname remote-testsparen-37.savingglobal.com
 
+Host tun38
+  Hostname remote-testsparen-38.savingglobal.com
+
+Host tun39
+  Hostname remote-testsparen-39.savingglobal.com
+
+Host tun40
+  Hostname remote-testsparen-40.savingglobal.com
+
+Host tun41
+  Hostname remote-testsparen-41.savingglobal.com
+
+Host tun42
+  Hostname remote-testsparen-42.savingglobal.com
+
+Host tun43
+  Hostname remote-testsparen-43.savingglobal.com
+
+Host tun44
+  Hostname remote-testsparen-44.savingglobal.com
+
+Host tun45
+  Hostname remote-testsparen-45.savingglobal.com
+
+Host tun46
+  Hostname remote-testsparen-46.savingglobal.com
+
+Host tun47
+  Hostname remote-testsparen-47.savingglobal.com
+
+Host tun48
+  Hostname remote-testsparen-48.savingglobal.com
+
+Host tun49
+  Hostname remote-testsparen-49.savingglobal.com
+
+Host tun50
+  Hostname remote-testsparen-50.savingglobal.com
+
+Host tun51
+  Hostname remote-testsparen-51.savingglobal.com
+
+Host tun52
+  Hostname remote-testsparen-52.savingglobal.com
+
+Host tun53
+  Hostname remote-testsparen-53.savingglobal.com
+
+Host tun54
+  Hostname remote-testsparen-54.savingglobal.com
+
+Host tun55
+  Hostname remote-testsparen-55.savingglobal.com
+
+Host tun56
+  Hostname remote-testsparen-56.savingglobal.com
+
+Host tun57
+  Hostname remote-testsparen-57.savingglobal.com
+
+Host tun58
+  Hostname remote-testsparen-58.savingglobal.com
+
+Host tun59
+  Hostname remote-testsparen-59.savingglobal.com
+
+Host tun60
+  Hostname remote-testsparen-60.savingglobal.com
+
+Host tun61
+  Hostname remote-testsparen-61.savingglobal.com
+
+Host tun62
+  Hostname remote-testsparen-62.savingglobal.com
+
+Host tun63
+  Hostname remote-testsparen-63.savingglobal.com
+
+Host tun64
+  Hostname remote-testsparen-64.savingglobal.com
+
+Host tun65
+  Hostname remote-testsparen-65.savingglobal.com
+
+Host tun66
+  Hostname remote-testsparen-66.savingglobal.com
+
+Host tun67
+  Hostname remote-testsparen-67.savingglobal.com
+
+Host tun68
+  Hostname remote-testsparen-68.savingglobal.com
+
+Host tun69
+  Hostname remote-testsparen-69.savingglobal.com
+
+Host tun70
+  Hostname remote-testsparen-70.savingglobal.com
+
+Host tun71
+  Hostname remote-testsparen-71.savingglobal.com
+
+Host tun72
+  Hostname remote-testsparen-72.savingglobal.com
+
+Host tun73
+  Hostname remote-testsparen-73.savingglobal.com
+
+Host tun74
+  Hostname remote-testsparen-74.savingglobal.com
+
+Host tun75
+  Hostname remote-testsparen-75.savingglobal.com
+
+Host tun76
+  Hostname remote-testsparen-76.savingglobal.com
+
+Host tun77
+  Hostname remote-testsparen-77.savingglobal.com
+
+Host tun78
+  Hostname remote-testsparen-78.savingglobal.com
+
+Host tun79
+  Hostname remote-testsparen-79.savingglobal.com
+
+Host tun80
+  Hostname remote-testsparen-80.savingglobal.com
+
 Host rts* remote-testsparen-* 136.243.209.* 148.251.203.*
   User svgl
   StrictHostKeyChecking no
@@ -263,6 +594,7 @@ Host tun*
   StrictHostKeyChecking no
   ForwardAgent yes
   ExitOnForwardFailure yes
+  ProxyCommand ssh ssh2 -W %h:%p
   # MySQL master
   LocalForward 23306 localhost:3306
   # MySQL slave
@@ -275,5 +607,4 @@ Host tun*
   LocalForward 20080 localhost:80
   # Opsys/OBS Tomcat
   LocalForward 28080 localhost:8080
-  ProxyCommand ssh ssh2 -W %h:%p
 

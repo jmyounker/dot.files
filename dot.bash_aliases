@@ -69,7 +69,7 @@ prov() {
 
 die() { echo "\$@" 1>&2 ; exit 1; }
 
-for f in "git" "wget" "tmux" "multitail"; do
+for f in "git" "wget" "tmux" "multitail" "inotify-tools"; do
     ( which \$f > /dev/null 2>&1 )
     if [ \$? -eq 1 ]; then
       ( which yum > /dev/null 2>&1 )
@@ -152,6 +152,13 @@ nukem() {
   fi
 }
 
+khrm() {
+  if [ "$#" != 1 ]; then
+     echo "usage: khrm LINENO"
+     return 127
+  fi
+  sed -i -e "$1d" $HOME/.ssh/known_hosts
+}
 
 # Docker
 
@@ -227,6 +234,10 @@ fd() {
   find . -type d -name "$@"
 }
 
+ga() {
+  find . -type f -exec grep -Hn $1 {} \;
+}
+
 bm() {
   eval $( bmtool --shell "$@" )
 }
@@ -234,4 +245,13 @@ bm() {
 lsr() {
   find "$@" -exec ls -lad {} \;
 }
- 
+
+abspath() {
+  echo $(pwd)/$1
+}
+
+source $HOME/.aliases.d/*.sh
+
+
+
+

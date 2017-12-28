@@ -1,0 +1,25 @@
+#!/usr/bin/env python
+
+
+import subprocess
+import sys
+
+
+MERGE = "/Applications/p4merge.app/Contents/MacOS/p4merge"
+
+
+def main():
+  BASE = sys.argv[1]
+  THEIRS = sys.argv[2]
+  MINE = sys.argv[3]
+  MERGED = sys.argv[4]
+
+  try:
+    return subprocess.call([MERGE, BASE, MINE, THEIRS, MERGED])
+  except:
+    return 1
+
+
+if __name__ == '__main__':
+  sys.exit(main())
+

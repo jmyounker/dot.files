@@ -45,12 +45,28 @@ function vup() {
 
 function vli() { vagrant global-status; }
 
-function ms-master() {
-  mysql -u root --port 13306 --host 127.0.0.1 -p 
+function mysql-master() {
+  mysql -u root --port 3306 --host 127.0.0.1 -proot savinglobal
 }
 
-function ms-slave() {
-  mysql -u root --port 13307 --host 127.0.0.1 -p
+function mysql-slave() {
+  mysql -u root --port 3307 --host 127.0.0.1 -proot opsys
+}
+
+function mysql-vagrant-master() {
+  mysql -u root --port 13306 --host 127.0.0.1 -proot savingglobal
+}
+
+function mysql-vagrant-slave() {
+  mysql -u root --port 13307 --host 127.0.0.1 -proot opsys
+}
+
+function mysql-rts-master() {
+  mysql -u root --port 23306 --host 127.0.0.1 -proot savingglobal
+}
+
+function mysql-rts-slave() {
+  mysql -u root --port 23307 --host 127.0.0.1 -proot opsys
 }
 
 function sg-tail() {

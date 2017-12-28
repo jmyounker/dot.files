@@ -31,6 +31,7 @@ installs = [
   ('bin/cleanm', ),
   ('bin/bmtool', ),
   ('bin/get_prompt', ),
+  ('bin/cmdplx', ),
   ('bin/git_branch_new', ),
   ('bin/git_fix_precommit', ),
   ('bin/git_sclone', ),
@@ -48,7 +49,8 @@ installs = [
   ('bin/nukem', ),
   ('bin/projtool', ),
   ('bin/retry', ),
-  ('bin/cmdplx', ),
+  ('bin/svn-p4-diff', ),
+  ('bin/svn-p4-merge', ),
   ('dot.ssh/config', None, COMPOSITE),
   ('dot.env.d/savingglobal/bash_aliases', ),
   ('dot.env.d/savingglobal/bashrc', ),
@@ -59,6 +61,7 @@ installs = [
   ('dot.completion.d/jar.bash', ),
   ('dot.completion.d/projtool.bash', ),
   ('dot.completion.d/virtualenv.bash', ),
+  ('dot.aliases.d/pod.sh', )
 ]
 
 removals = []
