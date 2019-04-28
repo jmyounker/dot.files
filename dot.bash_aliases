@@ -186,6 +186,11 @@ ptp() {
   ptpython
 }
 
+# Docker
+d() {
+ eval $( cmdplx d "$@" )
+}
+
 # Jenkins
 j() {
   eval $( cmdplx j "$@" )
