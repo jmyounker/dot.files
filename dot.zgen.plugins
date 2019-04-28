@@ -1,0 +1,17 @@
+oh-my-zsh plugins/git
+oh-my-zsh plugins/virtualenvwrapper
+load ~/repos/zsh-custom/plugins/chdirs
+load ~/repos/zsh-custom/plugins/cmdplx
+load ~/repos/zsh-custom/plugins/plugtool
+load ~/repos/zsh-custom/plugins/projtool
+load ~/repos/zsh-custom/plugins/p4merge
+load ~/repos/zsh-custom/plugins/conn-tools
+oh-my-zsh plugins/wd
+oh-my-zsh plugins/dircycle
+oh-my-zsh plugins/docker
+oh-my-zsh plugins/jira
+load ~/repos/zsh-custom/plugins/intellij
+load ~/repos/zsh-custom/plugins/jeff-podtool
+oh-my-zsh plugins/tig
+load ~/repos/zsh-custom/plugins/sdkman
+load ~/repos/zsh-custom/plugins/ssh
