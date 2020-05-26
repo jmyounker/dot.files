@@ -9,6 +9,7 @@ dirs = [
   ('.ssh', 0700),
   ('.env.d', None),
   ('.env.d/savingglobal', None),
+  ('.aliases.d', None),
 ]
 
 installs = [
@@ -61,7 +62,6 @@ installs = [
   ('dot.completion.d/jar.bash', ),
   ('dot.completion.d/projtool.bash', ),
   ('dot.completion.d/virtualenv.bash', ),
-  ('dot.aliases.d/pod.sh', ),
   ('dot.zshrc', ),
   ('dot.zgen.plugins', ),
 ]
