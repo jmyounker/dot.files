@@ -20,3 +20,5 @@ unzip artifacts/fonts-master.zip
 cd fonts-master
 ./install.sh
  
+# Import hazel rules from artifacts/hazel
+
