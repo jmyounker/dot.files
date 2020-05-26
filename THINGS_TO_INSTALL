@@ -15,3 +15,8 @@ brew cask install iterm2
 
 # Import iterm config from artifacts/iterm-profile.json
 
+# Install powerline (zgen) fonts
+unzip artifacts/fonts-master.zip
+cd fonts-master
+./install.sh
+ 
