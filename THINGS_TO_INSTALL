@@ -1,13 +1,16 @@
 When I install onto a new machine I should install:
 
-sudo easy_install pip
-sudo pip install virtualenv
-sudo pip install virtualenvwrapper
+sudo pip3 install virtualenvwrapper
 
-git
-brew (OSX)
+# Zgen
+git clone https://github.com/tarjoilija/zgen.git "${HOME}/.zgen"
+
+# Brew
+mkdir homebrew && curl -L https://github.com/Homebrew/brew/tarball/master | tar xz --strip 1 -C homebrew
+brew cask install iterm2
 brew install tig
 brew install tmux
 brew install reattach-to-user-namespace
+brew cask install iterm2
 
 
