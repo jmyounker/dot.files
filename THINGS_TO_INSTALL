@@ -14,4 +14,4 @@ brew install reattach-to-user-namespace
 brew cask install iterm2
 
 # Import iterm config from artifacts/iterm-profile.json
-
+# Import hazel rules from artifacts/hazel
