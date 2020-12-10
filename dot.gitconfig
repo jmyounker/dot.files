@@ -5,6 +5,7 @@
         c = checkout
         ci = commit -m
         co = checkout
+        diff-remote = !git diff $(git branch --show-current) origin/$(git branch --show-current)
         down = pull
         dt = difftool
         fix = !~/bin/git_fix_precommit
@@ -14,6 +15,7 @@
         p = pull
         pm = pull origin master
         pom = pull origin master
+        rm-remote = push origin --delete
         s = status
         sclone = !~/bin/git_sclone $1
         st = stage
@@ -56,6 +58,7 @@
 [core]
         editor = vi
         excludesfile = ~/.gitignore_global
+        autocrlf = input
 
 [filter "media"]
 	required = true
