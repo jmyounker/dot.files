@@ -28,7 +28,7 @@
 
 [user]
 	name = Jeff Younker
-	email = jeff.younker@raisin.com
+	email = jeff@drinktomi.com
 
 [color]
 	ui = true
@@ -67,3 +67,6 @@
 
 [push]
 	default = current
+
+[pull]
+	ff = only

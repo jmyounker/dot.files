@@ -1,9 +1,10 @@
 #!/usr/bin/python
 
-import optparse
+import argparse
 from contextlib import contextmanager
 import os
 import re
+import string
 import subprocess
 import sys
 import tempfile
@@ -70,7 +71,6 @@ def create(args):
 
 
 def init(args):
-
     proj = ProjConfig(os.path.join(os.getcwd(), proj_file_basename))
     proj.write()
     ProjDb().add_entry(proj)
@@ -364,18 +364,7 @@ class ProjHist(object):
         self.write()
 
 
-def main():
-    parser = optparse.OptionParser(description='install dot files')
-    parser.add_option('-v', '--var', metavar='VAR=VAL', dest='vars', action='append',
-                        help='set a project variables')
-    parser.add_option('--dump', dest='dump', action='store_true', default=False,
-                        help='dump information to command line instead of files')
-    opts, args = parser.parse_args()
-
-    if not args:
-        print >> sys.stderr, 'an action is required'
-        sys.exit(127)
-
+def main(args):
     cmds = { 'create': create,
              'init': init,
              'set': setvar,
@@ -384,22 +373,22 @@ def main():
              'forget': forget,
              'activate': activate,
              }
-    class CmdDesc:
-        def __init__(self, cmd, rest, dump, vars):
-            self.cmd = cmd
-            self.rest = rest
-            self.dump = dump
-            self.vars = vars
-    cmd_desc = CmdDesc(args[0], args[1:], opts.dump, opts.vars)
-    if cmd_desc.cmd not in cmds:
-        cmd_desc.cmd = 'activate'
-        cmd_desc.rest = args
-
-    cmd = cmds[cmd_desc.cmd]
+    cmd = cmds.get(args.cmd, activate)
     # We have an unknown command, and therefore we're being called as activate, so we need
     # to make it look like we were called as activate.
-    return cmd(cmd_desc)
+    if args.cmd not in cmds:
+        args.rest = [args.cmd] + args.rest
+        args.cmd = 'activate'  # For cleanliness
+    return cmd(args)
 
+
+parser = argparse.ArgumentParser(description='install dot files')
+parser.add_argument('-v', '--var', metavar='VAR=VAL', dest='vars', type=str,
+    help='set a project variables')
+parser.add_argument('--dump', dest='dump', action='store_true', default=False,
+    help='dump information to command line instead of files')
+parser.add_argument('cmd', metavar='CMD', type=str, help='command to execute')
+parser.add_argument('rest', metavar='REST', type=str, nargs='*', help='per command args')
 
 if __name__ == '__main__':
-    sys.exit(main())
+    sys.exit(main(parser.parse_args()))

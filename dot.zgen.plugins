@@ -1,17 +1,17 @@
-oh-my-zsh plugins/git
-oh-my-zsh plugins/virtualenvwrapper
-load ~/repos/zsh-custom/plugins/chdirs
-load ~/repos/zsh-custom/plugins/cmdplx
-load ~/repos/zsh-custom/plugins/plugtool
-load ~/repos/zsh-custom/plugins/projtool
-load ~/repos/zsh-custom/plugins/p4merge
-load ~/repos/zsh-custom/plugins/conn-tools
-oh-my-zsh plugins/wd
-oh-my-zsh plugins/dircycle
-oh-my-zsh plugins/docker
-oh-my-zsh plugins/jira
-load ~/repos/zsh-custom/plugins/intellij
-load ~/repos/zsh-custom/plugins/jeff-podtool
-oh-my-zsh plugins/tig
-load ~/repos/zsh-custom/plugins/sdkman
-load ~/repos/zsh-custom/plugins/ssh
+zgen load ~/repos/zsh-plugins/plugins/dinit
+zgen oh-my-zsh plugins/git
+zgen load $ZGEN_CUSTOM/plugins/chdirs
+zgen load $ZGEN_CUSTOM/plugins/cmdplx
+zgen load $ZGEN_CUSTOM/plugins/plugtool
+zgen load $ZGEN_CUSTOM/plugins/projtool
+zgen load $ZGEN_CUSTOM/plugins/p4merge
+zgen load $ZGEN_CUSTOM/plugins/conn-tools
+zgen oh-my-zsh plugins/wd
+zgen oh-my-zsh plugins/dircycle
+zgen oh-my-zsh plugins/docker
+zgen oh-my-zsh plugins/jira
+zgen load $ZGEN_CUSTOM/plugins/intellij
+zgen load $ZGEN_CUSTOM/plugins/podtool
+zgen oh-my-zsh plugins/tig
+zgen load $ZGEN_CUSTOM/plugins/sdkman
+zgen load $ZGEN_CUSTOM/plugins/ssh

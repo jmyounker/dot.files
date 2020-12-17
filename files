@@ -7,8 +7,6 @@ dirs = [
   ('bin', None),
   ('.completion.d', None),
   ('.ssh', 0700),
-  ('.env.d', None),
-  ('.env.d/savingglobal', None),
   ('.aliases.d', None),
 ]
 
@@ -53,8 +51,6 @@ installs = [
   ('bin/svn-p4-diff', ),
   ('bin/svn-p4-merge', ),
   ('dot.ssh/config', None, COMPOSITE),
-  ('dot.env.d/savingglobal/bash_aliases', ),
-  ('dot.env.d/savingglobal/bashrc', ),
   ('dot.completion.d/bm.bash', ),
   ('dot.completion.d/cmdplx.bash', ),
   ('dot.completion.d/conn.bash', ),

@@ -25,3 +25,5 @@ if [ $(uname) == "Darwin" ]; then
    export -f export
 fi
 
+
+export PATH="$HOME/.cargo/bin:$PATH"

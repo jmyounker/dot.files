@@ -6,17 +6,12 @@ source "$HOME/.zgen/zgen.zsh"
 
 if ! zgen saved; then
   echo "Creating a zgen save."
+  export ZGEN_CUSTOM=$HOME/repos/zsh-plugins
   zgen oh-my-zsh
-  if [ -e "$HOME/dev/git/sky/devenv/zsh/plugins/dinit" ]; then
-      zgen $HOME/dev/git/sky/devenv/zsh/plugins/dinit
-  fi
-  if [ -e "$HOME/repos/sky/devenv/zsh/plugins/dinit" ]; then
-      zgen $HOME/repos/sky/devenv/zsh/plugins/dinit
-  fi
   local pkg
   if [ -e $HOME/.zgen.plugins ]; then
       while read pkg; do
-          eval zgen $pkg
+          eval $pkg
       done < $HOME/.zgen.plugins
   fi
   zgen oh-my-zsh themes/agnoster
@@ -81,7 +76,7 @@ fi
 
 # Link to multiple plugins
 ZSH_CUSTOM_PATH=(
-    "$HOME/repos/zsh-custom"
+    "$HOME/repos/zsh-plugins"
     "$HOME/dev/git/sky/div/devenv/zsh"
 )
 
