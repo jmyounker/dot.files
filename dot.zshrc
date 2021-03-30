@@ -1,6 +1,7 @@
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
+
 # load zgen
 source "$HOME/.zgen/zgen.zsh"
 
@@ -14,7 +15,7 @@ if ! zgen saved; then
           eval $pkg
       done < $HOME/.zgen.plugins
   fi
-  zgen oh-my-zsh themes/agnoster
+  zgen load $ZGEN_CUSTOM/themes/theblobshop
   zgen save
 fi
 

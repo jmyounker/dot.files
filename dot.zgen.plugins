@@ -1,4 +1,5 @@
-zgen load ~/repos/zsh-plugins/plugins/dinit
+zgen load $ZGEN_CUSTOM/plugins/dinit
+zgen load $ZGEN_CUSTOM/plugins/gcloud
 zgen oh-my-zsh plugins/git
 zgen load $ZGEN_CUSTOM/plugins/chdirs
 zgen load $ZGEN_CUSTOM/plugins/cmdplx
