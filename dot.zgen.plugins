@@ -4,7 +4,6 @@ zgen oh-my-zsh plugins/git
 zgen load $ZGEN_CUSTOM/plugins/chdirs
 zgen load $ZGEN_CUSTOM/plugins/cmdplx
 zgen load $ZGEN_CUSTOM/plugins/plugtool
-zgen load $ZGEN_CUSTOM/plugins/projtool
 zgen load $ZGEN_CUSTOM/plugins/p4merge
 zgen load $ZGEN_CUSTOM/plugins/conn-tools
 zgen oh-my-zsh plugins/wd
@@ -14,7 +13,6 @@ zgen oh-my-zsh plugins/docker-compose
 zgen oh-my-zsh plugins/jira
 zgen load mattberther/zsh-nodenv
 zgen load $ZGEN_CUSTOM/plugins/intellij
-zgen load $ZGEN_CUSTOM/plugins/podtool
 zgen oh-my-zsh plugins/pyenv
 zgen oh-my-zsh plugins/tig
 zgen load $ZGEN_CUSTOM/plugins/sdkman
