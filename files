@@ -70,5 +70,5 @@ installs = [
 removals = []
 
 links = [
-  ('bin/plx', 'bin/tf'),
+  ('bin/tf', 'bin/plx'),
 ]
