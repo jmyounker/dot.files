@@ -46,10 +46,15 @@ installs = [
   ('bin/lines.between', ),
   ('bin/mkpdshgrpfiles.sh', ),
   ('bin/nukem', ),
+  ('bin/plx', ),
   ('bin/projtool', ),
   ('bin/retry', ),
   ('bin/svn-p4-diff', ),
   ('bin/svn-p4-merge', ),
+  ('bin/tf-default', ),
+  ('bin/tf-apply', ),
+  ('bin/tf-init', ),
+  ('bin/tf-plan', ),
   ('dot.ssh/config', None, COMPOSITE),
   ('dot.completion.d/bm.bash', ),
   ('dot.completion.d/cmdplx.bash', ),
@@ -65,4 +70,5 @@ installs = [
 removals = []
 
 links = [
+  ('bin/plx', 'bin/tf'),
 ]

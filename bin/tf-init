@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+GITLAB_TF_STATE_NAME=$(basename $(pwd))
+
+for token in GITLAB_PROJECT_ID GITLAB_TF_STATE_NAME GITLAB_USERNAME GITLAB_API_TOKEN; do
+  if eval "[[ -z \${$token} ]]"; then
+    echo "$token not defined" >&2
+    exit 127
+  fi
+done
+
+exec terraform init \
+    -backend-config="address=https://gitlab.com/api/v4/projects/${GITLAB_PROJECT_ID}/terraform/state/${GITLAB_TF_STATE_NAME}" \
+    -backend-config="lock_address=https://gitlab.com/api/v4/projects/${GITLAB_PROJECT_ID}/terraform/state/${GITLAB_TF_STATE_NAME}/lock" \
+    -backend-config="unlock_address=https://gitlab.com/api/v4/projects/${GITLAB_PROJECT_ID}/terraform/state/${GITLAB_TF_STATE_NAME}/lock" \
+    -backend-config="username=${GITLAB_USERNAME}" \
+    -backend-config="password=${GITLAB_API_TOKEN}" \
+    -backend-config="lock_method=POST" \
+    -backend-config="unlock_method=DELETE" \
+    -backend-config="retry_wait_min=5"
+
