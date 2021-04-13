@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Email</key>
+	<string>jeff@drinktomi.com</string>
+	<key>Name</key>
+	<string>Jeffrey Younker</string>
+	<key>Product Id</key>
+	<string>Hazel5.0</string>
+	<key>Seats</key>
+	<string>1</string>
+	<key>Signature</key>
+	<data>
+	QJYGiwxmVXgixfhOspQKotrDUxKd6e7qabM4lRscV3quFSbHCsY48/4xM0TBTMf/wYd4
+	dygyUKEnyTY1Yhzu60KvONugbmbQ4jPcTLIyNxvVjmmTtttGf/hLv2JEvAhHFsBc5wGp
+	y/fUNwpRJ1xjYQ3rlaXpJHjK6zCP8/eWzBM=
+	</data>
+	<key>Transaction Id</key>
+	<string>86MRV6PTVR04</string>
+</dict>
+</plist>
