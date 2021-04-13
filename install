@@ -1,4 +1,12 @@
 #!/bin/bash
 
+if [ ! -e "$HOME/.zgen" ]; then
+  git clone https://github.com/tarjoilija/zgen.git "${HOME}/.zgen"
+fi
+
+if [ ! -e "$HOME/repos/zsh-plugins" ]; then
+  git clone git@github.com:jmyounker/zsh-plugins.git "${HOME}/repos/zsh-plugins"
+fi
+
 ./install_dot_files --install "$@"
 
