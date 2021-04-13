@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Product</key>
+	<string>BetterTouchTool</string>
+	<key>Name</key>
+	<string>Jeff Younker</string>
+	<key>Email</key>
+	<string>jeff@drinktomi.com</string>
+	<key>Licenses</key>
+	<string>1</string>
+	<key>Timestamp</key>
+	<string>1617908330</string>
+	<key>TransactionID</key>
+	<string>1617904961000</string>
+	<key>LicenseType</key>
+	<string>BTTRemote</string>
+	<key>Signature</key>
+	<data>ddAT3RoUdiP7e2NqJTNzdkjP3EI9tpTJV0D800GMIl0j2dnQk9ch1NklTANgp4rYhHWEUy7Fif/7
+UX2i0fC8Aos4Mwiblg80xvT60Xh7FnTH2/tUjy26pbj9sp/4+fNh/oolkWND3LF0uc9dHyrf313u
+SCA/Jb3SDyW1IhPSZPA=
+</data>
+</dict>
+</plist>
