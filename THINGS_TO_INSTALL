@@ -6,12 +6,18 @@ sudo pip3 install virtualenvwrapper
 git clone https://github.com/tarjoilija/zgen.git "${HOME}/.zgen"
 
 # Brew
-mkdir homebrew && curl -L https://github.com/Homebrew/brew/tarball/master | tar xz --strip 1 -C homebrew
-brew cask install iterm2
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+bew install cask
 brew install tig
 brew install tmux
 brew install reattach-to-user-namespace
-brew cask install iterm2
+brew install --cask iterm2
+brew install --cask zoom
+
+compaudit | xargs chmod g-w,o-w
+
+
+brew install --cask slack
 
 # Import iterm config from artifacts/iterm-profile.json
 
@@ -22,3 +28,5 @@ cd fonts-master
  
 # Import hazel rules from artifacts/hazel
 
+# Docker
+brew install --cask docker
