@@ -11,10 +11,14 @@ zgen load $ZGEN_CUSTOM/plugins/intellij
 zgen oh-my-zsh plugins/jira
 zgen load $ZGEN_CUSTOM/plugins/p4merge
 zgen load $ZGEN_CUSTOM/plugins/plugtool
+zgen load romkatv/powerlevel10k powerlevel10k
 zgen oh-my-zsh plugins/pyenv
 zgen load $ZGEN_CUSTOM/plugins/sdkman
 zgen load $ZGEN_CUSTOM/plugins/ssh
 zgen oh-my-zsh plugins/tig
+zgen oh-my-zsh plugins/virtualenv
 zgen oh-my-zsh plugins/wd
 zgen load mattberther/zsh-nodenv
-
+# Order is important between these two
+zgen load $ZGEN_CUSTOM/plugins/anaconda3
+zgen load bckim92/zsh-autoswitch-conda

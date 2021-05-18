@@ -10,6 +10,8 @@
 	<true/>
 	<key>AllowClipboardAccess</key>
 	<true/>
+	<key>AlwaysAcceptFirstMouse</key>
+	<true/>
 	<key>AnimateDimming</key>
 	<false/>
 	<key>AutoHideTmuxClientSession</key>
@@ -36,6 +38,8 @@
 	<false/>
 	<key>DisableFullscreenTransparency</key>
 	<false/>
+	<key>DisallowCopyEmptyString</key>
+	<true/>
 	<key>EnableRendezvous</key>
 	<false/>
 	<key>FocusFollowsMouse</key>
@@ -793,7 +797,7 @@
 			<key>Non-ASCII Anti Aliased</key>
 			<true/>
 			<key>Normal Font</key>
-			<string>Hack-Regular 10</string>
+			<string>MesloLGS-NF-Regular 10</string>
 			<key>Option Key Sends</key>
 			<integer>0</integer>
 			<key>Prompt Before Closing 2</key>
@@ -943,13 +947,30 @@
 			<key>Tags</key>
 			<array/>
 			<key>Terminal Type</key>
-			<string>xterm</string>
+			<string>xterm-256color</string>
 			<key>Thin Strokes</key>
 			<integer>4</integer>
 			<key>Transparency</key>
 			<real>0.0</real>
 			<key>Triggers</key>
-			<array/>
+			<array>
+				<dict>
+					<key>action</key>
+					<string>iTermHyperlinkTrigger</string>
+					<key>parameter</key>
+					<string>https://us-west-2.console.aws.amazon.com/ec2/v2/home?region=us-west-2#SecurityGroup:groupId=\1</string>
+					<key>regex</key>
+					<string>"(sg-[0-9a-f]{17})"</string>
+				</dict>
+				<dict>
+					<key>action</key>
+					<string>iTermHyperlinkTrigger</string>
+					<key>parameter</key>
+					<string>https://us-west-2.console.aws.amazon.com/vpc/home?region=us-west-2#VpcDetails:VpcId=\1</string>
+					<key>regex</key>
+					<string>"(vpc-[0-9a-f]{17})"</string>
+				</dict>
+			</array>
 			<key>Unlimited Scrollback</key>
 			<true/>
 			<key>Use Bold Font</key>
@@ -959,6 +980,8 @@
 			<key>Use Canonical Parser</key>
 			<false/>
 			<key>Use Italic Font</key>
+			<false/>
+			<key>Use Non-ASCII Font</key>
 			<false/>
 			<key>Use Tab Color</key>
 			<false/>

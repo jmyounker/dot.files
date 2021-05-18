@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+if [ "$BLOBSHOP_DOTFILES_ENV" = "umt" ]; then
+    exec terraform init
+fi
+
 GITLAB_TF_STATE_NAME=$(basename $(pwd))
 
 for token in GITLAB_PROJECT_ID GITLAB_TF_STATE_NAME GITLAB_USERNAME GITLAB_API_TOKEN; do

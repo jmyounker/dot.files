@@ -21,6 +21,7 @@ installs = [
   ('dot.m.config', ),  # maven shortcuts
   ('dot.cmdplx.config', ),  # master config
   ('dot.profile', ),
+  ('dot.p10k.zsh', ),
   ('dot.s.config', ),  # subversion shortcuts
   ('dot.t.config', ),  # tmux shortcuts
   ('dot.screenrc', ),

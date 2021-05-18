@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 
-TF_PLAN_DIR=/tmp/$USER/tf-plans
+TF_PLAN_DIR="${PWD}/.plans"
 
-if [ ! -e ${TF_PLAN_DIR} ]; then
+if [ ! -e "${TF_PLAN_DIR}" ]; then
   echo "no plans available" >&2
   exit 1
 fi
 
-PLAN=$(ls ${TF_PLAN_DIR} | sort | tail -1)
+PLAN=$(ls "${TF_PLAN_DIR}" | sort | tail -1)
 PLAN_LEN=$( echo -n $PLAN | wc -c | awk '{print $1}' )
 if [ "$PLAN_LEN" == "0" ]; then
   echo "no plans available" >&2
@@ -16,5 +16,5 @@ fi
 
 echo "executing plan '$TF_PLAN_DIR/$PLAN'" >&2
 
-exec terraform apply "$TF_PLAN_DIR/$PLAN"
+exec terraform apply "$TF_PLAN_DIR/$PLAN" "$@"
 
