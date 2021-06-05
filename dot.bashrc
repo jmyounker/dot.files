@@ -148,6 +148,9 @@ source ${HOME}/.completion.d/conn.bash
 source ${HOME}/.completion.d/virtualenv.bash
 source ${HOME}/.completion.d/projtool.bash
 
+export CLICOLOR=1
+export LSCOLORS='cxCxdxDxexEgegBxBxBxbx'
+
 # Completion for the 's' cmdplx
 if ( function_exists "_svn" ); then
   complete -F _svn -o default -X '@(*/.svn|*/.svn/|.svn|.svn/)' s
