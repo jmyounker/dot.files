@@ -1,24 +1,25 @@
-zgen load $ZGEN_CUSTOM/plugins/chdirs
-zgen load $ZGEN_CUSTOM/plugins/cmdplx
-zgen load $ZGEN_CUSTOM/plugins/conn-tools
-zgen load $ZGEN_CUSTOM/plugins/dinit
-zgen load $ZGEN_CUSTOM/plugins/gcloud
-zgen oh-my-zsh plugins/git
-zgen oh-my-zsh plugins/dircycle
-zgen oh-my-zsh plugins/docker
-zgen oh-my-zsh plugins/docker-compose
-zgen load $ZGEN_CUSTOM/plugins/intellij
-zgen oh-my-zsh plugins/jira
-zgen load $ZGEN_CUSTOM/plugins/p4merge
-zgen load $ZGEN_CUSTOM/plugins/plugtool
-zgen load romkatv/powerlevel10k powerlevel10k
-zgen oh-my-zsh plugins/pyenv
-zgen load $ZGEN_CUSTOM/plugins/sdkman
-zgen load $ZGEN_CUSTOM/plugins/ssh
-zgen oh-my-zsh plugins/tig
-zgen oh-my-zsh plugins/virtualenv
-zgen oh-my-zsh plugins/wd
-zgen load mattberther/zsh-nodenv
+zgenom load $ZGEN_CUSTOM/plugins/chdirs
+zgenom load $ZGEN_CUSTOM/plugins/cmdplx
+zgenom load $ZGEN_CUSTOM/plugins/conn-tools
+zgenom load $ZGEN_CUSTOM/plugins/gcloud
+zgenom oh-my-zsh plugins/git
+zgenom oh-my-zsh plugins/dircycle
+zgenom oh-my-zsh plugins/docker
+zgenom oh-my-zsh plugins/docker-compose
+zgenom load $ZGEN_CUSTOM/plugins/intellij
+zgenom oh-my-zsh plugins/jira
+zgenom load $ZGEN_CUSTOM/plugins/p4merge
+zgenom load $ZGEN_CUSTOM/plugins/plugtool
+zgenom load romkatv/powerlevel10k powerlevel10k
+zgenom oh-my-zsh plugins/pyenv
+zgenom load $ZGEN_CUSTOM/plugins/sdkman
+zgenom load $ZGEN_CUSTOM/plugins/ssh
+zgenom oh-my-zsh plugins/tig
+zgenom oh-my-zsh plugins/virtualenv
+zgenom oh-my-zsh plugins/wd
+zgenom oh-my-zsh plugins/direnv
+zgenom load mattberther/zsh-nodenv - master
 # Order is important between these two
-zgen load $ZGEN_CUSTOM/plugins/anaconda3
-zgen load bckim92/zsh-autoswitch-conda
+# zgen load $ZGEN_CUSTOM/plugins/anaconda3
+# zgen load bckim92/zsh-autoswitch-conda
+zgenom load pkulev/zsh-rustup-completion
