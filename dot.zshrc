@@ -6,40 +6,59 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
 fi
 
 # If you come from bash you might have to change your $PATH.
-# export PATH=$HOME/bin:/usr/local/bin:$PATH
+export PATH=$HOME/bin:$PATH
 
+# Configure brew (Added by UMT onboarding scripts)
+export T3_ARCH="arm64"
+ARCH="$(uname -m)"
+if [[ "$ARCH" == "x86_64" ]]; then
+    [ -e /usr/local/Homebrew/bin/brew ] && eval "$(/usr/local/Homebrew/bin/brew shellenv)"
+elif [[ "$ARCH" == "arm64" ]]; then
+    [ -e /opt/homebrew/bin/brew ] && eval "$(/opt/homebrew/bin/brew shellenv)"
+fi
+
+# Configure pyenv if installed (Added by UMT onboarding scripts)
+if type pyenv &>/dev/null; then
+  eval "$(pyenv init -)"
+fi
+
+# Configure pyenv-virtualenv if installed (Added by UMT onboarding scripts)
+if type pyenv &>/dev/null; then
+  eval "$(pyenv virtualenv-init -)"
+fi
+
+# Configure nodenv if installed (Added by UMT onboarding scripts)
+if type nodenv &>/dev/null; then
+  eval "$(nodenv init -)"
+fi
+
+# Configure direnv if installed (Added by UMT onboarding scripts)
+if type direnv &>/dev/null; then
+  eval "$(direnv hook zsh)"
+  export DIRENV_LOG_FORMAT=
+fi
+
+# Install zgenom if needed
+if [[ ! -d "$HOME/.zgenom" ]]; then
+   git clone https://github.com/jandamm/zgenom.git "${HOME}/.zgenom"
+fi
 
 # load zgen
-source "$HOME/.zgen/zgen.zsh"
+source "$HOME/.zgenom/zgenom.zsh"
 
-if ! zgen saved; then
-  echo "Creating a zgen save."
+zgenom autoupdate
+
+if ! zgenom saved; then
   export ZGEN_CUSTOM=$HOME/repos/zsh-plugins
-  zgen oh-my-zsh
+  zgenom oh-my-zsh
   local pkg
   if [ -e $HOME/.zgen.plugins ]; then
       while read pkg; do
           eval $pkg
       done < $HOME/.zgen.plugins
   fi
-#  zgen load $ZGEN_CUSTOM/themes/theblobshop
-  zgen save
+  zgenom load $ZGEN_CUSTOM/themes/theblobshop
 fi
-
-# Path to your oh-my-zsh installation.
-#export ZSH="/Users/jyounker/.oh-my-zsh"
-
-# Set name of the theme to load --- if set to "random", it will
-# load a random theme each time oh-my-zsh is loaded, in which case,
-# to know which specific one was loaded, run: echo $RANDOM_THEME
-# See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
-#ZSH_THEME="agnoster"
-
-# Set list of themes to pick from when loading at random
-# Setting this variable when ZSH_THEME=random will cause zsh to load
-# a theme from this variable instead of looking in ~/.oh-my-zsh/themes/
-# If set to an empty array, this variable will have no effect.
-# ZSH_THEME_RANDOM_CANDIDATES=( "robbyrussell" "agnoster" )
 
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"
@@ -88,15 +107,6 @@ ZSH_CUSTOM_PATH=(
     "$HOME/dev/git/sky/div/devenv/zsh"
 )
 
-# Which plugins would you like to load?
-# Standard plugins can be found in ~/.oh-my-zsh/plugins/*
-# Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
-# Example format: plugins=(rails git textmate ruby lighthouse)
-# Add wisely, as too many plugins slow down shell startup.
-# plugins=($(<$HOME/.oh-my-zsh.plugins))
-
-#source $ZSH/oh-my-zsh.sh
-
 # User configuration
 
 # export MANPATH="/usr/local/man:$MANPATH"
@@ -111,20 +121,16 @@ ZSH_CUSTOM_PATH=(
 #   export EDITOR='mvim'
 # fi
 
-# Compilation flags
-# export ARCHFLAGS="-arch x86_64"
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
-# ssh
-# export SSH_KEY_PATH="~/.ssh/rsa_id"
-
-# Set personal aliases, overriding those provided by oh-my-zsh libs,
-# plugins, and themes. Aliases can be placed here, though oh-my-zsh
-# users are encouraged to define aliases within the ZSH_CUSTOM folder.
-# For a full list of active aliases, run `alias`.
-#
-# Example aliases
-# alias zshconfig="mate ~/.zshrc"
-# alias ohmyzsh="mate ~/.oh-my-zsh"
+source ~/.iterm2_shell_integration.zsh
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+if ! zgenom saved; then
+  echo "Creating a zgen save."
+  zgenom save
+fi
+
