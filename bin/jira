@@ -1,0 +1,20 @@
+#!/bin/bash
+
+# Usage: $0 -- shows default URL
+#        $0 [TICKET]+ -- opens every ticket
+if [[ "$(uname)" != "Darwin" ]]; then
+    echo "$0 only works on OSX" >&2
+    exit 126
+fi
+
+DEFAULT_URL="https://unitedmasters.atlassian.net/jira/software/c/projects/DNP/boards/60?assignee=6061faa6ea084b0069f20a42"
+TICKET_URL="https://unitedmasters.atlassian.net/browse"
+
+if [[ $# -eq 0 ]]; then
+    exec open "$DEFAULT_URL"
+fi
+
+while [[ $# -ne 0 ]]; do
+    open "$TICKET_URL/$1"
+    shift
+done

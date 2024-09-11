@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+if [ $# -ne 2 ]; then
+  echo "usage: $0 NEW_BRANCH_NAME" >&2
+  exit 127
+fi
+
+function die() {
+  local __msg="${1:-Unexpected error; aborting.}"
+  echo -e "${__msg} (${BASH_SOURCE[1]}:${FUNCNAME[1]} line ${BASH_LINENO[0]})"
+  exit 1
+}
+
+branch=$(git branch | grep '^\*' | awk '{print $2}')
+if [ "$branch" != "master" ]; then
+  git checkout master
+fi
+
+git pull || die "Could not sync master"
+git branch $1 || die "Could not cut new branch $1"
+git checkout $1 || die "Could not switch to new branch $1"
+
+

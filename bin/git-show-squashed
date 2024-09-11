@@ -1,0 +1,16 @@
+#!/bin/bash -e -x
+
+is_squashed() {
+  local PARENT_BRANCH
+  local CHILD_BRANCH
+  local MERGE_BASE
+  PARENT_BRANCH=$1
+  CHILD_BRANCH=$2
+  MERGE_BASE=$(git merge-base $PARENT_BRANCH $CHILD_BRANCH)
+  [[ $(git cherry $PARENT_BRANCH $(git commit-tree $(git rev-parse $CHILD_BRANCH\^{tree}) -p $MERGE_BASE -m _)) == "-"* ]]
+}
+
+PARENT_BRANCH=${1:-master}
+git checkout -q $PARENT_BRANCH
+git for-each-ref refs/heads/ "--format=%(refname:short)" \
+| while read branch; do is_squashed $PARENT_BRANCH $branch && echo $branch; done

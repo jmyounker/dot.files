@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+
+# Renders a dot file using the system PDF viewer.
+
+set -e
+set -o pipefail
+
+die() {
+    echo "$1" >& 2
+    exit 1
+}
+
+which dot > /dev/null || die "dot executable (graphviz) not found"
+
+TEMPDIR=$(mktemp -d) || die "cannot create pdf output file"
+# shellcheck disable=SC2064
+trap "rm -rf '$TEMPDIR'" EXIT
+TEMPFILE="$TEMPDIR/graphviz-out.pdf"
+
+# Render the dot file into TEMPFILE as a PDF
+dot "$@" -T pdf -o "$TEMPFILE"
+
+# View the resulting PDF with the system PDF viewer
+# -n: open a new instance of the pdf viewer
+# -W: wait until the viewer finishes
+open -n -F -W "$TEMPFILE"
+
