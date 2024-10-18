@@ -1,0 +1,39 @@
+#!/usr/bin/env python
+
+
+import os
+import sys
+import termios
+import tty
+
+
+P4MERGE = '/Applications/p4merge.app/Contents/MacOS/p4merge'
+IDEA = '/usr/local/bin/idea'
+
+LEFT  = sys.argv[-2]
+RIGHT = sys.argv[-1]
+
+
+def getch():
+    fd = sys.stdin.fileno()
+    old = termios.tcgetattr(fd)
+    try:
+        tty.setraw(fd)
+        return sys.stdin.read(1)
+    finally:
+        termios.tcsetattr(fd, termios.TCSADRAIN, old)
+
+
+if os.path.exists(P4MERGE):
+    os.execv(P4MERGE, [P4MERGE, LEFT, RIGHT])
+
+if os.path.exists(IDEA):
+    cid = os.fork()
+    if cid == 0:
+        os.execv(IDEA, [IDEA, 'diff', LEFT, RIGHT])
+    print 'press a key to continue'
+    getch()
+    sys.exit(0)
+
+os.execv('diff', ['diff', LEFT, RIGHT])
+

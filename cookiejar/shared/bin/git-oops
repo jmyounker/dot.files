@@ -1,0 +1,4 @@
+#!/bin/sh
+
+git reset --hard $(git log -n 2 | grep '^commit ' | tail -1 | awk '{print $2}')
+

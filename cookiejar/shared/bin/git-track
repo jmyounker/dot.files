@@ -1,0 +1,30 @@
+#!/bin/bash
+
+set +x
+
+git branch --list >/dev/null 2>&1
+if [ $? -ne 0 ]; then
+  echo "you need to be working in a git branch"
+  exit 1
+fi
+
+if [ $# -eq 0 ]; then
+  branch=$( git  branch --list | awk '/^\*/{print $2}' )
+elif [ $# -eq 1 ]; then
+  branch=$1
+else
+  echo "usage: $0 [GITHUB_BRANCH_NAME]"
+  exit 1
+fi
+
+
+git checkout $branch >/dev/null 2>&1 
+if [ $? -ne 0 ]; then
+  git branch $branch
+  git checkout $branch
+fi
+
+git branch -u origin/$branch $branch
+git pull
+
+set -x

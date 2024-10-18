@@ -1,0 +1,25 @@
+zgenom load $ZGEN_CUSTOM/plugins/osx-misc
+zgenom load $ZGEN_CUSTOM/plugins/chdirs
+zgenom load $ZGEN_CUSTOM/plugins/conn-tools
+zgenom load $ZGEN_CUSTOM/plugins/gcloud
+zgenom oh-my-zsh plugins/git
+zgenom oh-my-zsh plugins/dircycle
+zgenom oh-my-zsh plugins/docker
+zgenom oh-my-zsh plugins/docker-compose
+zgenom load $ZGEN_CUSTOM/plugins/intellij
+zgenom oh-my-zsh plugins/jira
+zgenom load $ZGEN_CUSTOM/plugins/p4merge
+zgenom load $ZGEN_CUSTOM/plugins/plugtool
+zgenom load romkatv/powerlevel10k powerlevel10k
+zgenom oh-my-zsh plugins/pyenv
+zgenom load $ZGEN_CUSTOM/plugins/sdkman
+zgenom load $ZGEN_CUSTOM/plugins/ssh
+zgenom oh-my-zsh plugins/tig
+zgenom oh-my-zsh plugins/virtualenv
+zgenom oh-my-zsh plugins/wd
+zgenom oh-my-zsh plugins/direnv
+zgenom load mattberther/zsh-nodenv - master
+# Order is important between these two
+# zgen load $ZGEN_CUSTOM/plugins/anaconda3
+# zgen load bckim92/zsh-autoswitch-conda
+zgenom load pkulev/zsh-rustup-completion

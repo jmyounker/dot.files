@@ -1,0 +1,13 @@
+#!/bin/sh
+
+if [ "$#" != 1 ]; then
+  echo "usage: nukem PTRN"
+  exit 127
+fi
+
+ptrn=$1
+
+pids=$( ps wwaux | grep $ptrn | grep -v grep | grep -v $0 | awk '{print $2}' )
+if [ ! -z "$pids" ]; then
+  kill -9 $pids
+fi

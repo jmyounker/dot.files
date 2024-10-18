@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+TF_PLAN_DIR="${PWD}/.plans"
+
+if [ ! -e "${TF_PLAN_DIR}" ]; then
+  install -d -m 0700 "${TF_PLAN_DIR}"
+fi
+
+TF_PLAN="${TF_PLAN_DIR}/plan.$(date '+%Y%m%d%H%M%S')"
+
+exec terraform plan -out=${TF_PLAN} "$@"

@@ -1,0 +1,20 @@
+#!/bin/sh
+
+if [ $# -lt 3 ]; then
+  echo "usage: $0 NUMBER_ATTEMPTS INTERVAL COMMAND..."
+  return 127
+fi
+tries=$1
+interval=$2
+shift
+shift
+for i in $(seq 1 $tries); do
+  "$@" > /dev/null 2>&1
+  result=$?
+  if [ $result -eq 0 ]; then
+    exit 0
+  fi
+  sleep $interval
+done
+exit 1
+

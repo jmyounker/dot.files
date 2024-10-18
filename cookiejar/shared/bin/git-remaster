@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+
+branch=$(git branch --show-current)
+
+if [ "$branch" == "master" ]; then
+    echo "cannot merge master to master" >&2
+    exit 126
+fi
+
+status=$(echo $(git status --porcelain | grep -Ev '^\?\? ' | wc -l))
+if [ "$status" -ne 0 ]; then
+  echo "Stash current work."
+  git stash
+fi
+
+git co master
+git pull
+git co "$branch"
+if ! git rebase master; then
+  grc=$?
+  if [ "$status" -ne 0 ]; then
+    echo "When you're done, don't forget to un-stash your work with:" >& 2
+    echo "git stash apply && git stash drop" >& 2
+  fi
+  exit $grc
+fi
+
+if [ "$status" -ne 0 ]; then
+  git stash apply && git stash drop
+fi
+
+

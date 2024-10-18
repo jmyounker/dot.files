@@ -1,0 +1,12 @@
+#!/bin/bash -e
+
+# If no arguments, then just diff the workspace's most recent commit
+if [ $# -eq 0 ]; then
+    exec git diff HEAD~ HEAD
+fi
+
+# Display the diffs one by one until we're done
+while [ "$1" != "" ]; do
+  git diff "${1}~" "$1"
+  shift
+done

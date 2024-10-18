@@ -1,0 +1,14 @@
+#!/bin/sh
+
+current=$(git branch --show-current)
+if [ "$current" == "master" ]; then
+   echo "Already on master" >&2
+   exit 1
+fi
+
+git checkout master
+git pull
+git checkout "$current"
+git pull
+exec git rebase master
+

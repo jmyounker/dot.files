@@ -1,0 +1,70 @@
+[alias]
+        b = branch
+        bn = !~/bin/git_branch_new $1
+        br = branch
+        c = checkout
+        ci = commit -m
+        co = checkout
+        diff-remote = !git diff $(git branch --show-current) origin/$(git branch --show-current)
+        down = pull
+        dt = difftool
+        fix = !~/bin/git_fix_precommit
+        master = checkout master
+        mt = mergetool
+        nb = !~/bin/git_branch_new $1
+        p = pull
+        pm = pull origin master
+        pom = pull origin master
+        rm-remote = push origin --delete
+        s = status
+        sclone = !~/bin/git_sclone $1
+        st = stage
+        start = !~/bin/git_start $1
+        submit = commit
+        t = !~/bin/git_tig_status
+        tr = !~/bin/git_track
+        track = !~/bin/git_track
+        up = push
+
+[user]
+	name = Jeff Younker
+	email = jeff@drinktomi.com
+
+[color]
+	ui = true
+	status = auto
+	branch = auto
+
+[merge]
+        keepBackup = false
+        tool = p4merge
+
+[mergetool "p4merge"]
+        cmd = p4merge "$BASE" "$LOCAL" "$REMOTE" "$MERGED"
+        keepTemporaries = false
+        trustExitCode = false
+        keepBackup = false
+
+[diff]
+        tool = p4diff
+
+[difftool]
+        prompt = false
+
+[difftool "p4diff"]
+        cmd = p4merge "$LOCAL" "$REMOTE"
+        keepBackup = false
+
+[core]
+        editor = vi
+        excludesfile = ~/.gitignore_global
+        autocrlf = input
+
+[filter "media"]
+	required = true
+	clean = git media clean %f
+	smudge = git media smudge %f
+
+[push]
+	default = current
+

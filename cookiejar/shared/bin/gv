@@ -1,0 +1,15 @@
+#!/bin/sh
+
+if [[ "$(uname -s)" != "Darwin" ]]; then
+    echo "only works on macs!" >&2
+    exit 126
+fi
+
+fmt=${1:-png}
+shift
+
+td="$(mktemp -d)" || exit 1
+trap "rm -rf '$td'" EXIT
+dot -T$fmt "$@" > "$td/out.$fmt"
+open -n -W "$td/out.$fmt"
+

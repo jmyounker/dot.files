@@ -1,0 +1,14 @@
+#!/usr/bin/env python
+
+import re
+import sys
+
+ptrn = re.compile(sys.argv[1])
+
+seen = False
+for line in sys.stdin:
+  if ptrn.search(line):
+    seen = True
+  if not seen:
+    sys.stdout.write(line)
+ 
